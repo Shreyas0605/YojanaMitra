@@ -183,8 +183,10 @@ def notify_users_of_new_schemes(new_schemes_list):
                     f"profile to see if you are eligible."
                 )
 
-                if user.mobile:
-                    send_sms_notification(user.mobile, msg_body)
+                # TEMP: disable SMS for testing
+# if user.mobile:
+#     send_sms_notification(user.mobile, msg_body)
+
 
                 if user.email:
                     send_email_notification(
