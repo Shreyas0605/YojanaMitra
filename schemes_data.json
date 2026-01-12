@@ -1,0 +1,697 @@
+[
+    {
+        "name": "Pradhan Mantri Jan Dhan Yojana (PMJDY)",
+        "category": "Financial Inclusion",
+        "description": "National Mission for Financial Inclusion to ensure access to financial services, namely, a basic savings & deposit accounts.",
+        "benefits": "Zero balance account, RuPay Debit Card, Overdraft facility up to ₹10,000.",
+        "eligibility": "Any Indian citizen above 10 years of age.",
+        "applicationLink": "https://pmjdy.gov.in",
+        "minAge": 10,
+        "maxAge": 100,
+        "allowedGenders": [
+            "All"
+        ],
+        "allowedOccupations": [
+            "All"
+        ],
+        "allowedCastes": [
+            "All"
+        ],
+        "allowedStates": [
+            "All"
+        ],
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)",
+        "category": "Insurance",
+        "description": "A one-year life insurance scheme renewable from year to year offering coverage for death due to any reason.",
+        "benefits": "Life cover of ₹2 lakhs at a premium of ₹436 per annum.",
+        "eligibility": "Savings bank account holders between 18-50 years.",
+        "applicationLink": "https://jansuraksha.gov.in",
+        "minAge": 18,
+        "maxAge": 50,
+        "allowedGenders": [
+            "All"
+        ],
+        "allowedOccupations": [
+            "All"
+        ],
+        "allowedStates": [
+            "All"
+        ],
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Pradhan Mantri Suraksha Bima Yojana (PMSBY)",
+        "category": "Insurance",
+        "description": "Accident insurance scheme offering accidental death and disability cover.",
+        "benefits": "Cover of ₹2 lakhs for accidental death/full disability for ₹20/year.",
+        "eligibility": "Bank account holders between 18-70 years.",
+        "applicationLink": "https://jansuraksha.gov.in",
+        "minAge": 18,
+        "maxAge": 70,
+        "allowedGenders": [
+            "All"
+        ],
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Atal Pension Yojana (APY)",
+        "category": "Pension",
+        "description": "Pension scheme for unorganized sector workers.",
+        "benefits": "Guaranteed minimum pension of ₹1,000 to ₹5,000 per month after age 60.",
+        "eligibility": "Citizens aged 18-40 years having a savings bank account.",
+        "applicationLink": "https://npscra.nsdl.co.in",
+        "minAge": 18,
+        "maxAge": 40,
+        "allowedOccupations": [
+            "All"
+        ],
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Pradhan Mantri Mudra Yojana (PMMY)",
+        "category": "Business Loan",
+        "description": "Scheme to provide loans up to ₹10 lakh to non-corporate, non-farm small/micro enterprises.",
+        "benefits": "Loans under three categories: Shishu, Kishore, and Tarun.",
+        "eligibility": "Any Indian citizen who has a business plan for a non-farm sector income generating activity.",
+        "applicationLink": "https://www.mudra.org.in",
+        "minAge": 18,
+        "maxAge": 65,
+        "allowedOccupations": [
+            "all"
+        ],
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Stand Up India Scheme",
+        "category": "Business Loan",
+        "description": "Facilitate bank loans between ₹10 lakh and ₹1 Crore to at least one SC/ST borrower and one woman borrower.",
+        "benefits": "Bank loans for setting up a greenfield enterprise.",
+        "eligibility": "SC/ST and/or Woman entrepreneurs above 18 years.",
+        "applicationLink": "https://www.standupmitra.in",
+        "minAge": 18,
+        "maxAge": 100,
+        "allowedGenders": [
+            "Female",
+            "All"
+        ],
+        "allowedCastes": [
+            "SC",
+            "ST"
+        ],
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Sukanya Samriddhi Yojana",
+        "category": "Child Welfare",
+        "description": "Small deposit scheme for the girl child launched as a part of the 'Beti Bachao Beti Padhao' campaign.",
+        "benefits": "High interest rate, tax benefits, maturity amount for girl's education/marriage.",
+        "eligibility": "Parents of a girl child below 10 years.",
+        "applicationLink": "https://www.nsiindia.gov.in",
+        "minAge": 0,
+        "maxAge": 10,
+        "allowedGenders": [
+            "Female"
+        ],
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "National Social Assistance Programme (NSAP) - Old Age Pension",
+        "category": "Pension",
+        "description": "Social security for the elderly.",
+        "benefits": "Monthly pension for BPL citizens aged 60+.",
+        "eligibility": "BPL, Age 60+.",
+        "applicationLink": "https://nsap.nic.in",
+        "minAge": 60,
+        "maxAge": 100,
+        "minIncome": 0,
+        "maxIncome": 50000,
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA)",
+        "category": "Employment",
+        "description": "Legal guarantee for one hundred days of employment in every financial year to adult members of any rural household.",
+        "benefits": "100 days of guaranteed wage employment.",
+        "eligibility": "Rural households willing to do unskilled manual work.",
+        "applicationLink": "https://nrega.nic.in",
+        "minAge": 18,
+        "maxAge": 100,
+        "residenceRequirement": "Rural"
+    },
+    {
+        "name": "Deen Dayal Upadhyaya Grameen Kaushalya Yojana (DDU-GKY)",
+        "category": "Skill Development",
+        "description": "Placement linked skill development scheme for rural poor youth.",
+        "benefits": "Free skill training and placement support.",
+        "eligibility": "Rural youth aged 15-35 years.",
+        "applicationLink": "http://ddugky.gov.in",
+        "minAge": 15,
+        "maxAge": 35,
+        "residenceRequirement": "Rural"
+    },
+    {
+        "name": "Pradhan Mantri Kaushal Vikas Yojana (PMKVY)",
+        "category": "Skill Development",
+        "description": "Flagship scheme for skill training of youth.",
+        "benefits": "Short term training, recognition of prior learning.",
+        "eligibility": "Indian youth/school dropouts.",
+        "applicationLink": "https://www.pmkvyofficial.org",
+        "minAge": 15,
+        "maxAge": 45,
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Ujjwala Yojana 2.0",
+        "category": "Energy",
+        "description": "Free LPG connections to women from BPL households.",
+        "benefits": "Free LPG connection + refill + stove.",
+        "eligibility": "Adult women of poor households (BPL/SC/ST/PMAY/AAY).",
+        "applicationLink": "https://www.pmuy.gov.in",
+        "allowedGenders": [
+            "Female"
+        ],
+        "minAge": 18,
+        "maxAge": 100,
+        "maxIncome": 100000,
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Swachh Bharat Mission (Gramin)",
+        "category": "Sanitation",
+        "description": "To accelerate the efforts to achieve universal sanitation coverage.",
+        "benefits": "Incentive of ₹12,000 for construction of IHHL.",
+        "eligibility": "Rural households without toilets.",
+        "applicationLink": "https://swachhbharatmission.gov.in",
+        "residenceRequirement": "Rural"
+    },
+    {
+        "name": "Jal Jeevan Mission",
+        "category": "Water",
+        "description": "To provide FHTC to every rural household by 2024.",
+        "benefits": "Functional tap water connection.",
+        "eligibility": "Rural households.",
+        "applicationLink": "https://jaljeevanmission.gov.in",
+        "residenceRequirement": "Rural"
+    },
+    {
+        "name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+        "category": "Agriculture",
+        "description": "Crop insurance scheme for farmers.",
+        "benefits": "Insurance coverage and financial support in event of crop failure.",
+        "eligibility": "Farmers growing notified crops.",
+        "applicationLink": "https://pmfby.gov.in",
+        "allowedOccupations": [
+            "Farmer"
+        ],
+        "residenceRequirement": "Rural"
+    },
+    {
+        "name": "Kisan Credit Card (KCC)",
+        "category": "Agriculture",
+        "description": "Adequate and timely credit support to farmers.",
+        "benefits": "Credit for cultivation and other needs.",
+        "eligibility": "Farmers, Tenant Farmers, Share Croppers.",
+        "applicationLink": "https://www.myscheme.gov.in/schemes/kcc",
+        "allowedOccupations": [
+            "Farmer"
+        ],
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Soil Health Card Scheme",
+        "category": "Agriculture",
+        "description": "To issue soil health cards to farmers every 2 years.",
+        "benefits": "Information on nutrient status of soil.",
+        "eligibility": "Farmers.",
+        "applicationLink": "https://soilhealth.dac.gov.in",
+        "allowedOccupations": [
+            "Farmer"
+        ]
+    },
+    {
+        "name": "National Means-cum-Merit Scholarship",
+        "category": "Education",
+        "description": "Scholarships for meritorious students of economically weaker sections.",
+        "benefits": "₹12,000 per annum.",
+        "eligibility": "Students of Class IX having scored 55% in Class VIII, parental income < ₹3.5 Lakh.",
+        "applicationLink": "https://scholarships.gov.in",
+        "minAge": 13,
+        "maxAge": 16,
+        "maxIncome": 350000,
+        "allowedOccupations": [
+            "Student"
+        ]
+    },
+    {
+        "name": "Post Matric Scholarship for SC Students",
+        "category": "Education",
+        "description": "Scholarships for SC students for post-matriculation studies.",
+        "benefits": "Financial support for education.",
+        "eligibility": "SC students, parental income < ₹2.5 Lakh.",
+        "applicationLink": "https://socialjustice.gov.in",
+        "allowedCastes": [
+            "SC"
+        ],
+        "maxIncome": 250000,
+        "allowedOccupations": [
+            "Student"
+        ]
+    },
+    {
+        "name": "Pre Matric Scholarship for OBC Students",
+        "category": "Education",
+        "description": "Scholarship for OBC students studying in class I to X.",
+        "benefits": "Financial assistance.",
+        "eligibility": "OBC students, parental income < ₹2.5 Lakh.",
+        "applicationLink": "https://scholarships.gov.in",
+        "allowedCastes": [
+            "OBC"
+        ],
+        "maxIncome": 250000,
+        "allowedOccupations": [
+            "Student"
+        ]
+    },
+    {
+        "name": "Ayushman Bharat Digital Mission",
+        "category": "Healthcare",
+        "description": "To develop the backbone necessary to support the integrated digital health infrastructure.",
+        "benefits": "Creation of ABHA (Health ID).",
+        "eligibility": "Any citizen.",
+        "applicationLink": "https://abdm.gov.in",
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Pradhan Mantri Matru Vandana Yojana",
+        "category": "Healthcare",
+        "description": "Maternity benefit program.",
+        "benefits": "Cash incentive of ₹5,000 in three installments.",
+        "eligibility": "Pregnant Women and Lactating Mothers (First Child).",
+        "applicationLink": "https://pmmvy.nic.in",
+        "allowedGenders": [
+            "Female"
+        ],
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Poshan Abhiyaan",
+        "category": "Healthcare",
+        "description": "National Nutrition Mission to improve nutritional outcomes.",
+        "benefits": "Nutritional support for children, pregnant women, and lactating mothers.",
+        "eligibility": "Children (0-6 years), Pregnant Women, Lactating Mothers.",
+        "applicationLink": "https://poshanabhiyaan.gov.in",
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Smart Cities Mission",
+        "category": "Urban Development",
+        "description": "To promote cities that provide core infrastructure and give a decent quality of life.",
+        "benefits": "Improved infrastructure and services.",
+        "eligibility": "Cities selected under the mission.",
+        "applicationLink": "https://smartcities.gov.in",
+        "residenceRequirement": "Urban"
+    },
+    {
+        "name": "AMRUT Mission",
+        "category": "Urban Development",
+        "description": "Atal Mission for Rejuvenation and Urban Transformation.",
+        "benefits": "Basic services (water supply, sewerage, urban transport) to households.",
+        "eligibility": "Citizens in notified AMRUT cities.",
+        "applicationLink": "https://amrut.gov.in",
+        "residenceRequirement": "Urban"
+    },
+    {
+        "name": "PM SVANidhi",
+        "category": "Business Loan",
+        "description": "Micro-credit facility for street vendors.",
+        "benefits": "Working capital loan up to ₹10,000.",
+        "eligibility": "Street vendors in urban areas.",
+        "applicationLink": "https://pmsvanidhi.mohua.gov.in",
+        "residenceRequirement": "Urban",
+        "allowedOccupations": [
+            "Self Employed",
+            "Daily Wage Worker"
+        ]
+    },
+    {
+        "name": "Digital India",
+        "category": "Technology",
+        "description": "Flagship programme to transform India into a digitally empowered society.",
+        "benefits": "Digital services, literacy, and infrastructure.",
+        "eligibility": "All citizens.",
+        "applicationLink": "https://digitalindia.gov.in",
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "UDAN Scheme",
+        "category": "Transport",
+        "description": "Ude Desh ka Aam Naagrik - Regional Connectivity Scheme.",
+        "benefits": "Affordable air travel.",
+        "eligibility": "Air travelers.",
+        "applicationLink": "https://civilaviation.gov.in",
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "FAME India Scheme",
+        "category": "Environment",
+        "description": "Faster Adoption and Manufacturing of Hybrid and Electric Vehicles.",
+        "benefits": "Subsidies on purchase of electric vehicles.",
+        "eligibility": "Buyers of electric vehicles.",
+        "applicationLink": "https://fame2.heavyindustry.gov.in",
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Khelo India",
+        "category": "Sports",
+        "description": "National Programme for Development of Sports.",
+        "benefits": "Scholarships for talented players, infrastructure development.",
+        "eligibility": "Talented sports persons.",
+        "applicationLink": "https://kheloindia.gov.in",
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Fit India Movement",
+        "category": "Health",
+        "description": "Nation-wide movement to encourage people to remain healthy and fit.",
+        "benefits": "Awareness and fitness programs.",
+        "eligibility": "All citizens.",
+        "applicationLink": "https://fitindia.gov.in",
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Beti Bachao Beti Padhao",
+        "category": "Social Welfare",
+        "description": "Campaign to generate awareness and improve the efficiency of welfare services intended for girls.",
+        "benefits": "Improved sex ratio, education for girls.",
+        "eligibility": "Girl child and society.",
+        "applicationLink": "https://wcd.nic.in/bbbp-schemes",
+        "allowedGenders": [
+            "Female"
+        ]
+    },
+    {
+        "name": "One Rank One Pension (OROP)",
+        "category": "Pension",
+        "description": "Uniform pension to defence personnel retiring in the same rank with the same length of service.",
+        "benefits": "Pension parity.",
+        "eligibility": "Retired Defence Personnel.",
+        "applicationLink": "https://desw.gov.in",
+        "allowedOccupations": [
+            "Defence"
+        ]
+    },
+    {
+        "name": "Agnipath Scheme",
+        "category": "Employment",
+        "description": "Recruitment scheme for Indian youth to serve in the Armed Forces.",
+        "benefits": "Service for 4 years as Agniveers.",
+        "eligibility": "Youth aged 17.5 to 21 years.",
+        "applicationLink": "https://mod.gov.in",
+        "minAge": 17,
+        "maxAge": 21
+    },
+    {
+        "name": "PM Vishwakarma Yojana",
+        "category": "Skill Development",
+        "description": "Support for traditional artisans and craftspeople.",
+        "benefits": "Collateral free credit, skill training, toolkit incentive.",
+        "eligibility": "Artisans in 18 traditional trades.",
+        "applicationLink": "https://pmvishwakarma.gov.in",
+        "minAge": 18,
+        "residenceRequirement": "Any"
+    },
+    {
+        "name": "Lakhpati Didi",
+        "category": "Women Empowerment",
+        "description": "Skill development for women in SHGs to earn at least ₹1 Lakh annually.",
+        "benefits": "Training in skills like LED bulb making, plumbing, drone repair.",
+        "eligibility": "Women in Self Help Groups.",
+        "applicationLink": "https://aajeevika.gov.in",
+        "allowedGenders": [
+            "Female"
+        ]
+    },
+    {
+        "name": "PM POSHAN",
+        "category": "Education",
+        "description": "Pradhan Mantri Poshan Shakti Nirman (formerly Mid-Day Meal Scheme).",
+        "benefits": "Hot cooked meal in government schools.",
+        "eligibility": "School children (Class I-VIII).",
+        "applicationLink": "https://education.gov.in/pm-poshan",
+        "minAge": 5,
+        "maxAge": 14,
+        "allowedOccupations": [
+            "Student"
+        ]
+    },
+    {
+        "name": "Samagra Shiksha Abhiyan",
+        "category": "Education",
+        "description": "Integarated Scheme for School Education.",
+        "benefits": "Quality education, infrastructure, teacher training.",
+        "eligibility": "Pre-school to Class 12.",
+        "applicationLink": "https://samagra.education.gov.in",
+        "minAge": 3,
+        "maxAge": 18,
+        "allowedOccupations": [
+            "Student"
+        ]
+    },
+    {
+        "name": "Rashtriya Vayoshri Yojana",
+        "category": "Social Welfare",
+        "description": "Scheme for providing physical aids and assisted-living devices for Senior Citizens belonging to BPL category.",
+        "benefits": "Free assistive devices like walking sticks, hearing aids.",
+        "eligibility": "Senior Citizens (60+), BPL.",
+        "applicationLink": "https://socialjustice.gov.in",
+        "minAge": 60,
+        "maxAge": 100,
+        "minIncome": 0,
+        "maxIncome": 100000
+    },
+    {
+        "name": "Accessible India Campaign",
+        "category": "Social Welfare",
+        "description": "Sugamya Bharat Abhiyan for achieving universal accessibility for Persons with Disabilities.",
+        "benefits": "Accessible environment, transport, and ICT.",
+        "eligibility": "Persons with Disabilities.",
+        "applicationLink": "https://disabilityaffairs.gov.in",
+        "disabilityRequirement": "Yes"
+    },
+    {
+        "name": "DDRS Scheme",
+        "category": "Social Welfare",
+        "description": "Deendayal Disabled Rehabilitation Scheme.",
+        "benefits": "Grant-in-aid to NGOs for rehabilitation of PwDs.",
+        "eligibility": "Persons with Disabilities.",
+        "applicationLink": "https://disabilityaffairs.gov.in",
+        "disabilityRequirement": "Yes"
+    },
+    {
+        "name": "Scholarships for Students with Disabilities",
+        "category": "Education",
+        "description": "Pre-matric, Post-matric, and Top Class Education scholarships.",
+        "benefits": "Financial assistance.",
+        "eligibility": "Students with 40% or more disability.",
+        "applicationLink": "https://scholarships.gov.in",
+        "disabilityRequirement": "Yes",
+        "allowedOccupations": [
+            "Student"
+        ]
+    },
+    {
+        "name": "Karnataka Gruha Jyothi Scheme",
+        "category": "Energy",
+        "description": "Free electricity up to 200 units for households in Karnataka.",
+        "benefits": "Zero electricity bill for up to 200 units usage.",
+        "eligibility": "Residents of Karnataka.",
+        "applicationLink": "https://sevasindhu.karnataka.gov.in",
+        "allowedStates": [
+            "Karnataka"
+        ]
+    },
+    {
+        "name": "Karnataka Gruha Lakshmi Scheme",
+        "category": "Social Welfare",
+        "description": "Financial assistance of ₹2,000 per month to the woman head of the family.",
+        "benefits": "₹2,000 monthly.",
+        "eligibility": "Woman head of family in Karnataka (APL/BPL/Antyodaya).",
+        "applicationLink": "https://sevasindhu.karnataka.gov.in",
+        "allowedStates": [
+            "Karnataka"
+        ],
+        "allowedGenders": [
+            "Female"
+        ]
+    },
+    {
+        "name": "Karnataka Shakti Scheme",
+        "category": "Transport",
+        "description": "Free bus travel for women in Karnataka.",
+        "benefits": "Free travel in non-luxury government buses.",
+        "eligibility": "Women residents of Karnataka.",
+        "applicationLink": "https://sevasindhu.karnataka.gov.in",
+        "allowedStates": [
+            "Karnataka"
+        ],
+        "allowedGenders": [
+            "Female"
+        ]
+    },
+    {
+        "name": "Karnataka Anna Bhagya Scheme",
+        "category": "Food Security",
+        "description": "Additional 5 kg rice per person for BPL families.",
+        "benefits": "Free rice/cash equivalent.",
+        "eligibility": "BPL/Antyodaya card holders in Karnataka.",
+        "applicationLink": "https://ahara.kar.nic.in",
+        "allowedStates": [
+            "Karnataka"
+        ]
+    },
+    {
+        "name": "Karnataka Yuva Nidhi Scheme",
+        "category": "Employment",
+        "description": "Unemployment allowance for graduates and diploma holders.",
+        "benefits": "₹3,000 for graduates, ₹1,500 for diploma holders per month.",
+        "eligibility": "Unemployed graduates/diploma holders of 2022-23 in Karnataka.",
+        "applicationLink": "https://sevasindhu.karnataka.gov.in",
+        "allowedStates": [
+            "Karnataka"
+        ],
+        "allowedOccupations": [
+            "Unemployed",
+            "Student"
+        ]
+    },
+    {
+        "name": "Delhi Ladli Scheme",
+        "category": "Child Welfare",
+        "description": "Financial assistance for girl child education.",
+        "benefits": "Periodic financial deposits.",
+        "eligibility": "Girl child born in Delhi, family income < ₹1 Lakh.",
+        "applicationLink": "http://wcddel.in",
+        "allowedStates": [
+            "Delhi"
+        ],
+        "allowedGenders": [
+            "Female"
+        ],
+        "maxIncome": 100000
+    },
+    {
+        "name": "Delhi Jai Bhim Mukhyamantri Pratibha Vikas Yojana",
+        "category": "Education",
+        "description": "Free coaching for competitive exams for SC/ST/OBC/EWS students.",
+        "benefits": "Free coating and stipend.",
+        "eligibility": "SC/ST/OBC/EWS students in Delhi.",
+        "applicationLink": "http://scstwelfare.delhigovt.nic.in",
+        "allowedStates": [
+            "Delhi"
+        ],
+        "allowedOccupations": [
+            "Student"
+        ]
+    },
+    {
+        "name": "Maharashtra Jyotirao Phule Shetkari Karjmukti Yojana",
+        "category": "Agriculture",
+        "description": "Farm loan waiver scheme.",
+        "benefits": "Loan waiver up to ₹2 Lakhs.",
+        "eligibility": "Farmers in Maharashtra.",
+        "applicationLink": "https://mjpsky.maharashtra.gov.in",
+        "allowedStates": [
+            "Maharashtra"
+        ],
+        "allowedOccupations": [
+            "Farmer"
+        ]
+    },
+    {
+        "name": "Maharashtra Shiv Bhojan Thali",
+        "category": "Food Security",
+        "description": "Subsidized meal for ₹10.",
+        "benefits": "Affordable food.",
+        "eligibility": "All citizens in Maharashtra.",
+        "applicationLink": "https://mahafood.gov.in",
+        "allowedStates": [
+            "Maharashtra"
+        ]
+    },
+    {
+        "name": "UP Kanya Sumangala Yojana",
+        "category": "Child Welfare",
+        "description": "Financial assistance for girl child.",
+        "benefits": "Up to ₹15,000 in phases.",
+        "eligibility": "Girl child in Uttar Pradesh.",
+        "applicationLink": "https://mksy.up.gov.in",
+        "allowedStates": [
+            "Uttar Pradesh"
+        ],
+        "allowedGenders": [
+            "Female"
+        ]
+    },
+    {
+        "name": "UP Abhyudaya Yojana",
+        "category": "Education",
+        "description": "Free coaching for competitive exams.",
+        "benefits": "Free coaching classes.",
+        "eligibility": "Students in Uttar Pradesh.",
+        "applicationLink": "http://abhyuday.up.gov.in",
+        "allowedStates": [
+            "Uttar Pradesh"
+        ],
+        "allowedOccupations": [
+            "Student"
+        ]
+    },
+    {
+        "name": "Gujarat Vahli Dikri Yojana",
+        "category": "Child Welfare",
+        "description": "Financial assistance to families with girl children.",
+        "benefits": "₹1.10 Lakh support.",
+        "eligibility": "EWS families in Gujarat.",
+        "applicationLink": "https://wcd.gujarat.gov.in",
+        "allowedStates": [
+            "Gujarat"
+        ],
+        "allowedGenders": [
+            "Female"
+        ]
+    },
+    {
+        "name": "Tamil Nadu Moovalur Ramamirtham Ammaiyar Higher Education Assurance Scheme",
+        "category": "Education",
+        "description": "₹1,000 monthly for girl students.",
+        "benefits": "₹1,000 per month.",
+        "eligibility": "Girl students from govt schools in Tamil Nadu.",
+        "applicationLink": "https://penkalvi.tn.gov.in",
+        "allowedStates": [
+            "Tamil Nadu"
+        ],
+        "allowedGenders": [
+            "Female"
+        ],
+        "allowedOccupations": [
+            "Student"
+        ]
+    },
+    {
+        "name": "Tamil Nadu Naan Mudhalvan Scheme",
+        "category": "Skill Development",
+        "description": "Skill development for students.",
+        "benefits": "Training and placement.",
+        "eligibility": "Students in Tamil Nadu.",
+        "applicationLink": "https://naanmudhalvan.tn.gov.in",
+        "allowedStates": [
+            "Tamil Nadu"
+        ],
+        "allowedOccupations": [
+            "Student"
+        ]
+    }
+]

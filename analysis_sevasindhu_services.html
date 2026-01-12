@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="no-js" lang="en-US">
+ <script>
+  var clour = 1;
+ </script>
+ <head>
+  <!-- META DATA -->
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <!-- TITLE OF SITE -->
+  <title>
+   Departments &amp; Services
+  </title>
+  <!-- for title img -->
+  <link href="/assets/images/logo/favicon.png" rel="shortcut icon" type="image/icon"/>
+  <!--font-awesome.min.css-->
+  <link href="/assets/css/font-awesome.min.css" rel="stylesheet"/>
+  <link href="/assets/css/site.css" rel="stylesheet"/>
+  <link href="/assets/css/datatables.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Oswald:700|Roboto" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Baloo+Tamma&amp;display=swap" rel="stylesheet"/>
+  <!--animate.css-->
+  <link href="/assets/css/animate.css" rel="stylesheet"/>
+  <!--hover.css-->
+  <link href="/assets/css/hover.css" rel="stylesheet"/>
+  <!--owl.carousel.css-->
+  <link href="/assets/css/owl.carousel.min.css" rel="stylesheet"/>
+  <link href="/assets/css/owl.theme.default.min.css" rel="stylesheet">
+   <!--bootstrap.min.css-->
+   <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
+   <!-- bootsnav -->
+   <link href="/assets/css/bootsnav.css" rel="stylesheet">
+    <!--style.css-->
+    <link href="/assets/css/style_eng.css" rel="stylesheet"/>
+    <!--responsive.css-->
+    <link href="/assets/css/responsive.css" rel="stylesheet"/>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+     .mySlides {
+            display: none;
+        }
+
+        .owl-carousel .owl-dots.disabled, .owl-carousel .owl-nav.disabled {
+            display: block;
+        }
+    </style>
+    <style>
+     .button {
+            background-color: #fff;
+            border: none;
+            color: #000;
+            text-align: center;
+            font-size: 12px;
+            padding: 8px;
+            transition: all 0.5s;
+            cursor: pointer;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        .footer-copyright12 {
+            position: relative !important;
+            left: 0;
+            bottom: 0;
+            padding: 10px;
+            background-color: #fff200;
+            text-align: center;
+            width: 100%;
+        }
+		
+		
+
+            .button span {
+                cursor: pointer;
+                display: inline-block;
+                position: relative;
+                transition: 0.5s;
+            }
+
+                .button span:after {
+                    content: '\00bb';
+                    position: absolute;
+                    opacity: 0;
+                    top: 0;
+                    right: -20px;
+                    transition: 0.5s;
+                }
+
+            .button:hover span {
+                padding-right: 25px;
+            }
+
+                .button:hover span:after {
+                    opacity: 1;
+                    right: 0;
+                }
+
+        .service-cent a {
+            padding: 5px 5px !important;
+            line-height: 30px !important;
+            height: 40px !important;
+        }
+
+        .page_button_inactive {
+            border: 1px solid #fff;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .page_button_active {
+            border: 1px solid #facf5a;
+            background: #facf5a;
+            padding: 10px;
+        }
+    </style>
+    <script>
+     var Disable = 0;
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-128048383-1">
+    </script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-128048383-1');
+    </script>
+    <script type="text/javascript">
+     if (document.layers) {
+            //Capture the MouseDown event.
+            document.captureEvents(Event.MOUSEDOWN);
+
+            //Disable the OnMouseDown event handler.
+            document.onmousedown = function () {
+                return false;
+            };
+        }
+        else {
+            //Disable the OnMouseUp event handler.
+            document.onmouseup = function (e) {
+                if (e != null && e.type == "mouseup") {
+                    //Check the Mouse Button which is clicked.
+                    if (e.which == 2 || e.which == 3) {
+                        //If the Button is middle or right then disable.
+                        return false;
+                    }
+                }
+            };
+        }
+
+        //Disable the Context Menu event.
+        document.oncontextmenu = function () {
+            return false;
+        };
+        document.onkeydown = ShowKeyCode;
+        function ShowKeyCode(evt) {
+            if (evt.keyCode == '123')
+                return false;
+            //For F12 Button 
+        }
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+    <script>
+     function servfunction(id) {
+            var urlContent = '/';
+            $.get("/api/dept/" + id, function (serverdata, status) {
+
+                if (serverdata) {
+                    try {
+                        //debugger;
+                        var serverdata_json = JSON.parse(serverdata);
+                        var html = '<div id="" class="" role="tabpanel" aria-labelledby="headingTwo"> <div class="panel-body"><ul>'
+                        var selection = '<select hidden id="mySelect' + id + '">'
+
+
+                        for (var i = 0; i < serverdata_json.length; i++) {
+                            if (serverdata_json[i].IsOtherService == 1) {
+                                html = html + '<li class="service-inactive"><a href="' + urlContent + '/' + serverdata_json[i].url+'" target="_blank">' + serverdata_json[i].name + '</a></li>'
+                            }
+                            else {
+                                html = html + '<li><a onclick=servdetails(' + serverdata_json[i].id + ') href="#"  data-toggle="modal" data-target="#myModal">' + serverdata_json[i].name + '</a></li>'
+                            }
+                            //html = html + '<a onclick=servdetails(' + serverdata_json[i].id + ') href="#"  data-toggle="modal" data-target="#myModal">' + serverdata_json[i].name + '</a></li>'
+                            selection = selection + ' <option>' + serverdata_json[i].name + '</option>'
+                        }
+                        selection = selection + ' </select>'
+                        var html = html + '</ul></div></div>' + selection
+                        var html1 = '<div></div>'
+
+
+                        for (var j = 0; j < serverdata_json[0].length + 1; j++) {
+                            if (j == serverdata_json[0].dept_id) {
+                                try {
+                                    var x = document.getElementById('#mySelect' + id).length;
+                                    $('#spldata' + j).html();
+                                } catch (e) {
+
+
+                                    $('#spldata' + j).html(html);
+                                }
+                                if (Disable == id) {
+                                    $('#spldata' + id).hide();
+                                    $('#addition' + id).show();
+                                    $('#substrion' + id).hide();
+                                    Disable = 0;
+                                }
+                                else {
+                                    $('#spldata' + id).show();
+                                    $('#addition' + id).hide();
+                                    $('#substrion' + id).show();
+                                    Disable = id;
+                                }
+                            }
+                            else {
+                                $('#spldata' + j).html(html1);
+                                $('#spldata' + j).hide();
+                                $('#addition' + j).show();
+                                $('#substrion' + j).hide();
+
+                            }
+                        }
+
+
+
+
+                    } catch (e) {
+                        console.log('Error while formatting the data : ' + e.message)
+                    }
+                }
+
+
+
+            });
+        }
+        //$('.panel-group').on('hidden.bs.collapse', toggleIcon);
+        //$('.panel-group').on('shown.bs.collapse', toggleIcon);
+    </script>
+    <script>
+     function TopDeptFunctions(id) {
+
+            $.get("/api/dept/" + id, function (serverdata, status) {
+                if (serverdata) {
+                    try {
+                       
+                        var serverdata_json = JSON.parse(serverdata);
+                        var html = '<ul>'
+
+                        for (var i = 0; i < serverdata_json.length; i++) {
+
+                            html = html + '<li><a onclick=servdetails(' + serverdata_json[i].id + ') href="#"  data-toggle="modal" data-target="#myModal">' + serverdata_json[i].name + '</a></li>'
+
+                        }
+                        var html = html + '</ul>'
+                        if (id == 1) {
+                            $('#topdept1').html(html);
+                        }
+                        else if (id == 4) {
+                            $('#topdept2').html(html);
+                        }
+                        else if (id == 5) {
+                            $('#topdept3').html(html);
+                        }
+                        else {
+                            $('#topdept4').html(html);
+                        }
+
+
+                    } catch (e) {
+                        console.log('Error while formatting the data : ' + e.message)
+                    }
+                }
+
+
+
+            });
+        }
+        //$('.panel-group').on('hidden.bs.collapse', toggleIcon);
+        //$('.panel-group').on('shown.bs.collapse', toggleIcon);
+    </script>
+    <script>
+     function TopDeptFunctionsD(id) {
+
+            $.get("/api/dept/" + id, function (serverdata, status) {
+                if (serverdata) {
+                    try {
+                       
+                        var serverdata_json = JSON.parse(serverdata);
+                        var html = '<ul>'
+
+                        for (var i = 0; i < serverdata_json.length; i++) {
+
+                            html = html + '<li><a onclick=servdetails(' + serverdata_json[i].id + ') href="#"  data-toggle="modal" data-target="#myModal">' + serverdata_json[i].name + '</a></li>'
+
+                        }
+                        var html = html + '</ul>'
+                        if (id == 1) {
+                            $('#topdept1').html(html);
+
+                        }
+                        else if (id == 4) {
+                            $('#topdept2').html(html);
+                        }
+                        else if (id == 2) {
+                            $('#topdept3').html(html);
+                        }
+                        else {
+                            $('#topdept4').html(html);
+                        }
+
+
+                    } catch (e) {
+                        console.log('Error while formatting the data : ' + e.message)
+                    }
+                }
+
+
+
+            });
+        }
+        //$('.panel-group').on('hidden.bs.collapse', toggleIcon);
+        //$('.panel-group').on('shown.bs.collapse', toggleIcon);
+    </script>
+    <script>
+     function kannadaversion(id) {
+            $.get(" /Account/Register", function () {
+
+            });
+        }
+    </script>
+    <script>
+     function servdetails(id) {
+
+            $.get("/api/Service/" + id, function (service, status) {
+                if (service) {
+                    try {
+                       
+                        var popup_html = '';
+                        var popup_html1 = '';
+                        var service_json = JSON.parse(service);
+
+
+                        popup_html1 = popup_html1 + '<div>'
+                            + '<button type="button" class="close" data-dismiss="modal">&times;</button>'
+                            + '<h4 class="modal-title"  >' + service_json[0].name + '</h4> </div>'
+                        if (service_json[0].IsOtherService == true) {
+                            popup_html = popup_html + '<div>'
+                                + '</div><div class="modal-body"><section class="container"><div class="row"><div class="container service-detals"><div class="panel-group">'
+                                + '<div class="panel panel-default"><div>'
+                                + '<div class="panel-body"><ul><li>Upon clicking the button, you will be redirected to the department website. Please follow the process mentioned in the department to avail the service.</li></ul></div></div></div></div></div></div></section></div><div class="modal-footer">'
+                        }
+                        else {
+                            popup_html = popup_html + '<div>'
+                                + '</div><div class="modal-body"><section class="container"><div class="row"><div class="container service-detals"><div class="panel-group">'
+                                + '<div class="panel panel-default"><div>'
+                                + '<div class="panel-body"><ul>'
+								+ '<li><span  style="font-weight:bold;">Service Description :  </span>  ' + service_json[0].definition + ' </li>'
+								+ '<li><span style="font-weight:bold;">Eligibility:</span> ' + service_json[0].eligibility + '</li><li><span style="font-weight:bold;">Supporting Document:</span><ul>'
+                                + '' + service_json[0].supporting_documents + ' </ul></li>'
+                                + '<li><span  style="font-weight:bold;">Application Fee :  </span>  ' + service_json[0].Applicationfee + ' </li>'
+                                + '<li><span  style="font-weight:bold;">Service Charge (Free for Online Submission) :  </span>  ' + service_json[0].chargers + ' </li>'
+                                + '<li><span  style="font-weight:bold;">Delivery Time (Days) :</span> ' + service_json[0].delivery + '  </li><li><span style="font-weight:bold;">Procedure for applying:</span><ul>'
+                                + '' + service_json[0].procedure + ''
+
+                                + '</ul></li></ul></div></div></div></div></div></div></section></div><div class="modal-footer">'
+                        }
+                        if (service_json[0].url == "serviceonline.gov.in/karnataka/") {
+
+                            popup_html = popup_html + '<a href="https://' + service_json[0].url + '"  target="_blank"><button id="ApplyButton" type="button" class="btn btn-default" >Apply Online</button></a></div></div>'
+
+                        }
+                        else {
+                            popup_html = popup_html + '<a href="https://' + service_json[0].url + '"  target="_blank"><button id="ApplyButton" type="button" class="btn btn-default" >Apply Online</button></a></div></div>'
+
+                        }
+
+                        $('#servicepopup').html(popup_html);
+                        $('#servicepopup1').html(popup_html1);
+
+                    }
+
+
+
+
+
+
+                    catch (e) {
+                        console.log('Error while formatting the data : ' + e.message)
+                    }
+                }
+
+
+
+            });
+        }
+    </script>
+    <script>
+     function searchdata() {
+            var searchdatavalue = document.getElementById("Searchtext").value + ",Filter";
+            var urlContent = '/';
+            $.get("/api/Service/" + searchdatavalue, function (service, status) {
+                if (service) {
+                    try {
+                        //debugger;
+                        var service_json = JSON.parse(service);
+                        var html = '<div class="col-lg-12 col-md-12" style="overflow-y: scroll; height: 500px;"> '
+                        if (service_json.Dept.length == 0) {
+                            html = html + '<h2 style="padding: 2%; text-align: center; ">No Service Available</h2>';
+                        }
+
+                        for (var i = 0; i < service_json.Dept.length; i++) {
+                            if (clour == 1) {
+                                if (service_json.Dept[i].IsSeveSindhuServiceExist == 1) {
+                                    html = html + '<div class="col-sm-4 col-md-4"> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                        + ' <a > ' + service_json.Dept[i].name + '</a></h4></div></div></div><div id="spldata' + service_json.Dept[i].id + '"style="  max-height: 300px; overflow-y: scroll; "><div id="" class="" role="tabpanel" aria-labelledby="headingTwo"> <div class="panel-body"><ul>';
+                                }
+                                else {
+                                    html = html + '<div class="col-sm-4 col-md-4"> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                        + ' <a > ' + service_json.Dept[i].name + '</a></h4></div></div></div><div id="spldata' + service_json.Dept[i].id + '"style="  max-height: 300px; overflow-y: scroll; "><div id="" class="" role="tabpanel" aria-labelledby="headingTwo"> <div class="panel-body"><ul>';
+                                }
+                                for (var j = 0; j < service_json.Service.length; j++) {
+                                    if (service_json.Service[j].dname == service_json.Dept[i].name) {
+                                        if (service_json.Service[j].IsOtherService == 1) {
+                                            html = html + '<li class="service-inactive"><a href="' + urlContent + '/' + service_json.Service[j].url +'" target="_blank">' + service_json.Service[j].name + '</a></li>';
+                                        }
+                                        else {
+                                            html = html + '<li><a onclick=servdetails(' + service_json.Service[j].id + ') href="#"  data-toggle="modal" data-target="#myModal">' + service_json.Service[j].name + '</a></li>';
+                                        }
+                                    }
+                                }
+
+                            }
+                            if (clour == 2) {
+                                if (service_json.Dept[i].IsSeveSindhuServiceExist == 1) {
+                                    html = html + '<div class="col-sm-4 col-md-4"> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                        + ' <a > ' + service_json.Dept[i].name + '</a></h4></div></div></div><div id="spldata' + service_json.Dept[i].id + '"style="  max-height: 300px; overflow-y: scroll; "><div id="" class="" role="tabpanel" aria-labelledby="headingTwo"> <div class="panel-body"><ul>';
+                                }
+                                else {
+                                    html = html + '<div class="col-sm-4 col-md-4"> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                        + ' <a > ' + service_json.Dept[i].name + '</a></h4></div></div></div><div id="spldata' + service_json.Dept[i].id + '"style="  max-height: 300px; overflow-y: scroll; "><div id="" class="" role="tabpanel" aria-labelledby="headingTwo"> <div class="panel-body"><ul>';
+                                }
+                                for (var j = 0; j < service_json.Service.length; j++) {
+                                    if (service_json.Service[j].dname == service_json.Dept[i].name) {
+                                        if (service_json.Service[j].IsOtherService == 1) {
+                                            html = html + '<li class="service-inactive"><a href="' + urlContent + '/' + service_json.Service[j].url + '" target="_blank">' + service_json.Service[j].name + '</a></li>';
+                                        }
+                                        else {
+                                            html = html + '<li><a onclick=servdetails(' + service_json.Service[j].id + ') href="#"  data-toggle="modal" data-target="#myModal">' + service_json.Service[j].name + '</a></li>';
+                                        }
+                                    }
+                                }
+                            }
+                            if (clour == 3) {
+                                if (service_json.Dept[i].IsSeveSindhuServiceExist == 1) {
+                                    html = html + '<div class="col-sm-4 col-md-4"> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                        + ' <a > ' + service_json.Dept[i].name + '</a></h4></div></div></div><div id="spldata' + service_json.Dept[i].id + '"style="  max-height: 300px; overflow-y: scroll; "><div id="" class="" role="tabpanel" aria-labelledby="headingTwo"> <div class="panel-body"><ul>';
+                                }
+                                else {
+                                    html = html + '<div class="col-sm-4 col-md-4"> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                        + ' <a > ' + service_json.Dept[i].name + '</a></h4></div></div></div><div id="spldata' + service_json.Dept[i].id + '"style="  max-height: 300px; overflow-y: scroll; "><div id="" class="" role="tabpanel" aria-labelledby="headingTwo"> <div class="panel-body"><ul>';
+                                }
+                                for (var j = 0; j < service_json.Service.length; j++) {
+                                    if (service_json.Service[j].dname == service_json.Dept[i].name) {
+                                        if (service_json.Service[j].IsOtherService == 1) {
+                                            html = html + '<li class="service-inactive"><a href="' + urlContent + '/' + service_json.Service[j].url + '" target="_blank">' + service_json.Service[j].name + '</a></li>';
+                                        }
+                                        else {
+                                            html = html + '<li><a onclick=servdetails(' + service_json.Service[j].id + ') href="#"  data-toggle="modal" data-target="#myModal">' + service_json.Service[j].name + '</a></li>';
+                                        }
+                                    }
+                                }
+                            }
+                            html = html + '</div></div></div></DIV>';
+                        }
+                        var html = html + '</div>'
+                        $('#spldata').html(html);
+
+
+                        for (var k = 0; k <= service_json.Dept.length; k++) {
+                            $('#spldata' + service_json.Dept[i].id).html(htmls);
+                            $('#spldata' + service_json.Dept[i].id).show();
+                        }
+
+
+
+                    }
+                    catch (e) {
+                        console.log('Error while formatting the data : ' + e.message)
+
+                    }
+                }
+            });
+
+        }
+
+
+
+        function cleardata() {
+            var a = document.getElementById("Searchtext");
+            a.value = a.defaultValue;
+            $.get("/api/dept", function (data, status) {
+                if (data) {
+                    try {
+                        //debugger;
+                        var jsondata = JSON.parse(data);
+                        var totalRecords = jsondata.length;
+                        var pageFlag = 0;
+                        var noOfPages = 0;
+                        var divClose = 0;
+                        var html = '';
+                        for (var i = 0; i < jsondata.length; i++) {
+                            if (pageFlag == 0) {
+                                noOfPages = noOfPages + 1;
+                                html = html + '<div id="divHomeDeparments_' + noOfPages + '" class="col-lg-12 col-md-12 HomeDepartments"> <div class="col-lg-4 col-md-4"> ';
+                            }
+                            if (pageFlag < 5) {
+                                if (clour == 1) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 2) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green " role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green " role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 3) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (divClose == 4) {
+                                    html = html + '</div><div class="col-lg-4 col-md-4">';
+                                }
+                            }
+                            if (pageFlag < 10 & pageFlag > 4) {
+                                if (clour == 1) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 2) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 3) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (divClose == 9) {
+                                    html = html + '</div><div class="col-lg-4 col-md-4">';
+                                }
+                            }
+                            if (pageFlag < 15 & pageFlag > 9) {
+
+                                if (clour == 1) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 2) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 3) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                            }
+                            pageFlag = pageFlag + 1;
+                            divClose = divClose + 1;
+                            //alert(pageFlag);
+                            if (pageFlag == 15) {
+                                html = html + '</div></div>';
+                                pageFlag = 0;
+                                divClose = 0;
+                                //alert('loop done');
+                            }
+                            if (totalRecords == (i + 1)) {
+                                html = html + '</div></div>';
+                                html = html + "<div style=\"float: right; margin-right: 27px;\">";
+                                for (var k = 1; k <= noOfPages; k++) {
+                                    if (k == 1) {
+                                        html = html + "<button type='button' class='HomeDeptPages page_button_active' id='" + k + "'>" + k + "</button>";
+                                    }
+                                    else {
+                                        html = html + "<button type='button' class='HomeDeptPages page_button_inactive' id='" + k + "'>" + k + "</button>";
+                                    }
+                                }
+                                html = html + "</div>";
+                            }
+                        }
+                        $('#spldata').html(html);
+                        $('.HomeDepartments').hide();
+                        $('#divHomeDeparments_1').show();
+                        IntAevnt();
+                        for (var j = 0; j < jsondata.length + 1; j++) {
+                            $('#substrion' + j).hide();
+                        }
+                    } catch (e) {
+                        console.log('Error while formatting the data : ' + e.message)
+                    }
+                }
+            });
+        }
+
+
+
+        $(document).ready(function () {
+            IntAevnt();
+            var a = document.getElementById("Searchtext").value + ",Filter";
+            a.value = a.defaultValue;
+            $.get("/api/dept", function (data, status) {
+                if (data) {
+                    try {
+                        var jsondata = JSON.parse(data);
+                        var totalRecords = jsondata.length;
+                        var pageFlag = 0;
+                        var noOfPages = 0;
+                        var divClose = 0;
+                        var html = '';
+                        for (var i = 0; i < jsondata.length; i++) {
+                            if (pageFlag == 0) {
+                                noOfPages = noOfPages + 1;
+                                html = html + '<div id="divHomeDeparments_' + noOfPages + '" class="col-lg-12 col-md-12 HomeDepartments"> <div class="col-lg-4 col-md-4"> ';
+                            }
+                            if (pageFlag < 5) {
+                                if (clour == 1) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 2) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 3) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 300px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (divClose == 4) {
+                                    html = html + '</div><div class="col-lg-4 col-md-4">';
+                                }
+                            }
+                            if (pageFlag < 10 & pageFlag > 4) {
+                                if (clour == 1) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 200px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 200px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 2) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 200px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 200px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 3) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 200px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 200px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                            if (divClose == 9) {
+                                    html = html + '</div><div class="col-lg-4 col-md-4">';
+                                }
+                            }
+
+                            if (pageFlag < 15 & pageFlag > 9) {
+
+                                if (clour == 1) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 100px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 100px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 2) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 100px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 100px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                                if (clour == 3) {
+                                    if (jsondata[i].IsSeveSindhuServiceExist == 1) {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel panel-default"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 100px; overflow-y: scroll; "></div></div>';
+                                    }
+                                    else {
+                                        html = html + '<div onclick=servfunction(' + jsondata[i].id + ')> <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"><div class="panel not-sevasindhu-service"><div class="panel-heading panel-heading-green panel-heading-blue" role="tab" id="headingTwo"><h4 class="panel-title">'
+                                            + ' <a > <i id="addition' + jsondata[i].id + '" class="more-less glyphicon glyphicon-plus"></i><i  id="substrion' + jsondata[i].id + '"class="glyphicon glyphicon-minus"></i>'
+                                            + jsondata[i].name
+                                            + '</a></h4></div></div></div><div id="spldata' + jsondata[i].id + '"style="  max-height: 100px; overflow-y: scroll; "></div></div>';
+                                    }
+                                }
+                            }
+                            divClose = divClose + 1;
+                            pageFlag = pageFlag + 1;
+                            //alert(pageFlag);
+                            if (pageFlag == 15) {
+                                html = html + '</div></div>';
+                                pageFlag = 0;
+                                divClose = 0;
+                                //alert('loop done');
+                            }
+                            if (totalRecords == (i + 1)) {
+                                html = html + '</div></div>';
+                                html = html + "<div style=\"float: right; margin-right: 27px;\">";
+                                for (var k = 1; k <= noOfPages; k++) {
+                                    if (k == 1) {
+                                        html = html + "<button type='button' class='HomeDeptPages page_button_active' id='" + k + "'>" + k + "</button>";
+                                    }
+                                    else {
+                                        html = html + "<button type='button' class='HomeDeptPages page_button_inactive' id='" + k + "'>" + k + "</button>";
+                                    }
+                                }
+                                html = html + "</div>";
+                            }
+                        }
+
+                        $('#spldata').html(html);
+                        $('.HomeDepartments').hide();
+                        $('#divHomeDeparments_1').show();
+                        IntAevnt();
+                        for (var j = 0; j < jsondata.length + 1; j++) {
+                            $('#substrion' + jsondata[j].id).hide();
+                        }
+                    } catch (e) {
+                        console.log('Error while formatting the data : ' + e.message)
+                    }
+                }
+            });
+        });
+        function IntAevnt() {
+            $('.HomeDeptPages').off('click').on('click', function () {
+                $('.HomeDepartments').hide();
+                $('#divHomeDeparments_' + $(this).attr('id') + '').show();
+                $('.HomeDeptPages').attr('class', 'HomeDeptPages page_button_inactive');
+                $(this).attr('class', 'HomeDeptPages page_button_active');
+            })
+        }
+    </script>
+   </link>
+  </link>
+ </head>
+ <body oncontextmenu="return false;">
+  <section>
+   <div>
+    <div class="top-section-bg">
+     <div class="container">
+      <div class="row">
+       <div class="col-md-9">
+        <div class="browser">
+         <span style="font-size:16px; color:#fff;">
+          Note: Supported browser versions are Internet explorer 9+, Mozilla 50+ and Chrome 52+
+          <!--<span style="font-size:16px; color:#fff">e-signature is intermittently functioning, <br> Regret inconvinence caused.</span><span><a style="color:#fff" href="https://www.karnatakaone.gov.in/Public/GramOneFranchiseeTerms">Click here for GramaOne Franchises</a></span>-->
+         </span>
+        </div>
+       </div>
+       <div class="col-md-3">
+        <table class="table-td">
+         <tbody>
+          <tr>
+           <td>
+            <a href="https://sevasindhu.karnataka.gov.in/Sevasindhu/ScreenReader">
+             <img alt=" " src="/assets/images/disabled-sign.png"/>
+            </a>
+           </td>
+           <td>
+            <a href="https://www.facebook.com/seva.sindhu.71">
+             <img alt=" " src="/assets/images/facebook.png"/>
+            </a>
+           </td>
+           <td>
+            <a href="https://twitter.com/sevasindhukarn1">
+             <img alt=" " src="/assets/images/twitter.png"/>
+            </a>
+           </td>
+           <td>
+            <a href="https://www.youtube.com/c/sevasindhuofficial">
+             <img alt=" " src="/assets/images/youtube.png"/>
+            </a>
+           </td>
+           <td style="background:#021644">
+            <a href="https://sevasindhu.karnataka.gov.in/Sevasindhu/DepartmentServices" style="color:#fff">
+             English
+            </a>
+           </td>
+           <td style="background:#021644">
+            <a href="https://sevasindhu.karnataka.gov.in/Sevasindhu/DepartmentServicesKannada">
+             <img alt=" " src="/assets/images/kannada_text_img.jpg"/>
+            </a>
+           </td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="topmenu-service">
+     <div class="menubar">
+      <nav class="navbar navbar-default">
+       <div class="container">
+        <div class="row">
+         <div class="col-sm-2 col-md-2">
+          <div class="kar_logo">
+           <a href="index.html">
+            <img alt="Karnataka Logo" height="106" src="/assets/images/karnataka_logo.jpg" width="144"/>
+           </a>
+          </div>
+         </div>
+         <div class="col-sm-8 col-md-8 text-center">
+          <div class="sevasindhu-text" style="text-align:center;">
+           <h4>
+            <span class="sevasindhu-font">
+             Seva Sindhu
+            </span>
+           </h4>
+           <h4 style="margin:0px;">
+            <span class="sevasindhu-font-head">
+             Government of Karnataka
+            </span>
+           </h4>
+          </div>
+         </div>
+         <div class="col-md-2 col-md-2 text-align-right">
+          <div class="sevasindhu_logo">
+           <a href="index.html">
+            <img alt="Sevasindhu Logo" height="106" src="/assets/images/logo/sevasindhu-logo.jpg" width="124"/>
+           </a>
+          </div>
+         </div>
+        </div>
+       </div>
+       <!--<div class="cm-section" style="text-align:center;"><img src="~/assets/images/CM_Section.png?bn=401" width="" height="" alt=" "></div>-->
+       <div class="row topmenu-bg">
+        <div class="navbar-header">
+         <button aria-expanded="false" class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button">
+          <span class="sr-only">
+           Toggle navigation
+          </span>
+          <span class="icon-bar">
+          </span>
+          <span class="icon-bar">
+          </span>
+          <span class="icon-bar">
+          </span>
+         </button>
+        </div>
+        <div class="col-sm-2 col-md-2">
+        </div>
+        <div class="container increasefont">
+         <div class="toggle-menu">
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+           <ul class="nav navbar-nav navbar-right">
+            <li>
+             <p class="smooth-menu service-cent">
+              <a href="https://sevasindhu.karnataka.gov.in/Sevasindhu/English">
+               Home
+              </a>
+             </p>
+            </li>
+            <li class="smooth-menu about">
+             <a href="https://sevasindhu.karnataka.gov.in/about.html">
+              About Seva Sindhu
+             </a>
+            </li>
+            <li class="smooth-menu acc_menu">
+             <a href="https://sevasindhu.karnataka.gov.in/Sevasindhu/DepartmentServices" id="myGrid">
+              Departments &amp; Services
+             </a>
+            </li>
+            <li>
+             <p class="smooth-menu service-cent">
+              <a href="https://sevasindhu.karnataka.gov.in/Sevasindhu/Servicecenters" target="_blank">
+               Service Centers
+              </a>
+             </p>
+            </li>
+            <li class="dropdown">
+             <p class="smooth-menu service-cent">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+               Grama One
+               <span class="caret">
+               </span>
+              </a>
+             </p>
+             <ul class="dropdown-menu">
+              <li>
+               <a href="https://gramaone.karnataka.gov.in" target="_blank">
+                Grama One Portal
+               </a>
+              </li>
+              <li>
+               <a href="https://sevasindhu.karnataka.gov.in/Gramaone/gramaone_franchise.html">
+                Apply for Grama one Franchise
+               </a>
+              </li>
+             </ul>
+            </li>
+            <li>
+             <a href="https://www.janasevaka.karnataka.gov.in/" target="_blank">
+              Janasevaka (
+              <span style="color:#fff200;">
+               For Door Step Delivery
+              </span>
+              )
+             </a>
+            </li>
+            <li class="smooth-menu contat">
+             <a href="https://sevasindhu.karnataka.gov.in/Faq.html">
+              FAQ
+             </a>
+            </li>
+            <li class="smooth-menu contat">
+             <a href="https://sevasindhu.karnataka.gov.in/Department_contact_Eng.html">
+              Department Contact Details
+             </a>
+            </li>
+            <li class="smooth-menu contat">
+             <a href="https://sevasindhu.karnataka.gov.in/Sevasindhu_Count/Service_CountList.aspx">
+              Dashboard
+             </a>
+            </li>
+            <li class="smooth-menu contat">
+             <a href="https://sevasindhuservices.karnataka.gov.in/">
+              Citizens Login
+             </a>
+            </li>
+            <li class="smooth-menu contat">
+             <a href="https://sevasindhu.karnataka.gov.in/contact.html">
+              Contact
+             </a>
+            </li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </section>
+  <section>
+   <div style="padding:15px; text-align:center; font-size:18px;">
+    <a href="https://www.janasevaka.karnataka.gov.in/" style="font-size:18px;" target="_blank">
+     Janasevaka (
+     <span style="color:red;">
+      For Door Step Delivery
+     </span>
+     )
+    </a>
+   </div>
+  </section>
+  <section>
+   <!-- Modal -->
+   <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+     <div class="modal-content">
+      <div class="modal-header" id="Colur">
+       <div id="servicepopup1">
+       </div>
+       <div>
+       </div>
+      </div>
+     </div>
+     <div id="servicepopup" style="background-color: white;">
+     </div>
+    </div>
+   </div>
+  </section>
+  <!--menu end-->
+  <section>
+   <div class="container" id="acc_menu">
+    <div class="row" id="top-menu">
+     <div class="col-sm-4 col-md-4">
+     </div>
+     <div class="col-sm-5 col-md-4">
+     </div>
+     <div class="col-sm-3 col-md-3">
+      <table>
+       <tr>
+        <td>
+         <input class="form-control" id="Searchtext" placeholder="Search Service" type="text"/>
+        </td>
+        <td>
+         <button aria-label="Search" class="button" onclick="searchdata()">
+          <i class="fa fa-search">
+          </i>
+         </button>
+        </td>
+        <td>
+         <button aria-label="Clear Service" class="button" onclick="cleardata()">
+          <i class="fa fa-remove">
+          </i>
+         </button>
+        </td>
+       </tr>
+      </table>
+     </div>
+    </div>
+    <div style="clear:both;">
+    </div>
+    <div class="row" id="search-cont">
+     <div id="spldata">
+     </div>
+     <!----<div class="w3-center">
+                    <table style="float: right; margin-top: 15px; margin-bottom: 15px;}">
+                        <tr>
+                            <td><button class="w3-button w3-light-grey" onclick="plusDivs(-1)">❮</button></td>
+                            <td><button class="w3-button demo" onclick="currentDiv(1)">1</button> </td>
+                            <td><button class="w3-button demo" onclick="currentDiv(2)">2</button></td>
+                            <td><button class="w3-button demo" onclick="currentDiv(3)">3</button> </td>
+                            <td><button class="w3-button w3-light-grey" onclick="plusDivs(1)"> ❯</button></td>
+                        </tr>
+                    </table>
+                </div>-->
+    </div>
+   </div>
+  </section>
+  <section>
+   <!-- Modal -->
+   <div class="modal fade" id="faq" role="dialog">
+    <div class="modal-dialog">
+     <!-- Modal content-->
+     <div class="modal-content frq-head">
+      <div class="modal-header">
+       <button class="close" data-dismiss="modal" type="button">
+        ×
+       </button>
+       <h4 class="modal-title" style="font-size: 16px;  color: #000; text-align: center; font-weight:bold;">
+        Frequently Asked Questions
+       </h4>
+      </div>
+      <div class="modal-body">
+       <section class="container">
+        <div class="row">
+         <div class="container-faq">
+          <div class="faq-cont">
+           <h5>
+            What is Seva Sindhu ?
+           </h5>
+           <p>
+            Seva Sindhu is the common citizen service portal/facility of Government of Karnataka to provide government related services and other information in one place. Seva Sindhu is implemented under the e-District Mission Mode Project (MMP) of Department of Electronics and Information Technology (DeitY), Ministry of Communications &amp; IT, Government of India.
+           </p>
+          </div>
+          <div class="faq-cont">
+           <h5>
+            How to access Seva Sindhu ?
+           </h5>
+           <p>
+            Seva Sindhu can be accessed online by public using Internet from anywhere Or through identified service delivery centers at District/Taluk/Sub-division/Village level.
+           </p>
+          </div>
+          <div class="faq-cont">
+           <h5>
+            How does it help the Citizens?
+           </h5>
+           <p>
+            Seva Sindhu helps Citizens to avail all the Government Services of any department in one place thereby saving a lot of time and money. It also provides other useful information like local events, employment opportunities etc.
+           </p>
+          </div>
+          <div class="faq-cont">
+           <h5>
+            What services are delivered in Seva Sindhu ?
+           </h5>
+           <p>
+            The broad list of services to be delivered through Seva Sindhu are: Certificates: Creation and distribution of certificates for income, domicile, caste, Birth, Death etc.
+                                            Licences: Arms Licenses etc. Public Distribution System (PDS): Issue of Ration Card, etc. Social Welfare Schemes: Disbursement of old-age pensions, family pensions, widow pensions, etc. Complaints: Related to unfair prices, absentee teachers, non-availability of doctor, etc.
+                                            RTI: Online filing and receipt of information relating to the Right to Information Act Linking with other e government projects: Registration, Land Records, and Driving Licences, etc. Information Dissemination: About government schemes, entitlements, etc. Assessment of taxes: Property tax, and other government taxes.
+                                            Utility Payment: Payments relating to electricity, water bills property taxes etc.
+                                            Local News : About events, employment opportunities etc.
+           </p>
+          </div>
+          <div class="faq-cont">
+           <h5>
+            What is the methodology followed in Seva Sindhu to deliver services?
+           </h5>
+           <p>
+            Citizens can register on the Seva Sindhu portal and apply for services Or they can go to the nearest identified service delivery center and ask for the service through the service center login.
+                                            Unique acknowledgement/token number is generated for each requested service which will serve as reference for future follow up action.
+           </p>
+          </div>
+         </div>
+        </div>
+       </section>
+      </div>
+      <div class="modal-footer">
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <section>
+   <!-- Modal -->
+   <div class="modal fade" id="website-policy" role="dialog">
+    <div class="modal-dialog">
+     <!-- Modal content-->
+     <div class="modal-content frq-head">
+      <div class="modal-header">
+       <button class="close" data-dismiss="modal" type="button">
+        ×
+       </button>
+       <h4 class="modal-title" style="font-size: 16px;  color: #000; text-align: center; font-weight:bold;">
+        Website Policy
+       </h4>
+      </div>
+      <div class="modal-body">
+       <section class="container">
+        <div class="row">
+         <div class="container-webpolicy">
+          <div class="webpolicy-cont">
+           <h5>
+            WEBSITE POLICIES
+           </h5>
+           <p>
+            We do We do not sell or share any personally identifiable information volunteered on this site to any third party (public/private). Any information provided to this website will be protected from loss, misuse, unauthorized access or disclosure, alteration, or destruction.
+           </p>
+           <p>
+            We gather certain information about the User, such as Internet protocol (IP) address, and date/time visited. We make no attempt to link these addresses with the identity of individuals visiting our site unless an attempt to damage the site has been detected.
+           </p>
+          </div>
+          <div class="webpolicy-cont">
+           <h5>
+            COOKIES POLICY
+           </h5>
+           <p>
+            A cookie is a piece of software code that an internet web site sends to your browser when you access information at that site. A cookie is stored as a simple text file on your computer or mobile device by a website’s server and only that server will be able to retrieve or read the contents of that cookie. Cookies let you navigate between pages efficiently as they store your preferences, and generally improve your experience of a website.
+           </p>
+          </div>
+          <div class="webpolicy-cont">
+           <h5>
+            HYPERLINKING POLICY
+           </h5>
+           <h5 class="margin-top-10">
+            Links to external websites/portals
+           </h5>
+           <p>
+            At many places in this website, you shall find links to other websites/portals. These links have been placed for your convenience. The department is not responsible for the contents of the linked websites and does not necessarily endorse the views expressed in them. Mere presence of the link or its listing on this website should not be assumed as endorsement of any kind. We cannot guarantee that these links will work all the time and we have no control over availability of linked destinations.
+           </p>
+           <p>
+            We do not object to you linking directly to the information that is hosted on this web site and no prior permission is required for the same. Also, we do not permit our pages to be loaded into frames on your site. The pages belonging to this website must load into a newly opened browser window of the User.
+           </p>
+          </div>
+          <div class="webpolicy-cont">
+           <h5>
+            TERMS &amp; CONDITIONS
+           </h5>
+           <p>
+            This website is owned , maintained and hosted by Department of e-Governance , Government of Karnataka at State Data Centre. The website is designed and developed by National Informatics Centre, Bangalore. The contents are provided by various departments of Karnataka .
+           </p>
+           <p>
+            Though all efforts have been made by the Government of Karnataka to ensure the accuracy and currency of the content on this website, the same should not be construed as a statement of law or used for any legal purposes. In case of any ambiguity or doubts, users are advised to verify/check with the respective departments and/or other source(s), and to obtain appropriate professional advice.
+           </p>
+           <p>
+            Under no circumstances will the Department s of Karnataka be liable for any expense, loss or damage including, without limitation, indirect or consequential loss or damage, or any expense, loss or damage whatsoever arising from use, or loss of use, of data, arising out of or in connection with the use of this website.
+           </p>
+           <p>
+            These terms and conditions shall be governed by and construed in accordance with the Indian Laws. Any dispute arising under these terms and conditions shall be subject to the jurisdiction of the courts of India.
+           </p>
+          </div>
+          <div class="webpolicy-cont">
+           <h5>
+            REGIONAL LANGUAGE POLICY
+           </h5>
+           <p>
+            Though all efforts have been made to ensure the accuracy of the content in regional languages on this Portal, the same should not be construed as a statement of law or used for any legal purposes. For any discrepancy in the regional language content you may refer to the original English content. For any error in language, you may report the same through the online feedback form.
+           </p>
+           <p>
+            The department accepts no responsibility in relation to the accuracy, completeness, usefulness or otherwise, of the contents. In no event will the Government or NIC be liable for any expense, loss or damage including, without limitation, indirect or consequential loss or damage, or any expense, loss or damage whatsoever arising from use, or loss of use, of data, arising out of or in connection with the use of this Portal.
+           </p>
+          </div>
+          <div class="webpolicy-cont">
+           <h5>
+            CANCELLATION / REFUND POLICY
+           </h5>
+           <p>
+            The fees once paid will not be refunded for applications which are successfully submitted.
+           </p>
+           <p>
+            Cancellation of applications shall not be entertained.
+           </p>
+           <p>
+            In case of a failed transaction, user shall have no right to claim the amount, the loss on this account shall not be borne either by Government or by the Banks / Payment Gateways. However automatic refund will be made for transactions which are not successful.
+           </p>
+          </div>
+          <div class="webpolicy-cont">
+           <h5>
+            PRIVACY POLICY:
+           </h5>
+           <p>
+            This portal aims to provide various Government to Citizen services of multiple departments in a single portal. In the backend, the portal connects to the respective department application for submission of the application. The portal enable citizens to avail services of various departments and track their application anytime from anywhere. We would like to assure you that we follow appropriate standards when it comes to protecting your privacy on our website.
+           </p>
+          </div>
+          <div class="webpolicy-cont">
+           <h5>
+            DISCLAIMER
+           </h5>
+           <p>
+            This website of e-Governance Department is being maintained for information purposes only. Even though every effort is taken to provide accurate and up to date information, the citizens and the officers making use of the circulars/information posted on the website are advised to get in touch with the respective Departments whenever there is any doubt regarding the correctness of the information contained therein. In the event of any conflict between the contents of the circulars on the website and the hard copy of the circulars/information issued by departments, the information in the hard copy should be relied upon and the matter shall be brought to the notice of the e-Governance department.
+           </p>
+          </div>
+         </div>
+        </div>
+       </section>
+      </div>
+      <div class="modal-footer">
+      </div>
+     </div>
+    </div>
+   </div>
+  </section>
+  <!--team end-->
+  <!--service end-->
+  <!--<section>
+        <div class="footer-cont">This is the Seva Sindhu Portal, developed with an objective to enable a single window access to information and services being provided by the various Government Departments. The content in this Portal is the result of a collaborative effort of Department of e-Governance and various other Government Departments of Karnataka. This Portal is a Mission Mode Project under the E-Governance Plan, designed and maintained by National Informatics Centre (NIC), Bengaluru</div>
+    </section>-->
+  <footer class="footer-copyright">
+   <div class="container">
+    <div class="row">
+     <div class="col-sm-2">
+      <div class="foot-copyright pull-left">
+       <p>
+        © All Rights Reserve
+       </p>
+      </div>
+     </div>
+     <div class="col-sm-3">
+      <div class="foot-copyright pull-left">
+       <p>
+        Powered by
+        <a href="http://serviceonline.gov.in/" style="color:#000;" target="_blank">
+         SERVICEPLUS
+        </a>
+       </p>
+      </div>
+     </div>
+     <div class="col-sm-3">
+      <div class="foot-copyright pull-left">
+       <p>
+        Page last updated on:   06-March-2025 11.30AM
+       </p>
+      </div>
+     </div>
+     <div class="col-sm-5">
+     </div>
+     <div class="col-sm-2">
+      <div class="foot-menu pull-right">
+       <ul>
+        <!--<li><a href="#"data-toggle="modal" data-target="#website-policy">Website policy</a></li>-->
+       </ul>
+      </div>
+     </div>
+    </div>
+    <div id="scroll-Top">
+     <i aria-hidden="true" class="fa fa-angle-double-up return-to-top" data-original-title="Back to Top" data-placement="top" data-toggle="tooltip" id="scroll-top" title="">
+     </i>
+    </div>
+   </div>
+  </footer>
+  <!-- footer-copyright end -->
+  <!-- jaquery link -->
+  <script src="/assets/js/jquery.js">
+  </script>
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+  <!--modernizr.min.js-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript">
+  </script>
+  <!--bootstrap.min.js-->
+  <script src="/assets/js/bootstrap.min.js" type="text/javascript">
+  </script>
+  <!-- bootsnav js -->
+  <script src="/assets/js/bootsnav.js">
+  </script>
+  <!-- for manu -->
+  <script src="/assets/js/jquery.hc-sticky.min.js" type="text/javascript">
+  </script>
+  <!-- vedio player js -->
+  <script src="/assets/js/jquery.magnific-popup.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" type="text/javascript">
+  </script>
+  <!-- isotope js -->
+  <!-- <script src="~/assets/js/masonry.min.js"></script>
+    <script src="~/assets/js/isotop-custom.js"></script>-->
+  <!--owl.carousel.js-->
+  <script src="/assets/js/owl.carousel.min.js" type="text/javascript">
+  </script>
+  <!-- counter js -->
+  <script src="/assets/js/jquery.counterup.min.js">
+  </script>
+  <script src="/assets/js/waypoints.min.js">
+  </script>
+  <script src="/assets/js/jquery.bootstrap.newsbox.js" type="text/javascript">
+  </script>
+  <!--Custom JS-->
+  <script src="/assets/js/jak-menusearch.js" type="text/javascript">
+  </script>
+  <script src="/assets/js/custom.js" type="text/javascript">
+  </script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js">
+  </script>
+  <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js">
+  </script>
+  <script src="https://cdn.datatables.net/plug-ins/9dcbecd42ad/integration/jqueryui/dataTables.jqueryui.js">
+  </script>
+  <link href="https://cdn.datatables.net/plug-ins/9dcbecd42ad/integration/jqueryui/dataTables.jqueryui.css" rel="stylesheet"/>
+  <link href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet"/>
+  <script type="text/javascript">
+   $(function () {
+            $(".news").bootstrapNews({
+                newsPerPage: 3,
+                autoplay: true,
+                pauseOnHover: true,
+                direction: 'up',
+                newsTickerInterval: 4000,
+                onToDo: function () {
+                    //console.log(this);
+                }
+            });
+        });
+  </script>
+  <script>
+   $(document).ready(function () {
+            $(".owl-prev").html('<i class="fa fa-chevron-left"></i>');
+            $(".owl-next").html('<i class="fa fa-chevron-right"></i>');
+        });
+  </script>
+  <script>
+   $(document).ready(function () {
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+
+                $("#search-cont *").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+  </script>
+  <script>
+   function toggleIcon(e) {
+            $(e.target)
+                .prev('.panel-heading')
+                .find(".more-less")
+                .toggleClass('glyphicon-plus glyphicon-minus');
+        }
+        $('.panel-group').on('hidden.bs.collapse', toggleIcon);
+        $('.panel-group').on('shown.bs.collapse', toggleIcon);
+  </script>
+  <script>
+   $(document).ready(function () {
+            //$("#acc_menu").hide();
+            //$(".acc_menu").click(function () {
+            //    $("#acc_menu").toggle();
+            //});
+            //$(".about").click(function () {
+            //    $("#acc_menu").hide();
+            //});
+            //$(".freq").click(function () {
+            //    $("#acc_menu").hide();
+            //});
+            //$(".contat").click(function () {
+            //    $("#acc_menu").hide();
+            //});
+
+            $(".about").click(function () {
+                $(".about-us").addClass("about-us-space");
+            });
+            //$(".depart-service-show").click(function () {
+
+            //    // $("#acc_menu").toggle();
+            //    $("#myGrid").click();
+            //});
+            //   11-09-18 start
+
+
+            //$(".btn-close").click(function () {
+            //    $("#acc_menu").hide();
+            //});
+
+            //$(".btn-close").click(function () {
+            //    $("#acc_menu").hide();
+            //});
+
+            //$("#mainbanner-img").click(function () {
+            //    $("#myGrid").click();
+            //    //$(".mainbanner-page").css("display", "none");
+            //});
+
+            $(function () {
+                var navMain = $("#bs-example-navbar-collapse-1");
+                navMain.on("click", "a", null, function () {
+                    navMain.collapse('hide');
+                });
+            });
+
+            $(function () {
+                $("#mainbanner").on('click', function () {
+                    $('#mainbanner').modal('hide');
+                });
+            });
+            //$(window).load(function () {
+            //    $('#mainbanner').modal('show');
+            //});
+            // 11-09-18 end
+
+            $("#on-click-reven").click(function () {
+                $(".frevisited-depart").toggle();
+                $(".food-depart").hide();
+                $(".planng-depart").hide();
+                $(".trans-depart").hide();
+            });
+
+            $("#on-click-food").click(function () {
+                $(".food-depart").toggle();
+                $(".frevisited-depart").hide();
+                $(".planng-depart").hide();
+                $(".trans-depart").hide();
+            });
+            $("#on-click-planng").click(function () {
+                $(".planng-depart").toggle();
+                $(".frevisited-depart").hide();
+                $(".food-depart").hide();
+                $(".trans-depart").hide();
+            });
+
+            $("#on-click-trans").click(function () {
+                $(".trans-depart").toggle();
+                $(".frevisited-depart").hide();
+                $(".food-depart").hide();
+                $(".planng-depart").hide();
+            });
+
+            $(".green-color").click(function () {
+                $(".topmenu-bg").removeClass("blue-code navbar-blue navbar-nav li a").addClass("green-code navbar-green navbar-nav li a");
+                $(".depart-service-show-total").removeClass("depart-service-show-blue").addClass("depart-service-show-green");
+                $(".cm-content-bg").removeClass("cm-content-bg-blue").addClass("cm-content-bg-green");
+                $(".name_text").removeClass("name_text-blue").addClass("name_text-green");
+                $(".name_text_span").removeClass("name_text_span-blue").addClass("name_text_span-green");
+                $(".update-aadhar-head").removeClass("update-aadhar-head-blue").addClass("update-aadhar-head-green");
+                $(".clients").removeClass("clients-blue").addClass("clients-green");
+                $(".service").removeClass("service-blue").addClass("service-green");
+                $(".single-about-us .panel-heading").removeClass("single-about-us panel-heading-blue").addClass("single-about-us panel-heading-green");
+                $(".single-about-us .latest-service").removeClass("single-about-us latest-service-blue").addClass("single-about-us latest-service-green");
+                $(".single-about-us .panel-footer").removeClass("single-about-us panel-footer-blue").addClass("single-about-us panel-footer-green");
+                $(".depart-service-show").removeClass("depart-service-show-blue").addClass("depart-service-show-green");
+                $("#acc_menu").removeClass("acc_menu-blue").addClass("acc_menu-green");
+                $(".panel-heading").removeClass("panel-heading-blue").addClass("panel-heading-green");
+                $("#Colur").removeClass("modal-header-blue").addClass("modal-header-green");
+                $(".updates").removeClass("updates-blue").addClass("updates-green");
+                $(".triangle-right").removeClass("triangle-right-blue").addClass("triangle-right-green");
+                $(".date-img").removeClass("date-img-blue").addClass("date-img-green");
+
+                clour = 2;
+
+            });
+
+            $(".blue-color").click(function () {
+                $(".topmenu-bg").removeClass("green-code navbar-green navbar-nav li a").addClass("blue-code navbar-blue navbar-nav li a");
+                $(".depart-service-show-total").addClass("depart-service-show-blue");
+                $(".cm-content-bg").addClass("cm-content-bg-blue");
+                $(".name_text").addClass("name_text-blue");
+                $(".name_text_span").addClass("name_text_span-blue");
+                $(".update-aadhar-head").addClass("update-aadhar-head-blue");
+                $(".clients").addClass("clients-blue");
+                $(".service").addClass("service-blue");
+                $(".single-about-us .panel-heading").addClass("single-about-us panel-heading-blue");
+                $(".single-about-us .latest-service").addClass("single-about-us latest-service-blue");
+                $(".single-about-us .panel-footer").addClass("single-about-us panel-footer-blue");
+                $(".depart-service-show").addClass("depart-service-show-blue");
+                $("#acc_menu").addClass("acc_menu-blue");
+                $(".panel-heading").addClass("panel-heading-blue");
+                $("#Colur").addClass("modal-header-blue");
+                $(".updates").addClass("updates-blue");
+                $(".triangle-right").addClass("triangle-right-blue");
+                $(".date-img").addClass("date-img-blue");
+                clour = 3;
+
+            });
+
+            $('#yellow').click(function () {
+
+                $(".topmenu-bg").removeClass("blue-code navbar-blue navbar-nav li a").removeClass("green-code navbar-green navbar-nav li a").addClass("topmenu-bg");
+                $(".depart-service-show-total").removeClass("depart-service-show-blue").removeClass("depart-service-show-green").addClass("depart-service-show-total");
+                $(".cm-content-bg").removeClass("cm-content-bg-blue").removeClass("cm-content-bg-green").addClass("cm-content-bg");
+                $(".name_text").removeClass("name_text-blue").removeClass("name_text-green").addClass("name_text");
+                $(".name_text_span").removeClass("name_text_span-blue").removeClass("name_text_span-green").addClass("name_text_span");
+                $(".update-aadhar-head").removeClass("update-aadhar-head-blue").removeClass("update-aadhar-head-green").addClass("update-aadhar-head");
+                $(".clients").removeClass("clients-blue").removeClass("clients-green").addClass("clients");
+                $(".service").removeClass("service-blue").removeClass("service-green").addClass("service");
+                $(".single-about-us .panel-heading").removeClass("single-about-us panel-heading-blue").removeClass("single-about-us panel-heading-green").addClass("single-about-us panel-heading");
+                $(".single-about-us .latest-service").removeClass("single-about-us latest-service-blue").removeClass("single-about-us latest-service-green").addClass("single-about-us latest-service");
+                $(".single-about-us .panel-footer").removeClass("single-about-us panel-footer-blue").removeClass("single-about-us panel-footer-green").addClass("single-about-us panel-footer");
+                $(".depart-service-show").removeClass("depart-service-show-blue").removeClass("depart-service-show-green").addClass("depart-service-show");
+                $("#acc_menu").removeClass("acc_menu-blue").removeClass("acc_menu-green").addClass("acc_menu");
+                $(".panel-heading").removeClass("panel-heading-blue").removeClass("panel-heading-green").addClass("panel-heading");
+                $("#Colur").removeClass("modal-header-blue").removeClass("modal-header-green").addClass("modal-header");
+                $(".updates").removeClass("updates-blue").removeClass("updates-green").addClass("updates");
+                $(".triangle-right").removeClass("triangle-right-blue").removeClass("triangle-right-green").addClass("triangle-right");
+                $(".date-img").removeClass("date-img-blue").removeClass("date-img-green").addClass("date-img");
+                clour = 1;
+            });
+
+            $(function () {
+                $("#increase").click(function () {
+                    $(".smooth-menu a, .about-us-txt h2, .about-us-txt p, .news a,.latest-service, .signle-service a, .team-details a, .team-details h2, .service-txt h2, .service-txt p").each(function () {
+                        var size = parseInt($(this).css("font-size"));
+                        size = size + 1 + "px";
+                        $(this).css({
+                            'font-size': size
+                        });
+                    });
+                });
+                $('#reloadfont').click(function () {
+                    location.reload();
+                });
+            });
+            $(function () {
+                $("#decrease").click(function () {
+                    $(".smooth-menu a, .about-us-txt h2, .about-us-txt p, .news a,.latest-service, .signle-service a, .team-details a, .team-details h2, .service-txt h2, .service-txt p").each(function () {
+                        var size = parseInt($(this).css("font-size"));
+                        size = size - 1 + "px";
+                        $(this).css({
+                            'font-size': size
+                        });
+                    });
+                });
+            });
+        });
+  </script>
+  <script>
+   $(document).ready(function () {
+            $('.modal').on('show.bs.modal', function () {
+                if ($(document).height() > $(window).height()) {
+                    // no-scroll
+                    $('body').addClass("modal-open-noscroll");
+                }
+                else {
+                    $('body').removeClass("modal-open-noscroll");
+                }
+            });
+            $('.modal').on('hide.bs.modal', function () {
+                $('body').removeClass("modal-open-noscroll");
+            });
+        })
+  </script>
+ </body>
+</html>
+<script src="/bundles/jqueryval?v=">
+</script>

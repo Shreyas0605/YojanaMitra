@@ -1,0 +1,1028 @@
+# YojanaMitra - System Analysis and Design Documentation
+
+## 3. System Requirements and Analysis
+
+### 3.1 Problem Statement
+
+**Background:**
+Indian citizens face significant challenges in discovering and accessing government welfare schemes due to:
+- Information scattered across multiple government portals
+- Complex eligibility criteria difficult to understand
+- Lack of personalized recommendations
+- Language barriers (most portals only in English)
+- No centralized platform for scheme discovery
+
+**Proposed Solution:**
+YojanaMitra is an AI-powered platform that simplifies government scheme discovery by providing:
+- Centralized scheme database
+- Intelligent eligibility matching
+- Bilingual support (English/Kannada)
+- Conversational AI assistant
+- User-friendly interface
+
+---
+
+### 3.2 Functional Requirements
+
+#### 3.2.1 User Management
+| Requirement ID | Description | Priority |
+|----------------|-------------|----------|
+| FR-UM-01 | Users shall be able to register with email and password | High |
+| FR-UM-02 | Users shall be able to login securely | High |
+| FR-UM-03 | Users shall be able to update their profile with 50+ demographic parameters | High |
+| FR-UM-04 | Users shall be able to logout from the system | Medium |
+| FR-UM-05 | System shall maintain user sessions securely | High |
+
+#### 3.2.2 Eligibility Checking
+| Requirement ID | Description | Priority |
+|----------------|-------------|----------|
+| FR-EC-01 | Anonymous users shall check eligibility without registration | High |
+| FR-EC-02 | System shall accept 60+ parameters for comprehensive matching | High |
+| FR-EC-03 | System shall calculate match scores for each scheme | High |
+| FR-EC-04 | System shall display schemes sorted by match percentage | High |
+| FR-EC-05 | System shall explain why schemes match or don't match | Medium |
+
+#### 3.2.3 Scheme Management (Admin)
+| Requirement ID | Description | Priority |
+|----------------|-------------|----------|
+| FR-SM-01 | Admins shall add new schemes with detailed criteria | High |
+| FR-SM-02 | Admins shall update existing scheme information | High |
+| FR-SM-03 | Admins shall delete outdated schemes | Medium |
+| FR-SM-04 | System shall support multi-select eligibility criteria | High |
+| FR-SM-05 | System shall validate scheme data before saving | High |
+
+#### 3.2.4 AI Features
+| Requirement ID | Description | Priority |
+|----------------|-------------|----------|
+| FR-AI-01 | System shall provide AI chatbot for scheme queries | Medium |
+| FR-AI-02 | Chatbot shall provide personalized responses based on user profile | Medium |
+| FR-AI-03 | System shall use Gemini AI for natural language processing | High |
+| FR-AI-04 | System shall provide fallback responses if AI unavailable | Low |
+
+#### 3.2.5 Multilingual Support
+| Requirement ID | Description | Priority |
+|----------------|-------------|----------|
+| FR-ML-01 | System shall support English language | High |
+| FR-ML-02 | System shall support Kannada language | High |
+| FR-ML-03 | Users shall switch languages dynamically | Medium |
+
+---
+
+### 3.3 Non-Functional Requirements
+
+#### 3.3.1 Performance Requirements
+| Requirement ID | Description | Target |
+|----------------|-------------|--------|
+| NFR-PF-01 | Page load time | < 2 seconds |
+| NFR-PF-02 | Eligibility check response time | < 3 seconds |
+| NFR-PF-03 | AI chatbot response time | < 5 seconds |
+| NFR-PF-04 | Database query time | < 500ms |
+| NFR-PF-05 | Concurrent user support | 100+ users |
+
+#### 3.3.2 Security Requirements
+| Requirement ID | Description |
+|----------------|-------------|
+| NFR-SC-01 | Passwords shall be encrypted using BCrypt hashing |
+| NFR-SC-02 | User sessions shall expire after 24 hours |
+| NFR-SC-03 | Admin access shall be role-based |
+| NFR-SC-04 | API endpoints shall validate authentication |
+| NFR-SC-05 | SQL injection prevention through ORM |
+
+#### 3.3.3 Usability Requirements
+| Requirement ID | Description |
+|----------------|-------------|
+| NFR-US-01 | Interface shall be intuitive for non-technical users |
+| NFR-US-02 | Mobile responsive design for all screen sizes |
+| NFR-US-03 | Accessibility compliance for disabled users |
+| NFR-US-04 | Clear error messages and validation |
+| NFR-US-05 | Maximum 3 clicks to any functionality |
+
+#### 3.3.4 Reliability Requirements
+| Requirement ID | Description |
+|----------------|-------------|
+| NFR-RL-01 | System uptime shall be 99.5% |
+| NFR-RL-02 | Data backup every 24 hours |
+| NFR-RL-03 | Graceful degradation if external services fail |
+| NFR-RL-04 | Transaction rollback on database errors |
+
+---
+
+### 3.4 System Actors
+
+**1. Guest User**
+- Browse schemes without login
+- Check eligibility anonymously
+- View scheme details
+- Use AI chatbot (limited)
+
+**2. Registered User**
+- All guest capabilities
+- Create and manage profile
+- Get personalized recommendations
+- Save favorite schemes
+- Full chatbot access
+
+**3. Administrator**
+- Add new schemes
+- Edit existing schemes
+- Delete schemes
+- View all users
+- Manage system settings
+
+---
+
+### 3.5 Use Case Diagram
+
+```
+                    ┌─────────────────────┐
+                    │                     │
+        ┌──────────►│  Browse Schemes     │
+        │           │                     │
+        │           └─────────────────────┘
+        │           
+        │           ┌─────────────────────┐
+        │           │                     │
+        ├──────────►│  Check Eligibility  │
+        │           │                     │
+        │           └─────────────────────┘
+        │           
+┌───────┴───────┐   ┌─────────────────────┐
+│               │   │                     │
+│  Guest User   ├──►│  View Scheme Details│
+│               │   │                     │
+└───────────────┘   └─────────────────────┘
+        │           
+        │           ┌─────────────────────┐
+        │           │                     │
+        └──────────►│  Use AI Chatbot     │
+                    │                     │
+                    └─────────────────────┘
+
+
+                    ┌─────────────────────┐
+                    │                     │
+        ┌──────────►│  Register Account   │
+        │           │                     │
+        │           └─────────────────────┘
+        │
+        │           ┌─────────────────────┐
+        │           │                     │
+        ├──────────►│  Login              │
+        │           │                     │
+        │           └─────────────────────┘
+┌───────┴───────┐   
+│               │   ┌─────────────────────┐
+│ Registered    │   │                     │
+│    User       ├──►│  Manage Profile     │
+│               │   │                     │
+└───────────────┘   └─────────────────────┘
+        │           
+        │           ┌─────────────────────┐
+        │           │                     │
+        └──────────►│Get Recommendations  │
+                    │                     │
+                    └─────────────────────┘
+
+
+                    ┌─────────────────────┐
+                    │                     │
+        ┌──────────►│  Admin Login        │
+        │           │                     │
+        │           └─────────────────────┘
+        │           
+        │           ┌─────────────────────┐
+        │           │                     │
+        ├──────────►│  Add Scheme         │
+┌───────┴───────┐   │                     │
+│               │   └─────────────────────┘
+│Administrator  │   
+│               │   ┌─────────────────────┐
+└───────────────┘   │                     │
+        │           │  Edit Scheme        │
+        ├──────────►│                     │
+        │           └─────────────────────┘
+        │           
+        │           ┌─────────────────────┐
+        │           │                     │
+        └──────────►│  Delete Scheme      │
+                    │                     │
+                    └─────────────────────┘
+```
+
+---
+
+## 4. Tools and Technology Used
+
+### 4.1 Development Environment
+
+#### 4.1.1 Code Editor
+- **Visual Studio Code**
+  - Version: Latest
+  - Extensions: Python, Prettier, ESLint
+  - Purpose: Primary development IDE
+
+#### 4.1.2 Version Control
+- **Git**
+  - Version: 2.x
+  - Platform: GitHub/GitLab
+  - Purpose: Source code management
+
+---
+
+### 4.2 Backend Technologies
+
+#### 4.2.1 Core Framework
+| Technology | Version | Purpose | License |
+|-----------|---------|---------|---------|
+| **Python** | 3.8+ | Programming language | Open Source |
+| **Flask** | 3.0.0 | Web framework | BSD License |
+| **Flask-CORS** | 4.0.0 | Cross-origin support | MIT License |
+| **Flask-SQLAlchemy** | 3.0.0 | Database ORM | BSD License |
+
+#### 4.2.2 Database
+| Technology | Version | Purpose | License |
+|-----------|---------|---------|---------|
+| **SQLite** | 3.x | Development database | Public Domain |
+| **SQLAlchemy** | 2.0.0 | ORM layer | MIT License |
+
+#### 4.2.3 Security & Authentication
+| Technology | Version | Purpose | License |
+|-----------|---------|---------|---------|
+| **BCrypt** | 4.0.1 | Password hashing | Apache 2.0 |
+| **Flask Sessions** | Built-in | Session management | BSD License |
+
+#### 4.2.4 AI/ML Integration
+| Technology | Version | Purpose | License |
+|-----------|---------|---------|---------|
+| **Google Gemini API** | 1.5 Flash | AI chatbot & NLP | Google Cloud |
+| **google.generativeai** | Latest | Python SDK | Apache 2.0 |
+
+---
+
+### 4.3 Frontend Technologies
+
+#### 4.3.1 Core Technologies
+| Technology | Version | Purpose | License |
+|-----------|---------|---------|---------|
+| **HTML5** | - | Page structure | W3C Standard |
+| **CSS3** | - | Styling | W3C Standard |
+| **JavaScript** | ES6+ | Client-side logic | ECMAScript |
+
+#### 4.3.2 UI Frameworks & Libraries
+| Technology | Version | Purpose | License |
+|-----------|---------|---------|---------|
+| **Bootstrap** | 5.3.2 | Responsive design | MIT License |
+| **Font Awesome** | 6.0.0 | Icons | Font Awesome Free |
+| **Google Fonts** | - | Typography | Open Font License |
+
+---
+
+### 4.4 Development Tools
+
+#### 4.4.1 Package Management
+- **pip** - Python package installer
+- **requirements.txt** - Dependency management
+
+#### 4.4.2 API Testing
+- **Postman** - API endpoint testing
+- **Browser DevTools** - Frontend debugging
+
+#### 4.4.3 Database Tools
+- **DB Browser for SQLite** - Database visualization
+- **SQLAlchemy CLI** - Database migrations
+
+---
+
+### 4.5 Deployment & Hosting (Future)
+
+| Technology | Purpose |
+|-----------|---------|
+| **Gunicorn** | WSGI HTTP Server |
+| **Nginx** | Reverse proxy |
+| **Docker** | Containerization |
+| **AWS/Heroku** | Cloud hosting |
+
+---
+
+### 4.6 Technology Stack Summary
+
+```
+┌─────────────────────────────────────────────┐
+│           PRESENTATION LAYER                │
+│  HTML5 | CSS3 | JavaScript | Bootstrap      │
+└──────────────────┬──────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────┐
+│          APPLICATION LAYER                  │
+│         Flask (Python 3.8+)                 │
+│  • RESTful API                              │
+│  • Session Management                       │
+│  • Business Logic                           │
+└──────────────────┬──────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────┐
+│            DATA LAYER                       │
+│  SQLAlchemy ORM → SQLite Database           │
+│  • User Data                                │
+│  • Scheme Data                              │
+│  • Admin Data                               │
+└─────────────────────────────────────────────┘
+
+         External Services:
+    ┌────────────────────────┐
+    │   Google Gemini AI     │
+    │   (Chatbot & NLP)      │
+    └────────────────────────┘
+```
+
+---
+
+## 5. System Design
+
+### 5.1 Architecture Design
+
+#### 5.1.1 Three-Tier Architecture
+
+**YojanaMitra follows a classic three-tier architectural pattern:**
+
+```
+┌──────────────────────────────────────────────────────┐
+│                  TIER 1: CLIENT TIER                 │
+│                 (Presentation Layer)                 │
+├──────────────────────────────────────────────────────┤
+│  • Web Browser (Chrome, Firefox, Safari, Edge)       │
+│  • HTML/CSS/JavaScript                               │
+│  • Responsive Bootstrap UI                           │
+│  • AJAX for API calls                                │
+└────────────────────┬─────────────────────────────────┘
+                     │ HTTP/HTTPS
+                     │ JSON Data
+                     ▼
+┌──────────────────────────────────────────────────────┐
+│              TIER 2: APPLICATION TIER                │
+│                (Business Logic Layer)                │
+├──────────────────────────────────────────────────────┤
+│  • Flask Web Server                                  │
+│  • RESTful API Endpoints                             │
+│  • Authentication & Authorization                    │
+│  • Eligibility Matching Algorithm                    │
+│  • Session Management                                │
+│  • Integration with Gemini AI                        │
+└────────────────────┬─────────────────────────────────┘
+                     │ SQLAlchemy ORM
+                     │ SQL Queries
+                     ▼
+┌──────────────────────────────────────────────────────┐
+│                TIER 3: DATA TIER                     │
+│                  (Data Layer)                        │
+├──────────────────────────────────────────────────────┤
+│  • SQLite Database                                   │
+│  • Tables: users, schemes, admins                    │
+│  • ACID Transactions                                 │
+│  • Data Integrity Constraints                        │
+└──────────────────────────────────────────────────────┘
+```
+
+---
+
+### 5.2 Database Design
+
+#### 5.2.1 Entity-Relationship Diagram (ERD)
+
+```
+┌─────────────────────────────┐
+│          USERS              │
+├─────────────────────────────┤
+│ PK: id (INT)                │
+│    email (VARCHAR)          │
+│    password_hash (VARCHAR)  │
+│    name (VARCHAR)           │
+│    mobile (VARCHAR)         │
+│    age (INT)                │
+│    gender (VARCHAR)         │
+│    state (VARCHAR)          │
+│    district (VARCHAR)       │
+│    occupation (VARCHAR)     │
+│    income (DECIMAL)         │
+│    caste (VARCHAR)          │
+│    ... (40 more fields)     │
+└─────────────────────────────┘
+          │
+          │ 1:N
+          │ (gets recommendations)
+          │
+          ▼
+┌─────────────────────────────┐
+│         SCHEMES             │
+├─────────────────────────────┤
+│ PK: id (INT)                │
+│    name (VARCHAR)           │
+│    description (TEXT)       │
+│    category (VARCHAR)       │
+│    benefits (TEXT)          │
+│    eligibility (TEXT)       │
+│    min_age (INT)            │
+│    max_age (INT)            │
+│    min_income (DECIMAL)     │
+│    max_income (DECIMAL)     │
+│    allowed_genders (JSON)   │
+│    allowed_states (JSON)    │
+│    allowed_occupations(JSON)│
+│    allowed_castes (JSON)    │
+│    application_link (TEXT)  │
+│    created_at (DATETIME)    │
+└─────────────────────────────┘
+
+
+┌─────────────────────────────┐
+│          ADMINS             │
+├─────────────────────────────┤
+│ PK: id (INT)                │
+│    email (VARCHAR UNIQUE)   │
+│    password_hash (VARCHAR)  │
+└─────────────────────────────┘
+          │
+          │ 1:N
+          │ (manages)
+          │
+          ▼
+      [SCHEMES]
+```
+
+---
+
+#### 5.2.2 Database Schema Details
+
+**Table 1: users**
+```sql
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email VARCHAR(120) UNIQUE NOT NULL,
+    password_hash VARCHAR(200) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    mobile VARCHAR(15),
+    age INTEGER,
+    gender VARCHAR(20),
+    marital_status VARCHAR(20),
+    disability VARCHAR(10),
+    caste VARCHAR(50),
+    state VARCHAR(100),
+    district VARCHAR(100),
+    occupation VARCHAR(100),
+    income DECIMAL(10,2),
+    education VARCHAR(100),
+    -- ... 35 more demographic fields
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**Table 2: schemes**
+```sql
+CREATE TABLE schemes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(200) NOT NULL,
+    description TEXT NOT NULL,
+    category VARCHAR(100),
+    benefits TEXT,
+    eligibility TEXT,
+    target_audience VARCHAR(200),
+    min_age INTEGER,
+    max_age INTEGER,
+    min_income DECIMAL(10,2),
+    max_income DECIMAL(10,2),
+    allowed_genders TEXT,      -- JSON array
+    allowed_states TEXT,        -- JSON array
+    allowed_occupations TEXT,   -- JSON array
+    allowed_castes TEXT,        -- JSON array
+    allowed_education TEXT,     -- JSON array
+    allowed_marital_status TEXT,-- JSON array
+    disability_requirement VARCHAR(20),
+    residence_requirement VARCHAR(20),
+    application_link TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**Table 3: admins**
+```sql
+CREATE TABLE admins (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email VARCHAR(120) UNIQUE NOT NULL,
+    password_hash VARCHAR(200) NOT NULL
+);
+```
+
+---
+
+### 5.3 UML Diagrams
+
+#### 5.3.1 Class Diagram
+
+```
+┌────────────────────────────┐
+│         User               │
+├────────────────────────────┤
+│ - id: int                  │
+│ - email: string            │
+│ - password_hash: string    │
+│ - name: string             │
+│ - age: int                 │
+│ - gender: string           │
+│ - income: decimal          │
+│ - ... (40 more attributes) │
+├────────────────────────────┤
+│ + to_dict(): dict          │
+│ + check_password(): bool   │
+└────────────────────────────┘
+            │
+            │ uses
+            ▼
+┌────────────────────────────┐
+│        Scheme              │
+├────────────────────────────┤
+│ - id: int                  │
+│ - name: string             │
+│ - description: text        │
+│ - min_age: int             │
+│ - max_age: int             │
+│ - max_income: decimal      │
+│ - allowed_genders: json    │
+│ - allowed_states: json     │
+├────────────────────────────┤
+│ + to_dict(): dict          │
+│ + check_eligibility(): bool│
+└────────────────────────────┘
+            ▲
+            │ manages
+            │
+┌────────────────────────────┐
+│         Admin              │
+├────────────────────────────┤
+│ - id: int                  │
+│ - email: string            │
+│ - password_hash: string    │
+├────────────────────────────┤
+│ + authenticate(): bool     │
+└────────────────────────────┘
+```
+
+---
+
+#### 5.3.2 Sequence Diagram: Eligibility Check Flow
+
+```
+User      →  Frontend   →   Flask API    →   Database   →  AI Engine
+ │             │              │                │              │
+ │  Fill Form  │              │                │              │
+ ├────────────►│              │                │              │
+ │             │              │                │              │
+ │             │ POST /api/   │                │              │
+ │             │ check-       │                │              │
+ │             │ eligibility  │                │              │
+ │             ├─────────────►│                │              │
+ │             │              │                │              │
+ │             │              │ Fetch all      │              │
+ │             │              │ schemes        │              │
+ │             │              ├───────────────►│              │
+ │             │              │                │              │
+ │             │              │◄───────────────┤              │
+ │             │              │  Scheme list   │              │
+ │             │              │                │              │
+ │             │              │  Calculate     │              │
+ │             │              │  match scores  │              │
+ │             │              │  (for each)    │              │
+ │             │              │                │              │
+ │             │              │  Filter &      │              │
+ │             │              │  Sort results  │              │
+ │             │              │                │              │
+ │             │◄─────────────┤                │              │
+ │             │  JSON with   │                │              │
+ │             │  matched     │                │              │
+ │             │  schemes     │                │              │
+ │◄────────────┤              │                │              │
+ │ Display     │              │                │              │
+ │ Results     │              │                │              │
+ │             │              │                │              │
+```
+
+---
+
+### 5.4 System Modules
+
+#### 5.4.1 Authentication Module
+**Responsibility:** User and admin authentication, session management
+
+**Components:**
+- User registration
+- User login/logout
+- Admin login
+- Password hashing (BCrypt)
+- Session validation
+
+**Key Functions:**
+- `register()` - Create new user account
+- `login()` - Authenticate user
+- `admin_login()` - Authenticate admin
+- `logout()` - Destroy session
+
+---
+
+#### 5.4.2 Eligibility Matching Module
+**Responsibility:** Calculate scheme eligibility based on user profile
+
+**Components:**
+- Eligibility calculation algorithm
+- Score normalization
+- Reason generation
+
+**Key Functions:**
+- `calculate_match_score(user, scheme)` - Core matching logic
+- `check_eligibility()` - Anonymous checking
+- `get_recommendations()` - Authenticated checking
+
+**Algorithm Logic:**
+```
+For each scheme:
+    score = 0
+    criteria_count = 0
+    
+    IF scheme.min_age exists:
+        criteria_count++
+        IF user.age < scheme.min_age:
+            RETURN 0 (disqualified)
+        score++
+    
+    IF scheme.max_income exists:
+        criteria_count++
+        IF user.income > scheme.max_income:
+            RETURN 0 (disqualified)
+        score++
+    
+    // Similar checks for gender, state, occupation, etc.
+    
+    match_percentage = (score / criteria_count) * 100
+    RETURN match_percentage
+```
+
+---
+
+#### 5.4.3 Scheme Management Module
+**Responsibility:** CRUD operations for schemes (Admin only)
+
+**Components:**
+- Create scheme
+- Read scheme
+- Update scheme
+- Delete scheme
+- List all schemes
+
+**Key Functions:**
+- `create_scheme()` - Add new scheme
+- `get_schemes()` - List schemes
+- `update_scheme(id)` - Edit scheme
+- `delete_scheme(id)` - Remove scheme
+
+---
+
+#### 5.4.4 AI Chatbot Module
+**Responsibility:** Conversational assistance using Gemini AI
+
+**Components:**
+- Intent recognition
+- Context building
+- API integration with Gemini
+- Fallback response generation
+
+**Key Functions:**
+- `chat()` - Main chatbot endpoint
+- `generate_fallback_response()` - Backup responses
+
+---
+
+## 6. System Implementation
+
+### 6.1 Development Methodology
+
+**Methodology Used:** Agile (Iterative Development)
+
+**Phases:**
+1. **Sprint 1 (Week 1-2):** Database design, User authentication
+2. **Sprint 2 (Week 3-4):** Scheme management, Admin panel
+3. **Sprint 3 (Week 5-6):** Eligibility algorithm, Frontend design
+4. **Sprint 4 (Week 7-8):** AI integration, Testing, Deployment
+
+---
+
+### 6.2 Implementation Phases
+
+#### Phase 1: Backend Foundation
+**Duration:** 2 weeks
+
+**Tasks Completed:**
+- Set up Flask project structure
+- Configure SQLAlchemy database
+- Design database schema
+- Implement User, Scheme, Admin models
+- Create database initialization script
+
+**Deliverables:**
+- `app.py` with basic Flask setup
+- Database models defined
+- SQLite database created
+
+---
+
+#### Phase 2: Authentication System
+**Duration:** 1 week
+
+**Tasks Completed:**
+- Implement BCrypt password hashing
+- Create registration endpoint
+- Create login endpoint
+- Implement session management
+- Add admin authentication
+
+**Deliverables:**
+- `/api/register` endpoint
+- `/api/login` endpoint
+- `/api/admin/login` endpoint
+- Session-based auth working
+
+---
+
+#### Phase 3: Core Business Logic
+**Duration:** 2 weeks
+
+**Tasks Completed:**
+- Develop eligibility matching algorithm
+- Implement `calculate_match_score()` function
+- Create anonymous eligibility checker
+- Build recommendation engine
+- Add scheme CRUD operations
+
+**Deliverables:**
+- `/api/check-eligibility` endpoint
+- `/api/recommendations` endpoint
+- Admin scheme management APIs
+
+---
+
+#### Phase 4: Frontend Development
+**Duration:** 2 weeks
+
+**Tasks Completed:**
+- Design responsive UI with Bootstrap
+- Create login/register pages
+- Build eligibility checker form (60+ fields)
+- Develop admin panel interface
+- Implement single-page navigation
+
+**Deliverables:**
+- `index.html` - Main user interface
+- `admin.html` - Admin panel
+- `style.css` - Custom styling
+
+---
+
+#### Phase 5: AI Integration
+**Duration:** 1 week
+
+**Tasks Completed:**
+- Set up Google Gemini API
+- Implement chatbot endpoint
+- Add context-aware responses
+- Create fallback mechanism
+
+**Deliverables:**
+- `/api/chat` endpoint
+- AI-powered chatbot functional
+
+---
+
+#### Phase 6: Testing & Refinement
+**Duration:** 1 week
+
+**Testing Performed:**
+- Unit testing of eligibility algorithm
+- API endpoint testing with Postman
+- Frontend UI/UX testing
+- Cross-browser compatibility testing
+- Mobile responsiveness testing
+
+**Bug Fixes:**
+- Form validation errors
+- Session timeout issues
+- UI layout adjustments
+
+---
+
+### 6.3 Code Implementation Highlights
+
+#### 6.3.1 Eligibility Matching Algorithm
+**File:** `app.py` (lines 643-783)
+
+**Key Logic:**
+```python
+def calculate_match_score(user, scheme):
+    score = 0
+    criteria_count = 0
+    
+    # Age check (Hard constraint)
+    if scheme.min_age is not None:
+        criteria_count += 1
+        if user.age < scheme.min_age:
+            return 0  # Disqualified
+        score += 1
+    
+    # Income check (Hard constraint)
+    if scheme.max_income is not None:
+        criteria_count += 1
+        if user.income > scheme.max_income:
+            return 0  # Disqualified
+        score += 1
+    
+    # Gender check (Soft constraint)
+    if scheme.allowed_genders:
+        genders = json.loads(scheme.allowed_genders)
+        if user.gender in genders:
+            score += 1
+    
+    # Calculate percentage
+    match_percentage = (score / criteria_count) * 100
+    return match_percentage
+```
+
+---
+
+#### 6.3.2 RESTful API Design
+
+**Authentication Endpoints:**
+```python
+@app.route('/api/register', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
+@app.route('/api/logout', methods=['POST'])
+```
+
+**Scheme Endpoints:**
+```python
+@app.route('/api/schemes', methods=['GET'])      # List all
+@app.route('/api/schemes/<id>', methods=['GET']) # Get one
+@app.route('/api/schemes', methods=['POST'])     # Create (Admin)
+@app.route('/api/schemes/<id>', methods=['PUT']) # Update (Admin)
+@app.route('/api/schemes/<id>', methods=['DELETE']) # Delete (Admin)
+```
+
+**Eligibility Endpoints:**
+```python
+@app.route('/api/check-eligibility', methods=['POST'])
+@app.route('/api/recommendations', methods=['GET'])
+```
+
+**AI Endpoint:**
+```python
+@app.route('/api/chat', methods=['POST'])
+```
+
+---
+
+#### 6.3.3 Frontend Implementation
+
+**Single Page Application Navigation:**
+```javascript
+function showPage(pageName) {
+    // Hide all pages
+    const pages = document.querySelectorAll('.page-section');
+    pages.forEach(page => page.style.display = 'none');
+    
+    // Show selected page
+    const targetPage = document.getElementById(pageName + '-page');
+    if (targetPage) {
+        targetPage.style.display = 'block';
+    }
+}
+```
+
+**AJAX API Call Example:**
+```javascript
+async function checkEligibility() {
+    const formData = collectFormData();
+    
+    const response = await fetch('/api/check-eligibility', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(formData)
+    });
+    
+    const data = await response.json();
+    displayResults(data.schemes);
+}
+```
+
+---
+
+### 6.4 Deployment Configuration
+
+#### 6.4.1 Local Development Setup
+
+**Step 1: Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+**Step 2: Configure Environment**
+```bash
+# Create .env file
+GEMINI_API_KEY=your_api_key_here
+SECRET_KEY=your_secret_key_here
+```
+
+**Step 3: Initialize Database**
+```bash
+python app.py  # Auto-creates database on first run
+```
+
+**Step 4: Run Server**
+```bash
+python app.py
+# Server runs on http://localhost:5000
+```
+
+---
+
+#### 6.4.2 Production Deployment (Recommended)
+
+**Using Gunicorn + Nginx:**
+```bash
+# Install Gunicorn
+pip install gunicorn
+
+# Run with Gunicorn
+gunicorn -w 4 -b 0.0.0.0:5000 app:app
+```
+
+**Nginx Configuration:**
+```nginx
+server {
+    listen 80;
+    server_name yojanamitra.com;
+    
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+---
+
+### 6.5 Implementation Challenges & Solutions
+
+| Challenge | Solution Implemented |
+|-----------|---------------------|
+| Complex eligibility matching with 60+ parameters | Created weighted scoring algorithm with hard/soft constraints |
+| Handling JSON arrays in SQLite | Used SQLAlchemy's JSON column type with serialization |
+| Session management across pages | Implemented Flask server-side sessions with secure cookies |
+| Mobile responsiveness | Used Bootstrap grid system with custom CSS media queries |
+| Slow AI responses | Added loading indicators and fallback responses |
+| Password security | Implemented BCrypt hashing with automatic salting |
+
+---
+
+### 6.6 Current System Statistics
+
+**Codebase Metrics:**
+- Total Lines of Code: ~5,000
+- Backend (Python): ~900 lines
+- Frontend (HTML/JS): ~4,000 lines
+- CSS: ~1,000 lines
+
+**Database:**
+- 3 Tables (users, schemes, admins)
+- 50+ user profile fields
+- 20+ scheme criteria fields
+- Support for 100+ concurrent users
+
+**Features Implemented:**
+- ✅ User authentication
+- ✅ Anonymous eligibility checking
+- ✅ Admin scheme management
+- ✅ AI chatbot
+- ✅ Bilingual support
+- ✅ Responsive design
+
+---
+
+## Summary
+
+This system analysis and design document covers:
+1. ✅ Comprehensive requirements analysis (functional + non-functional)
+2. ✅ Complete technology stack documentation
+3. ✅ Detailed system design (architecture, database, UML)
+4. ✅ Implementation phases and code highlights
+5. ✅ Deployment configuration
+6. ✅ Challenges faced and solutions
+
+The YojanaMitra platform successfully implements an AI-powered government scheme discovery system using modern web technologies, following best practices in software engineering and system design.

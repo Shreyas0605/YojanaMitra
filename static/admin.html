@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YojanaMitra - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html,
+        body {
+            overflow-y: auto;
+            height: auto;
+        }
+
+        body {
+            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            width: 280px;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            position: fixed;
+            top: 0;
+            height: 100vh;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1.5rem;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.03);
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #2563eb;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-btn {
+            background: transparent;
+            border: none;
+            text-align: left;
+            padding: 14px 20px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            color: #64748b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .sidebar-btn:hover {
+            background-color: #f8fafc;
+            color: #1e293b;
+            transform: translateX(4px);
+        }
+
+        .sidebar-btn.active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            box-shadow: 0 2px 12px rgba(37, 99, 235, 0.08);
+        }
+
+        .mt-auto {
+            margin-top: auto;
+        }
+
+        .logout-btn {
+            color: #ef4444;
+        }
+
+        .logout-btn:hover {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+
+        /* Content */
+        .admin-content {
+            margin-left: 280px;
+            padding: 2rem;
+            padding-bottom: 25rem;
+            min-height: auto;
+            width: calc(100% - 280px);
+            overflow-y: visible;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            overflow: visible;
+        }
+
+        .admin-card-body {
+            padding: 2.5rem;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced Form Styling */
+        .form-control,
+        .form-select {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Section headers */
+        h6.text-primary {
+            color: #2563eb !important;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eff6ff;
+        }
+
+        /* Dropdown buttons */
+        .dropdown .btn-outline-secondary {
+            border: 2px solid #e2e8f0 !important;
+            border-radius: 8px;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown .btn-outline-secondary:hover {
+            border-color: #cbd5e1 !important;
+            background-color: #f8fafc !important;
+        }
+
+        .dropdown-menu {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-check-input:checked {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+
+        /* Enhanced buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-light.border {
+            border: 2px solid #e2e8f0 !important;
+            border-radius: 8px;
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-light.border:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1 !important;
+        }
+
+        /* Auth Overlay */
+        #auth-container {
+            z-index: 2000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Auth / Login Overlay -->
+    <div id="auth-container">
+        <div class="card shadow-lg border-0 p-4" style="width: 400px; background: white;">
+            <div class="text-center mb-4">
+                <i class="fas fa-shield-halved text-primary fa-3x mb-3"></i>
+                <h3 class="fw-bold text-dark">Admin Access</h3>
+                <p class="text-muted small">Enter your credentials to continue</p>
+            </div>
+            <form id="admin-login-form" autocomplete="off" novalidate>
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="email" class="form-control" required autocomplete="off">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" required autocomplete="off" readonly
+                        onfocus="this.removeAttribute('readonly');">
+                </div>
+                <div id="login-error" class="alert alert-danger mb-3 py-2 small" style="display:none;"></div>
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Wrapper -->
+    <div id="admin-wrapper" style="display: none;">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="sidebar-brand"><i class="fas fa-landmark"></i> YojanaMitra</div>
+            <nav id="sidebar-nav">
+                <button class="sidebar-btn active" data-target="schemes"><i class="fas fa-table-list"></i> All
+                    Schemes</button>
+                <button class="sidebar-btn" data-target="add-scheme"><i class="fas fa-plus-circle"></i> Add
+                    Scheme</button>
+                <button class="sidebar-btn" data-target="pending-schemes">
+                    <i class="fas fa-clock"></i> Pending Approvals
+                    <span class="badge bg-danger ms-2" id="pending-count" style="display:none;">0</span>
+                </button>
+                <button class="sidebar-btn" data-target="scrape-sources">
+                    <i class="fas fa-globe"></i> Scrape Sources
+                </button>
+                <div class="mt-auto">
+                    <button class="sidebar-btn logout-btn" id="logout-btn"><i
+                            class="fas fa-arrow-right-from-bracket"></i> Logout</button>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-content">
+            <!-- View: All Schemes -->
+            <div id="view-schemes" class="view-section active">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark m-0">Scheme Management</h2>
+                        <p class="text-muted m-0">View and manage all government schemes</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button id="bulk-delete-btn" class="btn btn-outline-danger d-none"
+                            onclick="bulkDeleteSchemes()">
+                            <i class="fas fa-trash-sweep me-2"></i>Delete Selected (<span id="selected-count">0</span>)
+                        </button>
+                        <button class="btn btn-primary" onclick="switchView('add-scheme')">
+                            <i class="fas fa-plus me-2"></i>Add New Scheme
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4" style="width: 40px;">
+                                            <input type="checkbox" class="form-check-input" id="select-all">
+                                        </th>
+                                        <th style="width: 60px;">#</th>
+                                        <th>Scheme Name</th>
+                                        <th>Category</th>
+                                        <th>Benefits</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="schemes-table-body">
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">Loading schemes...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pagination Controls -->
+                <div class="d-flex justify-content-between align-items-center mt-3" id="schemes-pagination">
+                    <span class="text-muted small" id="schemes-page-info">Showing page 1</span>
+                    <div>
+                        <button class="btn btn-sm btn-outline-primary me-2" id="btn-prev-schemes"
+                            onclick="changeSchemePage(-1)" disabled>
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary" id="btn-next-schemes"
+                            onclick="changeSchemePage(1)" disabled>
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View: Add/Edit Scheme -->
+            <div id="view-add-scheme" class="view-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark m-0" id="form-title">Add New Scheme</h2>
+                        <p class="text-muted m-0">Fill in the details below</p>
+                    </div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-body">
+                        <form id="scheme-form">
+                            <input type="hidden" name="scheme_id" id="scheme-id">
+
+                            <div class="row g-4">
+                                <!-- Core Details -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Scheme Name *</label>
+                                    <input type="text" name="name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Category *</label>
+                                    <select name="category" class="form-select" required>
+                                        <option value="">Select Category...</option>
+                                        <option value="Agriculture">Agriculture</option>
+                                        <option value="Education">Education</option>
+                                        <option value="Healthcare">Healthcare</option>
+                                        <option value="Housing">Housing</option>
+                                        <option value="Social Welfare">Social Welfare</option>
+                                        <option value="Employment">Employment</option>
+                                        <option value="Women Empowerment">Women Empowerment</option>
+                                        <option value="Energy">Energy</option>
+                                        <option value="Water">Water</option>
+                                        <option value="Pension">Pension</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Description *</label>
+                                    <textarea name="description" class="form-control" rows="3" required></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Benefits</label>
+                                    <textarea name="benefits" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Eligibility Criteria Text</label>
+                                    <textarea name="eligibility" class="form-control" rows="2"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Application Link</label>
+                                    <input type="text" name="applicationLink" class="form-control">
+                                </div>
+
+                                <div class="col-12">
+                                    <hr class="my-2">
+                                    <h6 class="text-primary fw-bold">Detailed Eligibility Criteria</h6>
+                                </div>
+
+                                <!-- Age & Income -->
+                                <div class="col-md-3">
+                                    <label class="form-label">Min Age</label>
+                                    <input type="number" name="minAge" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Max Age</label>
+                                    <input type="number" name="maxAge" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Min Income</label>
+                                    <input type="number" name="minIncome" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Max Income</label>
+                                    <input type="number" name="maxIncome" class="form-control">
+                                </div>
+
+                                <!-- Multi-Select Dropdowns -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Allowed Gender</label>
+                                    <div class="dropdown" data-field="allowedGenders">
+                                        <button
+                                            class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                            Select Options
+                                        </button>
+                                        <ul class="dropdown-menu w-100 p-2 shadow"
+                                            style="max-height: 250px; overflow-y: auto;">
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedGenders" value="Male"
+                                                        id="g_male"><label class="form-check-label w-100"
+                                                        for="g_male">Male</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedGenders" value="Female"
+                                                        id="g_female"><label class="form-check-label w-100"
+                                                        for="g_female">Female</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedGenders" value="Other"
+                                                        id="g_other"><label class="form-check-label w-100"
+                                                        for="g_other">Other</label></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Allowed States</label>
+                                    <div class="dropdown" data-field="allowedStates">
+                                        <button
+                                            class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                            Select States
+                                        </button>
+                                        <ul class="dropdown-menu w-100 p-2 shadow"
+                                            style="max-height: 250px; overflow-y: auto;">
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedStates" value="Karnataka"
+                                                        id="s_ka"><label class="form-check-label w-100"
+                                                        for="s_ka">Karnataka</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedStates" value="Andhra Pradesh"
+                                                        id="s_ap"><label class="form-check-label w-100"
+                                                        for="s_ap">Andhra Pradesh</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedStates" value="Maharashtra"
+                                                        id="s_mh"><label class="form-check-label w-100"
+                                                        for="s_mh">Maharashtra</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedStates" value="Tamil Nadu"
+                                                        id="s_tn"><label class="form-check-label w-100" for="s_tn">Tamil
+                                                        Nadu</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedStates" value="Delhi"
+                                                        id="s_dl"><label class="form-check-label w-100"
+                                                        for="s_dl">Delhi</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedStates" value="Uttar Pradesh"
+                                                        id="s_up"><label class="form-check-label w-100" for="s_up">Uttar
+                                                        Pradesh</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedStates" value="Other"
+                                                        id="s_ot"><label class="form-check-label w-100"
+                                                        for="s_ot">Other</label></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Allowed Occupations</label>
+                                    <div class="dropdown" data-field="allowedOccupations">
+                                        <button
+                                            class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                            Select Occupations
+                                        </button>
+                                        <ul class="dropdown-menu w-100 p-2 shadow"
+                                            style="max-height: 250px; overflow-y: auto;">
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedOccupations" value="Student"
+                                                        id="o_st"><label class="form-check-label w-100"
+                                                        for="o_st">Student</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedOccupations" value="Farmer"
+                                                        id="o_fa"><label class="form-check-label w-100"
+                                                        for="o_fa">Farmer</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedOccupations"
+                                                        value="Daily Wage Worker" id="o_dw"><label
+                                                        class="form-check-label w-100" for="o_dw">Daily Wage
+                                                        Worker</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedOccupations" value="Self Employed"
+                                                        id="o_se"><label class="form-check-label w-100" for="o_se">Self
+                                                        Employed</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedOccupations" value="Salaried"
+                                                        id="o_sa"><label class="form-check-label w-100"
+                                                        for="o_sa">Salaried</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedOccupations" value="Unemployed"
+                                                        id="o_un"><label class="form-check-label w-100"
+                                                        for="o_un">Unemployed</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedOccupations" value="Other"
+                                                        id="o_ot"><label class="form-check-label w-100"
+                                                        for="o_ot">Other</label></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Allowed Castes</label>
+                                    <div class="dropdown" data-field="allowedCastes">
+                                        <button
+                                            class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                            Select Castes
+                                        </button>
+                                        <ul class="dropdown-menu w-100 p-2 shadow"
+                                            style="max-height: 250px; overflow-y: auto;">
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedCastes" value="General"
+                                                        id="c_ge"><label class="form-check-label w-100"
+                                                        for="c_ge">General</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedCastes" value="OBC"
+                                                        id="c_ob"><label class="form-check-label w-100"
+                                                        for="c_ob">OBC</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedCastes" value="SC" id="c_sc"><label
+                                                        class="form-check-label w-100" for="c_sc">SC</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedCastes" value="ST" id="c_st"><label
+                                                        class="form-check-label w-100" for="c_st">ST</label></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Allowed Marital Status</label>
+                                    <div class="dropdown" data-field="allowedMaritalStatus">
+                                        <button
+                                            class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                            Select Status
+                                        </button>
+                                        <ul class="dropdown-menu w-100 p-2 shadow"
+                                            style="max-height: 250px; overflow-y: auto;">
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedMaritalStatus" value="Single"
+                                                        id="m_si"><label class="form-check-label w-100"
+                                                        for="m_si">Single</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedMaritalStatus" value="Married"
+                                                        id="m_ma"><label class="form-check-label w-100"
+                                                        for="m_ma">Married</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedMaritalStatus" value="Widowed"
+                                                        id="m_wi"><label class="form-check-label w-100"
+                                                        for="m_wi">Widowed</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedMaritalStatus" value="Divorced"
+                                                        id="m_di"><label class="form-check-label w-100"
+                                                        for="m_di">Divorced</label></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Granular Guards -->
+                                <div class="col-md-4">
+                                    <label class="form-label">Minority Requirement</label>
+                                    <select name="minorityRequirement" class="form-select">
+                                        <option value="Any">Any</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Senior Citizen</label>
+                                    <select name="seniorCitizenRequirement" class="form-select">
+                                        <option value="Any">Any</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Widow / Single Woman</label>
+                                    <select name="widowRequirement" class="form-select">
+                                        <option value="Any">Any</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Min Disability %</label>
+                                    <input type="number" name="disabilityPercentageMin" class="form-control"
+                                        placeholder="e.g. 40">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Min Education Level</label>
+                                    <select name="minEducationLevel" class="form-select">
+                                        <option value="">None</option>
+                                        <option value="Below 10th">Below 10th</option>
+                                        <option value="10th Pass">10th Pass</option>
+                                        <option value="12th Pass">12th Pass</option>
+                                        <option value="Diploma">Diploma</option>
+                                        <option value="Graduate">Graduate</option>
+                                        <option value="Post Graduate">Post Graduate</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Disability Requirement</label>
+                                    <select name="disabilityRequirement" class="form-select">
+                                        <option value="Any">Any</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+
+                                <!-- Requirements -->
+                                <div class="col-md-4">
+                                    <label class="form-label">Bank Account Required</label>
+                                    <select name="bankAccountRequired" class="form-select">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Aadhaar Required</label>
+                                    <select name="aadhaarRequired" class="form-select">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Residence Requirement</label>
+                                    <select name="residenceRequirement" class="form-select">
+                                        <option value="Any">Any</option>
+                                        <option value="Urban">Urban</option>
+                                        <option value="Rural">Rural</option>
+                                    </select>
+                                </div>
+
+                                <!-- Multi-Select Ration Cards -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Allowed Ration Cards</label>
+                                    <div class="dropdown" data-field="allowedRationCardTypes">
+                                        <button
+                                            class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                            type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                            Select Options
+                                        </button>
+                                        <ul class="dropdown-menu w-100 p-2 shadow"
+                                            style="max-height: 250px; overflow-y: auto;">
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedRationCardTypes" value="BPL"
+                                                        id="r_bpl"><label class="form-check-label w-100" for="r_bpl">BPL
+                                                        (Below Poverty Line)</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedRationCardTypes" value="APL"
+                                                        id="r_apl"><label class="form-check-label w-100" for="r_apl">APL
+                                                        (Above Poverty Line)</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedRationCardTypes" value="Antyodaya"
+                                                        id="r_ant"><label class="form-check-label w-100"
+                                                        for="r_ant">Antyodaya (AAY)</label></div>
+                                            </li>
+                                            <li>
+                                                <div class="form-check ms-2"><input class="form-check-input"
+                                                        type="checkbox" name="allowedRationCardTypes" value="None"
+                                                        id="r_none"><label class="form-check-label w-100"
+                                                        for="r_none">No Ration Card</label></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Holistic Precision Guards -->
+                                <div class="col-12 mt-4 bg-light p-3 rounded">
+                                    <h6 class="text-primary fw-bold mb-3"><i class="fas fa-shield-alt me-2"></i>Holistic
+                                        Precision Guards</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Allowed Religions</label>
+                                            <div class="dropdown" data-field="allowedReligions">
+                                                <button
+                                                    class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                                    type="button" data-bs-toggle="dropdown"
+                                                    data-bs-auto-close="outside">
+                                                    Select Religions
+                                                </button>
+                                                <ul class="dropdown-menu w-100 p-2 shadow"
+                                                    style="max-height: 250px; overflow-y: auto;">
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedReligions" value="Hindu"
+                                                                id="rel_h"><label class="form-check-label w-100"
+                                                                for="rel_h">Hindu</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedReligions" value="Muslim"
+                                                                id="rel_m"><label class="form-check-label w-100"
+                                                                for="rel_m">Muslim</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedReligions"
+                                                                value="Christian" id="rel_c"><label
+                                                                class="form-check-label w-100"
+                                                                for="rel_c">Christian</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedReligions" value="Sikh"
+                                                                id="rel_s"><label class="form-check-label w-100"
+                                                                for="rel_s">Sikh</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedReligions" value="Buddhist"
+                                                                id="rel_b"><label class="form-check-label w-100"
+                                                                for="rel_b">Buddhist</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedReligions" value="Jain"
+                                                                id="rel_j"><label class="form-check-label w-100"
+                                                                for="rel_j">Jain</label></div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Allowed Father Occupations</label>
+                                            <div class="dropdown" data-field="allowedFatherOccupations">
+                                                <button
+                                                    class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                                    type="button" data-bs-toggle="dropdown"
+                                                    data-bs-auto-close="outside">
+                                                    Select Occupations
+                                                </button>
+                                                <ul class="dropdown-menu w-100 p-2 shadow"
+                                                    style="max-height: 250px; overflow-y: auto;">
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedFatherOccupations"
+                                                                value="None" id="fo_n"><label
+                                                                class="form-check-label w-100"
+                                                                for="fo_n">None/Other</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedFatherOccupations"
+                                                                value="Government" id="fo_g"><label
+                                                                class="form-check-label w-100" for="fo_g">Government
+                                                                Employee</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedFatherOccupations"
+                                                                value="Farmer" id="fo_f"><label
+                                                                class="form-check-label w-100" for="fo_f">Farmer</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedFatherOccupations"
+                                                                value="Artisan" id="fo_a"><label
+                                                                class="form-check-label w-100"
+                                                                for="fo_a">Artisan</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedFatherOccupations"
+                                                                value="Weaver" id="fo_w"><label
+                                                                class="form-check-label w-100" for="fo_w">Weaver</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedFatherOccupations"
+                                                                value="Laborer" id="fo_l"><label
+                                                                class="form-check-label w-100"
+                                                                for="fo_l">Laborer</label></div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Allowed Mother Occupations</label>
+                                            <div class="dropdown" data-field="allowedMotherOccupations">
+                                                <button
+                                                    class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center"
+                                                    type="button" data-bs-toggle="dropdown"
+                                                    data-bs-auto-close="outside">
+                                                    Select Occupations
+                                                </button>
+                                                <ul class="dropdown-menu w-100 p-2 shadow"
+                                                    style="max-height: 250px; overflow-y: auto;">
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedMotherOccupations"
+                                                                value="Homemaker" id="mo_h"><label
+                                                                class="form-check-label w-100"
+                                                                for="mo_h">Homemaker</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedMotherOccupations"
+                                                                value="Government" id="mo_g"><label
+                                                                class="form-check-label w-100" for="mo_g">Government
+                                                                Employee</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedMotherOccupations"
+                                                                value="Farmer" id="mo_f"><label
+                                                                class="form-check-label w-100" for="mo_f">Farmer</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedMotherOccupations"
+                                                                value="Artisan" id="mo_a"><label
+                                                                class="form-check-label w-100"
+                                                                for="mo_a">Artisan</label></div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="form-check ms-2"><input class="form-check-input"
+                                                                type="checkbox" name="allowedMotherOccupations"
+                                                                value="Weaver" id="mo_w"><label
+                                                                class="form-check-label w-100" for="mo_w">Weaver</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Land Type Requirement</label>
+                                            <select name="landTypeRequirement" class="form-select">
+                                                <option value="Any">Any</option>
+                                                <option value="Dry">Dry Land</option>
+                                                <option value="Wet">Wet/Irrigated</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Tribal Guard</label>
+                                            <select name="tribalRequirement" class="form-select">
+                                                <option value="Any">Any</option>
+                                                <option value="Yes">Yes (Must be Tribal)</option>
+                                                <option value="No">No (Must NOT be Tribal)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Orphan Guard</label>
+                                            <select name="orphanRequirement" class="form-select">
+                                                <option value="Any">Any</option>
+                                                <option value="Yes">Yes (Must be Orphan)</option>
+                                                <option value="No">No (Must NOT be Orphan)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-4 pt-4 border-top d-flex gap-3">
+                                    <button type="submit" class="btn btn-primary btn-lg flex-grow-1" id="save-btn">Save
+                                        Scheme</button>
+                                    <button type="button" class="btn btn-light border btn-lg" id="cancel-edit-btn"
+                                        style="display:none;" onclick="cancelEdit()">Cancel Edit</button>
+                                    <button type="button" class="btn btn-light border btn-lg" id="reset-form-btn"
+                                        onclick="resetForm()">Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View: Pending Schemes (NEW) -->
+            <div id="view-pending-schemes" class="view-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark m-0">Pending Scheme Approvals</h2>
+                        <p class="text-muted m-0">Review and approve automatically detected schemes</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button id="batch-approve-btn" class="btn btn-success d-none" onclick="batchApprove()">
+                            <i class="fas fa-check-double me-2"></i>Approve Selected (<span
+                                id="pending-selected-count">0</span>)
+                        </button>
+                        <button id="batch-reject-btn" class="btn btn-outline-danger d-none" onclick="batchReject()">
+                            <i class="fas fa-times-circle me-2"></i>Reject Selected
+                        </button>
+                        <button class="btn btn-primary" onclick="triggerManualScrape()">
+                            <i class="fas fa-sync me-2"></i>Scrape Now
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4" style="width: 40px;">
+                                            <input type="checkbox" class="form-check-input" id="select-all-pending">
+                                        </th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Source</th>
+                                        <th>Confidence</th>
+                                        <th>Detected</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pending-schemes-table-body">
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">Loading pending schemes...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View: Scrape Sources (NEW) -->
+            <div id="view-scrape-sources" class="view-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark m-0">Scrape Sources</h2>
+                        <p class="text-muted m-0">Manage government websites for automated scraping</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <div class="input-group" style="width: 150px;">
+                            <span class="input-group-text bg-light text-muted small">Limit</span>
+                            <input type="number" id="scrapeLimitInput" class="form-control" placeholder="All" min="1">
+                        </div>
+                        <button class="btn btn-outline-danger" onclick="stopScraping()">
+                            <i class="fas fa-stop me-2"></i>Stop
+                        </button>
+                        <button id="scrapeNowBtn" class="btn btn-outline-primary" onclick="triggerManualScrape()">
+                            <i class="fas fa-sync me-2"></i>Scrape Now
+                        </button>
+                        <button class="btn btn-primary" onclick="showAddSourceModal()">
+                            <i class="fas fa-plus me-2"></i>Add Source
+                        </button>
+                    </div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Name</th>
+                                        <th>URL</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th>Last Scraped</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scrape-sources-table-body">
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">Loading sources...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Scheme Preview -->
+    <div class="modal fade" id="schemePreviewModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Scheme Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="schemePreviewBody">
+                    <!-- Scheme details will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="modal-approve-btn">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Add Scrape Source -->
+    <div class="modal fade" id="addSourceModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Scrape Source</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addSourceForm">
+                        <div class="mb-3">
+                            <label class="form-label">Source Name *</label>
+                            <input type="text" class="form-control" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">URL *</label>
+                            <input type="url" class="form-control" name="url" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Scraper Type</label>
+                            <select class="form-select" name="scraperType">
+                                <option value="generic">Generic</option>
+                                <option value="karnataka_sevasethe">Karnataka SevaSethe</option>
+                                <option value="education_gov_in">Education Portal</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitAddSource()">Add Source</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Logic -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Check admin session status
+        async function checkSession() {
+            try {
+                const res = await fetch('/api/admin/me');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.admin) {
+                        showDashboard();
+                        loadSchemes(); // Load initial data
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.log('Not authenticated');
+            }
+            // Show login if not authenticated
+            showLogin();
+        }
+
+        function showLogin() {
+            document.getElementById('auth-container').style.display = 'flex';
+            document.getElementById('admin-wrapper').style.display = 'none';
+            // Clear form fields to prevent autofill
+            const loginForm = document.getElementById('admin-login-form');
+            if (loginForm) {
+                loginForm.reset();
+                // Remove readonly after a brief delay (browser autofill trap)
+                const emailInput = loginForm.querySelector('input[name="email"]');
+                const passwordInput = loginForm.querySelector('input[name="password"]');
+                if (emailInput && passwordInput) {
+                    emailInput.setAttribute('readonly', 'readonly');
+                    passwordInput.setAttribute('readonly', 'readonly');
+                    setTimeout(() => {
+                        emailInput.removeAttribute('readonly');
+                        passwordInput.removeAttribute('readonly');
+                    }, 500);
+                }
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('admin-wrapper').style.display = 'block';
+        }
+
+        function showError(msg) {
+            const errorDiv = document.getElementById('login-error');
+            if (errorDiv) {
+                errorDiv.textContent = msg;
+                errorDiv.style.display = 'block';
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Admin Panel Loaded');
+            checkSession();
+            initMultiSelects(); // Initialize dynamic labels
+
+            // Navigation
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                if (btn.dataset.target) {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        switchView(btn.dataset.target);
+                    });
+                }
+            });
+
+            // Logout
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    await fetch('/api/logout', { method: 'POST' });
+                    // Clear session and prevent caching
+                    sessionStorage.clear();
+                    localStorage.clear();
+                    // Force reload without cache
+                    window.location.href = window.location.href.split('?')[0] + '?t=' + Date.now();
+                });
+            }
+
+            // Login
+            const loginForm = document.getElementById('admin-login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const submitBtn = loginForm.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.textContent;
+                    submitBtn.textContent = 'Verifying...';
+                    submitBtn.disabled = true;
+
+                    const formData = new FormData(e.target);
+                    // Manual Validation
+                    const data = Object.fromEntries(formData);
+                    if (!data.email || !data.password) {
+                        showError('Please fill in all fields');
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+
+                    try {
+                        const res = await fetch('/api/login', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(Object.fromEntries(formData))
+                        });
+                        const data = await res.json();
+
+                        if (res.ok && data.user && data.user.isAdmin) {
+                            // Clear the form after successful login
+                            loginForm.reset();
+                            showDashboard();
+                            loadSchemes(); // Load initial data
+                        } else {
+                            showError(data.error || 'Access Denied');
+                        }
+                    } catch (e) {
+                        console.error(e);
+                        showError('Network error');
+                    } finally {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
+
+            // Unified Save/Update Scheme
+            const schemeForm = document.getElementById('scheme-form');
+            if (schemeForm) {
+                schemeForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.target);
+                    const data = Object.fromEntries(formData);
+
+                    const isEditing = data.scheme_id && data.scheme_id !== "";
+                    const url = isEditing ? `/api/schemes/${data.scheme_id}` : '/api/schemes';
+                    const method = isEditing ? 'PUT' : 'POST';
+
+                    // --- PRE-PROCESS FIELDS ---
+                    // Handle Multi-Selects (Checkboxes)
+                    const multiSelectFields = [
+                        'allowedGenders', 'allowedStates', 'allowedOccupations',
+                        'allowedCastes', 'allowedMaritalStatus', 'allowedRationCardTypes',
+                        'allowedReligions', 'allowedFatherOccupations', 'allowedMotherOccupations'
+                    ];
+                    multiSelectFields.forEach(field => {
+                        const checkboxes = schemeForm.querySelectorAll(`input[name="${field}"]:checked`);
+                        data[field] = Array.from(checkboxes).map(cb => cb.value);
+                    });
+
+                    // Ensure numeric fields are numbers or null
+                    ['minAge', 'maxAge', 'minIncome', 'maxIncome', 'disabilityPercentageMin'].forEach(field => {
+                        if (data[field] === '') {
+                            data[field] = null;
+                        } else {
+                            data[field] = Number(data[field]);
+                        }
+                    });
+
+                    try {
+                        const res = await fetch(url, {
+                            method: method,
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
+                        if (res.ok) {
+                            alert(isEditing ? 'Scheme Updated!' : 'Scheme Saved!');
+                            cancelEdit(); // Reset and exit edit mode
+                            switchView('schemes');
+                            loadSchemes();
+                        } else {
+                            const err = await res.json();
+                            alert('Failed to save scheme: ' + (err.error || 'Unknown error'));
+                        }
+                    } catch (err) { console.error(err); }
+                });
+            }
+
+            // Selection Logic
+            const selectAllCb = document.getElementById('select-all');
+            if (selectAllCb) {
+                selectAllCb.addEventListener('change', (e) => {
+                    document.querySelectorAll('.scheme-checkbox').forEach(cb => {
+                        cb.checked = e.target.checked;
+                    });
+                    updateBulkDeleteUI();
+                });
+            }
+
+            const selectAllPendingCb = document.getElementById('select-all-pending');
+            if (selectAllPendingCb) {
+                selectAllPendingCb.addEventListener('change', (e) => {
+                    document.querySelectorAll('.pending-checkbox').forEach(cb => {
+                        cb.checked = e.target.checked;
+                    });
+                    updateBatchPendingUI();
+                });
+            }
+        });
+
+        // Multi-Select UI Logic
+        function initMultiSelects() {
+            document.querySelectorAll('.dropdown[data-field]').forEach(dropdown => {
+                const button = dropdown.querySelector('.dropdown-toggle');
+                const checkboxes = dropdown.querySelectorAll('.form-check-input');
+                const updateLabel = () => {
+                    const selected = Array.from(checkboxes).filter(c => c.checked).map(c => c.nextElementSibling.textContent.trim());
+                    if (selected.length > 0) {
+                        button.textContent = (selected.length > 2) ? `${selected.length} selected` : selected.join(', ');
+                    } else {
+                        // Default text based on field name
+                        const field = dropdown.dataset.field;
+                        if (field === 'allowedGenders') button.textContent = 'Select Genders';
+                        else if (field === 'allowedStates') button.textContent = 'Select States';
+                        else if (field === 'allowedOccupations') button.textContent = 'Select Occupations';
+                        else if (field === 'allowedCastes') button.textContent = 'Select Castes';
+                        else if (field === 'allowedMaritalStatus') button.textContent = 'Select Status';
+                        else if (field === 'allowedRationCardTypes') button.textContent = 'Select Ration Cards';
+                        else button.textContent = 'Select Options';
+                    }
+                };
+
+                // Add listeners
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', updateLabel);
+                });
+
+                // Initial update
+                updateLabel();
+            });
+        }
+
+        // Utils
+        function showDashboard() {
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('admin-wrapper').style.display = 'block';
+            loadSchemes();
+        }
+
+        function showError(msg) {
+            const errDiv = document.getElementById('login-error');
+            if (errDiv) { errDiv.textContent = msg; errDiv.style.display = 'block'; }
+        }
+
+        async function checkSession() {
+            try {
+                const res = await fetch('/api/admin/me', { headers: { 'Cache-Control': 'no-cache' } });
+                if (res.ok) {
+                    showDashboard();
+                } else {
+                    console.log('Not authenticated');
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById('view-' + viewId);
+            if (target) target.classList.add('active');
+        }
+
+        let currentSchemePage = 1;
+        const SCHEMES_PER_PAGE = 50;
+
+        async function loadSchemes(page = 1) {
+            currentSchemePage = page;
+            console.log(`[loadSchemes] Loading page ${page}`);
+
+            const tbody = document.getElementById('schemes-table-body');
+            if (!tbody) return;
+
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5"><div class="spinner-border text-primary"></div><p class="mt-2 text-muted">Loading schemes...</p></td></tr>';
+
+            try {
+                const res = await fetch(`/api/schemes?page=${page}&limit=${SCHEMES_PER_PAGE}`);
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+                const data = await res.json();
+                tbody.innerHTML = '';
+                updateBulkDeleteUI();
+
+                if (data.schemes && data.schemes.length > 0) {
+                    // Optimized Rendering (Fixes lag)
+                    tbody.innerHTML = data.schemes.map((s, index) => `
+                        <tr>
+                            <td class="ps-4">
+                                <input type="checkbox" class="form-check-input scheme-checkbox" 
+                                       data-id="${s.id}" onchange="updateBulkDeleteUI()">
+                            </td>
+                            <td>${((page - 1) * SCHEMES_PER_PAGE) + index + 1}</td>
+                            <td class="fw-bold text-primary">${s.name}</td>
+                            <td><span class="badge bg-light text-dark border">${s.category || 'General'}</span></td>
+                            <td class="small text-muted">${s.benefits ? s.benefits.substring(0, 50) + '...' : '-'}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editScheme(${s.id})" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteScheme(${s.id})" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>`).join('');
+
+                    // Update Pagination Controls
+                    const totalPages = data.total_pages || 1;
+                    document.getElementById('schemes-page-info').textContent = `Showing page ${page} of ${totalPages} (${data.total_items} total)`;
+                    document.getElementById('btn-prev-schemes').disabled = page <= 1;
+                    document.getElementById('btn-next-schemes').disabled = page >= totalPages;
+
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No schemes found</td></tr>';
+                    document.getElementById('schemes-page-info').textContent = 'No schemes found';
+                }
+            } catch (e) {
+                console.error('[loadSchemes] Error:', e);
+                tbody.innerHTML = '<tr><td colspan="6" class="text-danger text-center py-4">Error loading schemes: ' + e.message + '</td></tr>';
+            }
+        }
+
+        function changeSchemePage(delta) {
+            loadSchemes(currentSchemePage + delta);
+        }
+
+        async function deleteScheme(id) {
+            if (!confirm('Delete scheme?')) return;
+            const res = await fetch(`/api/schemes/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                loadSchemes();
+            } else {
+                alert('Error deleting scheme');
+            }
+        }
+
+        // Update bulk delete button visibility and count
+        function updateBulkDeleteUI() {
+            const selected = document.querySelectorAll('.scheme-checkbox:checked');
+            const btn = document.getElementById('bulk-delete-btn');
+            const countSpan = document.getElementById('selected-count');
+            if (btn && countSpan) {
+                if (selected.length > 0) {
+                    btn.classList.remove('d-none');
+                    countSpan.textContent = selected.length;
+                } else {
+                    btn.classList.add('d-none');
+                }
+            }
+        }
+
+        async function bulkDeleteSchemes() {
+            const selectedBoxes = document.querySelectorAll('.scheme-checkbox:checked');
+            if (selectedBoxes.length === 0) return;
+
+            const ids = Array.from(selectedBoxes).map(cb => parseInt(cb.dataset.id));
+            if (!confirm(`Are you sure you want to delete ${ids.length} schemes?`)) return;
+
+            try {
+                const res = await fetch('/api/admin/schemes/bulk-delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ids: ids })
+                });
+
+                if (res.ok) {
+                    alert('Schemes deleted successfully!');
+                    loadSchemes();
+                    document.getElementById('select-all').checked = false;
+                } else {
+                    const err = await res.json();
+                    alert('Failed: ' + (err.error || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Network error');
+            }
+        }
+
+        async function editScheme(id) {
+            try {
+                const res = await fetch('/api/schemes');
+                const data = await res.json();
+                const s = data.schemes.find(item => item.id === id);
+                if (!s) return;
+
+                // Enter Edit Mode
+                switchView('add-scheme');
+                document.getElementById('form-title').textContent = 'Edit Scheme: ' + s.name;
+                document.getElementById('save-btn').textContent = 'Update Scheme';
+                document.getElementById('cancel-edit-btn').style.display = 'block';
+
+                const form = document.getElementById('scheme-form');
+                form.reset();
+
+                // Populate fields
+                form.querySelector('[name="scheme_id"]').value = s.id;
+                form.querySelector('[name="name"]').value = s.name || '';
+                form.querySelector('[name="category"]').value = s.category || '';
+                form.querySelector('[name="description"]').value = s.description || '';
+                form.querySelector('[name="benefits"]').value = s.benefits || '';
+                form.querySelector('[name="eligibility"]').value = s.eligibility || '';
+                form.querySelector('[name="applicationLink"]').value = s.applicationLink || '';
+                form.querySelector('[name="minAge"]').value = s.minAge || '';
+                form.querySelector('[name="maxAge"]').value = s.maxAge || '';
+                form.querySelector('[name="minIncome"]').value = s.minIncome || '';
+                form.querySelector('[name="maxIncome"]').value = s.maxIncome || '';
+
+                // Granular fields
+                form.querySelector('[name="minorityRequirement"]').value = s.criteria.minorityRequirement || 'Any';
+                form.querySelector('[name="seniorCitizenRequirement"]').value = s.criteria.seniorCitizenRequirement || 'Any';
+                form.querySelector('[name="widowRequirement"]').value = s.criteria.widowRequirement || 'Any';
+                form.querySelector('[name="disabilityPercentageMin"]').value = s.criteria.disabilityPercentageMin || '';
+                form.querySelector('[name="minEducationLevel"]').value = s.criteria.minEducationLevel || '';
+                form.querySelector('[name="disabilityRequirement"]').value = s.criteria.disabilityRequirement || 'Any';
+                form.querySelector('[name="bankAccountRequired"]').value = s.criteria.bankAccountRequired || 'No';
+                form.querySelector('[name="aadhaarRequired"]').value = s.criteria.aadhaarRequired || 'No';
+                form.querySelector('[name="residenceRequirement"]').value = s.criteria.residenceRequirement || 'Any';
+
+                // Multi-selects
+                const populateMulti = (fieldName, values) => {
+                    if (!values) return;
+                    const items = Array.isArray(values) ? values : JSON.parse(values);
+                    items.forEach(val => {
+                        const cb = form.querySelector(`input[name="${fieldName}"][value="${val}"]`);
+                        if (cb) cb.checked = true;
+                    });
+                };
+
+                populateMulti('allowedGenders', s.criteria.allowedGenders);
+                populateMulti('allowedStates', s.criteria.allowedStates);
+                populateMulti('allowedOccupations', s.criteria.allowedOccupations);
+                populateMulti('allowedCastes', s.criteria.allowedCastes);
+                populateMulti('allowedMaritalStatus', s.criteria.allowedMaritalStatus);
+                populateMulti('allowedRationCardTypes', s.criteria.allowedRationCardTypes);
+                populateMulti('allowedReligions', s.criteria.allowedReligions);
+                populateMulti('allowedFatherOccupations', s.criteria.allowedFatherOccupations);
+                populateMulti('allowedMotherOccupations', s.criteria.allowedMotherOccupations);
+
+                form.querySelector('[name="landTypeRequirement"]').value = s.criteria.landTypeRequirement || 'Any';
+                form.querySelector('[name="tribalRequirement"]').value = s.criteria.tribalRequirement || 'Any';
+                form.querySelector('[name="orphanRequirement"]').value = s.criteria.orphanRequirement || 'Any';
+
+                initMultiSelects(); // Update labels
+            } catch (e) {
+                console.error(e);
+                alert('Error loading scheme details');
+            }
+        }
+
+        function cancelEdit() {
+            document.getElementById('form-title').textContent = 'Add New Scheme';
+            document.getElementById('save-btn').textContent = 'Save Scheme';
+            document.getElementById('cancel-edit-btn').style.display = 'none';
+            resetForm();
+        }
+
+        function resetForm() {
+            const form = document.getElementById('scheme-form');
+            if (form) {
+                form.reset();
+                form.querySelector('[name="scheme_id"]').value = '';
+            }
+            initMultiSelects(); // Reset labels
+        }
+
+        // =============== PENDING SCHEMES FUNCTIONS ===============
+        let currentPendingPage = 1;
+
+        async function loadPendingSchemes(page = 1) {
+            try {
+                const res = await fetch(`/api/admin/pending-schemes?page=${page}&per_page=50`);
+                const data = await res.json();
+                const tbody = document.getElementById('pending-schemes-table-body');
+                currentPendingPage = page;
+
+                if (data.pendingSchemes && data.pendingSchemes.length > 0) {
+                    tbody.innerHTML = data.pendingSchemes.map(p => `
+                        <tr>
+                            <td class="ps-4">
+                                <input type="checkbox" class="form-check-input pending-checkbox" 
+                                       data-id="${p.id}" onchange="updateBatchPendingUI()">
+                            </td>
+                            <td class="fw-bold text-dark">${p.name}</td>
+                            <td><span class="badge bg-light text-dark border">${p.category || 'Uncategorized'}</span></td>
+                            <td class="small text-muted">${p.sourceName || 'Unknown'}</td>
+                            <td>
+                                <div class="progress" style="height: 12px; width: 80px; border-radius: 10px;">
+                                    <div class="progress-bar ${p.confidenceScore > 0.7 ? 'bg-success' : 'bg-warning'}" 
+                                         role="progressbar"
+                                         style="width: ${(p.confidenceScore * 100).toFixed(0)}%">
+                                    </div>
+                                </div>
+                                <small class="text-muted mt-1">${(p.confidenceScore * 100).toFixed(0)}% Match</small>
+                            </td>
+                            <td class="small text-muted">${new Date(p.scrapedAt).toLocaleDateString()}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-success" onclick="approvePendingScheme(${p.id})" title="Approve">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="previewScheme(${p.id})" title="Preview">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="rejectPendingScheme(${p.id})" title="Reject">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+
+                    // Update badge count with total (not just current page)
+                    updatePendingCount(data.pagination.total);
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No pending schemes</td></tr>';
+                    updatePendingCount(0);
+                }
+            } catch (e) {
+                console.error('Error loading pending schemes:', e);
+            }
+        }
+
+        function loadPendingPage(direction) {
+            if (direction === 'next') {
+                loadPendingSchemes(currentPendingPage + 1);
+            } else if (direction === 'prev' && currentPendingPage > 1) {
+                loadPendingSchemes(currentPendingPage - 1);
+            }
+        }
+
+        async function approvePendingScheme(id) {
+            if (!confirm('Approve this scheme?')) return;
+            try {
+                const res = await fetch(`/api/admin/pending-schemes/${id}/approve`, { method: 'POST' });
+                if (res.ok) {
+                    alert('Scheme approved!');
+                    loadPendingSchemes();
+                    loadSchemes(); // Refresh main schemes list
+                }
+            } catch (e) {
+                alert('Error approving scheme');
+            }
+        }
+
+        async function rejectPendingScheme(id) {
+            const reason = prompt('Rejection reason (optional):');
+            try {
+                const res = await fetch(`/api/admin/pending-schemes/${id}/reject`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reason: reason || 'No reason provided' })
+                });
+                if (res.ok) {
+                    alert('Scheme rejected');
+                    loadPendingSchemes();
+                }
+            } catch (e) {
+                alert('Error rejecting scheme');
+            }
+        }
+
+        // Batch Functions for Pending Schemes
+        function updateBatchPendingUI() {
+            const selected = document.querySelectorAll('.pending-checkbox:checked');
+            const approveBtn = document.getElementById('batch-approve-btn');
+            const rejectBtn = document.getElementById('batch-reject-btn');
+            const countSpan = document.getElementById('pending-selected-count');
+
+            if (approveBtn && rejectBtn && countSpan) {
+                if (selected.length > 0) {
+                    approveBtn.classList.remove('d-none');
+                    rejectBtn.classList.remove('d-none');
+                    countSpan.textContent = selected.length;
+                } else {
+                    approveBtn.classList.add('d-none');
+                    rejectBtn.classList.add('d-none');
+                }
+            }
+        }
+
+        async function batchApprove() {
+            const selectedBoxes = document.querySelectorAll('.pending-checkbox:checked');
+            if (selectedBoxes.length === 0) return;
+
+            const ids = Array.from(selectedBoxes).map(cb => parseInt(cb.dataset.id));
+            if (!confirm(`Approve all ${ids.length} selected schemes?`)) return;
+
+            try {
+                const res = await fetch('/api/admin/pending/batch-approve', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ids: ids })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(data.message);
+                    loadPendingSchemes();
+                    loadSchemes();
+                    document.getElementById('select-all-pending').checked = false;
+                } else {
+                    const err = await res.json();
+                    alert('Error: ' + (err.error || 'Unknown error'));
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Network error during batch approval');
+            }
+        }
+
+        async function batchReject() {
+            const selectedBoxes = document.querySelectorAll('.pending-checkbox:checked');
+            if (selectedBoxes.length === 0) return;
+
+            const ids = Array.from(selectedBoxes).map(cb => parseInt(cb.dataset.id));
+            const reason = prompt(`Reject all ${ids.length} schemes? Reason (optional):`);
+            if (reason === null) return;
+
+            try {
+                const res = await fetch('/api/admin/pending/batch-reject', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ids: ids, reason: reason || 'Batch rejection' })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(data.message);
+                    loadPendingSchemes();
+                    document.getElementById('select-all-pending').checked = false;
+                } else {
+                    const err = await res.json();
+                    alert('Error: ' + (err.error || 'Unknown error'));
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Network error during batch rejection');
+            }
+        }
+
+        async function previewScheme(id) {
+            try {
+                const res = await fetch(`/api/admin/pending-schemes`);
+                const data = await res.json();
+                const scheme = data.pendingSchemes.find(p => p.id === id);
+
+                if (!scheme) return;
+
+                const modal = new bootstrap.Modal(document.getElementById('schemePreviewModal'));
+                const body = document.getElementById('schemePreviewBody');
+
+                body.innerHTML = `
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>${scheme.name}</h4>
+                            <p class="badge bg-info">${scheme.category}</p>
+                            <p class="text-muted small">Source: ${scheme.sourceName} | Confidence: ${(scheme.confidenceScore * 100).toFixed(0)}%</p>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <h6>Description</h6>
+                            <p>${scheme.description}</p>
+                        </div>
+                        <div class="col-6">
+                            <h6>Benefits</h6>
+                            <p>${scheme.benefits || 'N/A'}</p>
+                        </div>
+                        <div class="col-6">
+                            <h6>Eligibility</h6>
+                            <p>${scheme.eligibility || 'N/A'}</p>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('modal-approve-btn').onclick = () => {
+                    modal.hide();
+                    approvePendingScheme(id);
+                };
+
+                modal.show();
+            } catch (e) {
+                console.error('Error previewing scheme:', e);
+            }
+        }
+
+        function updatePendingCount(count) {
+            const badge = document.getElementById('pending-count');
+            if (badge) {
+                badge.textContent = count;
+                badge.style.display = count > 0 ? 'inline-block' : 'none';
+            }
+        }
+
+        // =============== SCRAPE SOURCES FUNCTIONS ===============
+        async function loadScrapeSources() {
+            try {
+                const res = await fetch('/api/admin/scrape-sources');
+                const data = await res.json();
+                const tbody = document.getElementById('scrape-sources-table-body');
+
+                if (data.sources && data.sources.length > 0) {
+                    tbody.innerHTML = data.sources.map(s => `
+                        <tr>
+                            <td class="ps-4 fw-bold">${s.name}</td>
+                            <td class="small text-muted">${s.url}</td>
+                            <td><span class="badge bg-secondary">${s.scraperType}</span></td>
+                            <td>
+                                <span class="badge ${s.isActive ? 'bg-success' : 'bg-warning'}">
+                                    ${s.isActive ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td class="small">${s.lastScraped ? new Date(s.lastScraped).toLocaleString() : 'Never'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="deleteSource(${s.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No scrape sources configured</td></tr>';
+                }
+            } catch (e) {
+                console.error('Error loading scrape sources:', e);
+            }
+        }
+
+        function showAddSourceModal() {
+            const modal = new bootstrap.Modal(document.getElementById('addSourceModal'));
+            document.getElementById('addSourceForm').reset();
+            modal.show();
+        }
+
+        async function submitAddSource() {
+            const form = document.getElementById('addSourceForm');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            try {
+                const res = await fetch('/api/admin/scrape-sources', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    alert('Source added successfully!');
+                    bootstrap.Modal.getInstance(document.getElementById('addSourceModal')).hide();
+                    loadScrapeSources();
+                } else {
+                    alert('Error adding source');
+                }
+            } catch (e) {
+                alert('Error adding source');
+            }
+        }
+
+        async function deleteSource(id) {
+            if (!confirm('Delete this scrape source?')) return;
+            try {
+                const res = await fetch(`/api/admin/scrape-sources/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    alert('Source deleted');
+                    loadScrapeSources();
+                }
+            } catch (e) {
+                alert('Error deleting source');
+            }
+        }
+
+        // Global variable to track interval
+        let scrapeStatusInterval;
+
+        async function triggerManualScrape() {
+            const limitInput = document.getElementById('scrapeLimitInput');
+            const limit = limitInput && limitInput.value ? parseInt(limitInput.value) : null;
+
+            const msg = limit ? `Start manual scraping (Limit: ${limit} schemes)? This may take a few minutes.` : 'Start manual scraping of ALL schemes? This may take a significant amount of time.';
+
+            if (!confirm(msg)) return;
+            try {
+                // Set initial loading state
+                updateScrapeButtonState(true);
+
+                const res = await fetch('/api/admin/trigger-scrape', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ limit: limit })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(data.message || 'Scraping job started in background! The pending count badge will update when schemes are found.');
+                    // Polling will handle the button state
+                } else {
+                    alert('Error starting scrape');
+                    updateScrapeButtonState(false);
+                }
+            } catch (e) {
+                alert('Error triggering scrape');
+                updateScrapeButtonState(false);
+            }
+        }
+
+        function updateScrapeButtonState(isRunning) {
+            const btn = document.getElementById('scrapeNowBtn');
+            if (btn) {
+                if (isRunning) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-cog fa-spin me-2"></i>Scraping in progress...';
+                    btn.classList.add('btn-outline-primary');
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-sync me-2"></i>Scrape Now';
+                }
+            }
+        }
+
+        async function pollScrapeStatus() {
+            if (document.getElementById('admin-wrapper').style.display === 'none') return;
+            try {
+                // Add timestamp to prevent caching
+                const res = await fetch('/api/admin/scrape-status?t=' + Date.now());
+                const data = await res.json();
+                updateScrapeButtonState(data.isRunning);
+            } catch (e) {
+                console.error("Error polling status", e);
+            }
+        }
+
+        async function stopScraping() {
+            if (!confirm('Stop the current scraping job?')) return;
+            try {
+                const res = await fetch('/api/admin/stop-scrape', { method: 'POST' });
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert(data.message || 'Stop signal sent to scraper.');
+                } else {
+                    alert('Error stopping scrape: ' + (data.error || 'Unknown error'));
+                }
+            } catch (e) {
+                alert('Error sending stop signal: ' + e.message);
+            }
+        }
+
+        // Load pending schemes and sources when those views are shown
+        function switchView(target) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + target).classList.add('active');
+
+            // Load data when switching views
+            if (target === 'pending-schemes') {
+                loadPendingSchemes();
+            } else if (target === 'scrape-sources') {
+                loadScrapeSources();
+            }
+        }
+
+        // =============== AUTO-REFRESH NOTIFICATIONS & STATUS ===============
+        setInterval(async () => {
+            if (document.getElementById('admin-wrapper').style.display !== 'none') {
+                try {
+                    // Update pending count
+                    const res = await fetch('/api/admin/pending-schemes');
+                    const data = await res.json();
+                    if (data.pendingSchemes) {
+                        updatePendingCount(data.pendingSchemes.length);
+                    }
+
+                    // Poll scrape status
+                    await pollScrapeStatus();
+
+                } catch (e) {
+                    // Silently fail
+                }
+            }
+        }, 2000); // Check every 2 seconds
+    </script>
+    <script src="js/chatbot.js"></script>
+</body>
+
+</html>

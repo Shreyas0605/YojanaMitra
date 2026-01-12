@@ -1,0 +1,10 @@
+.env
+yojanamitra.db
+__pycache__/
+*.log
+instance/
+*.pyc
+.vscode/
+node_modules/
+dist/
+build/

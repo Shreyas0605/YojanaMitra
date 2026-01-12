@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YojanaMitra - Smart Welfare Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="showPage('home')">
+                <i class="fas fa-hands-helping me-2"></i>YojanaMitra
+            </a>
+
+            <!-- Language Toggle -->
+            <button class="btn btn-sm btn-outline-light me-3 language-toggle" onclick="toggleLanguage()"
+                id="lang-toggle">
+                <i class="fas fa-language me-1"></i><span id="lang-text">ಕನ್ನಡ</span>
+            </button>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('home')" data-en="Home"
+                            data-kn="ಮುಖಪುಟ">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('schemes')" data-en="Schemes"
+                            data-kn="ಯೋಜನೆಗಳು">Schemes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="showPage('eligibility')"
+                            data-en="Check Eligibility" data-kn="ಅರ್ಹತೆ ಪರಿಶೀಲಿಸಿ">Check Eligibility</a></li>
+
+                    <!-- Guest Links -->
+                    <li class="nav-item guest-only"><a class="nav-link" href="#" onclick="showPage('login')"
+                            data-en="Login" data-kn="ಲಾಗಿನ್">Login</a></li>
+                    <li class="nav-item guest-only"><a class="btn btn-primary ms-2" href="#"
+                            onclick="showPage('register')" data-en="Register" data-kn="ನೋಂದಣಿ">Register</a></li>
+
+                    <!-- User Links -->
+                    <li class="nav-item user-only" style="display:none;"><a class="nav-link" href="#"
+                            onclick="showPage('profile')" data-en="Profile" data-kn="ಪ್ರೊಫೈಲ್">Profile</a></li>
+                    <li class="nav-item user-only" style="display:none;">
+                        <button class="btn btn-outline-danger ms-2" onclick="logout()" data-en="Logout"
+                            data-kn="ಲಾಗ್ಔಟ್">Logout</button>
+                    </li>
+
+                    <!-- Admin Link -->
+                    <li class="nav-item admin-only" style="display:none;"><a class="nav-link" href="#"
+                            onclick="showPage('admin')" data-en="Admin Panel" data-kn="ನಿರ್ವಾಹಕ ಪ್ಯಾನೆಲ್">Admin
+                            Panel</a></li>
+                    <li class="nav-item admin-only" style="display:none;">
+                        <button class="btn btn-outline-danger ms-2" onclick="logout()" data-en="Logout"
+                            data-kn="ಲಾಗ್ಔಟ್">Logout</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="home-page" class="page-section">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <!-- Left Column - Text Content -->
+                    <div class="col-lg-6 hero-content">
+                        <h1 class="hero-title">
+                            <span class="highlight">YojanaMitra</span><br>
+                            Government Welfare<br>
+                            Made Simple
+                        </h1>
+                        <p class="hero-subtitle">
+                            Discover 50+ government schemes tailored to your profile. Fast, secure, and completely free.
+                            Let AI help you find the benefits you deserve.
+                        </p>
+                        <div class="d-flex gap-3 mb-4">
+                            <button class="btn btn-primary btn-lg" onclick="showPage('eligibility')">
+                                Check Eligibility
+                            </button>
+                            <button class="btn btn-outline-secondary btn-lg" onclick="showPage('schemes')">
+                                Browse Schemes
+                            </button>
+                        </div>
+
+                        <!-- Trust Badges -->
+                        <div class="mt-5 d-flex align-items-center gap-4 flex-wrap">
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-shield-alt text-success" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <strong style="display: block; font-size: 0.9rem;">100% Secure</strong>
+                                    <small class="text-muted">Government Verified</small>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-robot text-primary" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <strong style="display: block; font-size: 0.9rem;">AI Powered</strong>
+                                    <small class="text-muted">Gemini Technology</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column - Illustration -->
+                    <div class="col-lg-6 hero-illustration mt-5 mt-lg-0">
+                        <div class="illustration-placeholder">
+                            <!-- Placeholder for illustration -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="py-5 bg-light-subtle">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold">How It Works</h2>
+                    <p class="text-muted">Get your benefits in 3 simple steps</p>
+                </div>
+                <div class="row g-4 text-center">
+                    <div class="col-md-4">
+                        <div class="how-it-works-card">
+                            <div class="mb-3"><i class="fas fa-user-edit fa-3x"></i></div>
+                            <h5>1. Enter Details</h5>
+                            <p>Provide basic details like age, income, and occupation to check eligibility.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="how-it-works-card">
+                            <div class="mb-3"><i class="fas fa-magic fa-3x"></i></div>
+                            <h5>2. Get Matched</h5>
+                            <p>Our AI instantly finds the schemes you are eligible for.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="how-it-works-card">
+                            <div class="mb-3"><i class="fas fa-check-circle fa-3x"></i></div>
+                            <h5>3. Apply Directly</h5>
+                            <p>Get direct application links and guidance to claim your benefits.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Categories -->
+        <section class="py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold">Popular Categories</h2>
+                    <p class="text-muted">Explore schemes by sector</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card text-center h-100 category-card"
+                            onclick="filterSchemesByCategory('Agriculture')">
+                            <div class="card-body">
+                                <i class="fas fa-tractor fa-2x mb-2 text-success"></i>
+                                <h6>Agriculture</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card text-center h-100 category-card"
+                            onclick="filterSchemesByCategory('Healthcare')">
+                            <div class="card-body">
+                                <i class="fas fa-heartbeat fa-2x mb-2 text-danger"></i>
+                                <h6>Healthcare</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card text-center h-100 category-card"
+                            onclick="filterSchemesByCategory('Education')">
+                            <div class="card-body">
+                                <i class="fas fa-graduation-cap fa-2x mb-2 text-info"></i>
+                                <h6>Education</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card text-center h-100 category-card" onclick="filterSchemesByCategory('Housing')">
+                            <div class="card-body">
+                                <i class="fas fa-home fa-2x mb-2 text-warning"></i>
+                                <h6>Housing</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card text-center h-100 category-card"
+                            onclick="filterSchemesByCategory('Employment')">
+                            <div class="card-body">
+                                <i class="fas fa-briefcase fa-2x mb-2 text-primary"></i>
+                                <h6>Employment</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2">
+                        <div class="card text-center h-100 category-card" onclick="filterSchemesByCategory('Women')">
+                            <div class="card-body">
+                                <i class="fas fa-female fa-2x mb-2" style="color: #ec4899;"></i>
+                                <h6>Women</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Stats -->
+        <section class="py-5 stats-section">
+            <div class="container">
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h2 class="fw-bold">50+</h2>
+                        <p>Government Schemes</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2 class="fw-bold">100%</h2>
+                        <p>Free & Secure</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2 class="fw-bold">24/7</h2>
+                        <p>AI Assistance</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-4 text-center">
+            <div class="container">
+                <p class="text-muted mb-0">&copy; 2024 YojanaMitra. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ELIGIBILITY CHECKER PAGE -->
+    <div id="eligibility-page" class="page-section" style="display:none;">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3">
+                            <h4 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>Check Your Eligibility</h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="text-muted mb-4">Enter your details below to find schemes you qualify for.</p>
+                            <form id="eligibility-form">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Age *</label>
+                                        <input type="number" class="form-control" name="age" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Gender *</label>
+                                        <select class="form-select" name="gender" required>
+                                            <option value="">Select</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">State *</label>
+                                        <input type="text" class="form-control" name="state" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Occupation *</label>
+                                        <input type="text" class="form-control" name="occupation" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Annual Income (₹) *</label>
+                                        <input type="number" class="form-control" name="income" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Caste</label>
+                                        <select class="form-select" name="caste">
+                                            <option value="General">General</option>
+                                            <option value="OBC">OBC</option>
+                                            <option value="SC">SC</option>
+                                            <option value="ST">ST</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary px-5">
+                                        <i class="fas fa-search me-2"></i>Find Schemes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="eligibility-results" class="mt-4" style="display:none;">
+                        <h5 class="mb-3">Schemes You Qualify For:</h5>
+                        <div id="eligibility-schemes-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCHEMES PAGE -->
+    <div id="schemes-page" class="page-section" style="display:none;">
+        <div class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-list-alt me-2"></i>Government Schemes</h2>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <input type="text" id="search-input" class="form-control" placeholder="Search schemes...">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="category-filter" class="form-select">
+                                <option value="">All Categories</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                                <option value="Housing">Housing</option>
+                                <option value="Employment">Employment</option>
+                                <option value="Women">Women Empowerment</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="state-filter" class="form-select">
+                                <option value="">All States</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Karnataka">Karnataka</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary w-100" onclick="loadSchemes()"><i
+                                    class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="schemes-list" class="row g-4"></div>
+        </div>
+    </div>
+
+    <!-- LOGIN PAGE -->
+    <div id="login-page" class="page-section" style="display:none;">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card mt-5">
+                        <div class="card-body p-5">
+                            <h3 class="text-center mb-4">Login</h3>
+                            <form id="login-form">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                            </form>
+                            <div class="text-center mt-3">
+                                <a href="#" onclick="showPage('register')">Don't have an account?
+                                    Register</a>
+                            </div>
+                            <div class="text-center mt-2">
+                                <a href="#" onclick="showPage('admin-login')">Admin Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTER PAGE -->
+    <div id="register-page" class="page-section" style="display:none;">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card mt-5">
+                        <div class="card-body p-5">
+                            <h3 class="text-center mb-4">Create Account</h3>
+                            <form id="register-form">
+                                <div class="mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mobile</label>
+                                    <input type="tel" class="form-control" name="mobile" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Register</button>
+                            </form>
+                            <div class="text-center mt-3">
+                                <a href="#" onclick="showPage('login')">Already have an account? Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div id="profile-page" class="page-section" style="display:none;">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header py-3">
+                            <h4 class="mb-0"><i class="fas fa-user-circle me-2"></i>My Profile</h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="profile-form">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" name="name" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" readonly>
+                                    </div>
+                                </div>
+                                <hr>
+                                <h5 class="mb-3 text-secondary">Demographics</h5>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Age</label>
+                                        <input type="number" class="form-control" name="age" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Gender</label>
+                                        <select class="form-select" name="gender" required>
+                                            <option value="">Select</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">State</label>
+                                        <input type="text" class="form-control" name="state" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Occupation</label>
+                                        <input type="text" class="form-control" name="occupation" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Annual Income (₹)</label>
+                                        <input type="number" class="form-control" name="income" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Caste</label>
+                                        <select class="form-select" name="caste">
+                                            <option value="General">General</option>
+                                            <option value="OBC">OBC</option>
+                                            <option value="SC">SC</option>
+                                            <option value="ST">ST</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary px-4">Save Profile</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN PAGE -->
+    <div id="admin-login-page" class="page-section" style="display:none;">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="card mt-5">
+                        <div class="card-body p-5">
+                            <h3 class="text-center mb-4"><i class="fas fa-shield-alt me-2"></i>Admin Login</h3>
+                            <form id="admin-login-form">
+                                <div class="mb-3">
+                                    <label class="form-label">Admin Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Login as Admin</button>
+                            </form>
+                            <div class="text-center mt-3">
+                                <a href="#" onclick="showPage('login')">User Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL PAGE -->
+    <div id="admin-page" class="page-section" style="display:none;">
+        <div class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-cog me-2"></i>Admin Panel</h2>
+                <button class="btn btn-success" onclick="showAddSchemeForm()">
+                    <i class="fas fa-plus me-2"></i>Add New Scheme
+                </button>
+            </div>
+
+            <!-- Add/Edit Scheme Form -->
+            <div id="scheme-form-container" class="card mb-4" style="display:none;">
+                <div class="card-header">
+                    <h5 class="mb-0" id="scheme-form-title">Add New Scheme</h5>
+                </div>
+                <div class="card-body">
+                    <form id="scheme-form">
+                        <input type="hidden" id="scheme-id" name="id">
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <label class="form-label">Scheme Name *</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Category *</label>
+                                <select class="form-select" name="category" required>
+                                    <option value="">Select</option>
+                                    <option value="Agriculture">Agriculture</option>
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Housing">Housing</option>
+                                    <option value="Employment">Employment</option>
+                                    <option value="Women">Women Empowerment</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description *</label>
+                            <textarea class="form-control" name="description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Benefits *</label>
+                            <textarea class="form-control" name="benefits" rows="2" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Eligibility Criteria</label>
+                            <textarea class="form-control" name="eligibility" rows="2"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Application Link</label>
+                            <input type="url" class="form-control" name="applicationLink" placeholder="https://...">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Target Audience</label>
+                            <input type="text" class="form-control" name="targetAudience"
+                                placeholder="e.g., Farmers, Students">
+                        </div>
+
+                        <hr>
+                        <h6 class="mb-3">Eligibility Criteria (Optional)</h6>
+
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Min Age</label>
+                                <input type="number" class="form-control" name="minAge">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Max Age</label>
+                                <input type="number" class="form-control" name="maxAge">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Min Income (₹)</label>
+                                <input type="number" class="form-control" name="minIncome">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Max Income (₹)</label>
+                                <input type="number" class="form-control" name="maxIncome">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Allowed Genders (comma-separated or "All")</label>
+                            <input type="text" class="form-control" name="allowedGenders"
+                                placeholder="Male, Female, Other or All">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Allowed Occupations (comma-separated or "All")</label>
+                            <input type="text" class="form-control" name="allowedOccupations"
+                                placeholder="Farmer, Student or All">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Allowed Castes (comma-separated or "All")</label>
+                            <input type="text" class="form-control" name="allowedCastes"
+                                placeholder="General, OBC, SC, ST or All">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Allowed States (comma-separated or "All")</label>
+                            <input type="text" class="form-control" name="allowedStates"
+                                placeholder="Maharashtra, Delhi or All">
+                        </div>
+
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary me-2"
+                                onclick="hideSchemeForm()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Scheme</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Schemes List -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">All Schemes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Target Audience</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-schemes-list">
+                                <tr>
+                                    <td colspan="4" class="text-center">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <button class="chat-toggle-btn" onclick="toggleChat()">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+
+    <div id="chatbox" class="chatbox" style="display:none;">
+        <div class="chat-header">
+            <span><i class="fas fa-headset me-2"></i>YojanaMitra Assistant</span>
+            <button class="btn btn-sm btn-outline-light border-0" onclick="toggleChat()"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot">
+                Hello! I can help you find schemes and answer your questions. How can I assist you today?
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <div class="input-group">
+                <input type="text" id="chat-input" class="form-control" placeholder="Type your message..."
+                    onkeypress="if(event.key==='Enter') sendChatMessage()">
+                <button class="btn btn-primary" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+            <small class="text-muted mt-1 d-block text-center" style="font-size: 10px;">Powered by Gemini
+                AI</small>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // --- State Management ---
+        let currentUser = null;
+        let isAdmin = false;
+        let currentLanguage = 'en'; // Default to English
+
+        // --- Language Switching ---
+        const translations = {
+            en: {
+                'Home': 'Home',
+                'Schemes': 'Schemes',
+                'Check Eligibility': 'Check Eligibility',
+                'Login': 'Login',
+                'Register': 'Register',
+                'Profile': 'Profile',
+                'Logout': 'Logout',
+                'Admin Panel': 'Admin Panel'
+            },
+            kn: {
+                'Home': 'ಮುಖಪುಟ',
+                'Schemes': 'ಯೋಜನೆಗಳು',
+                'Check Eligibility': 'ಅರ್ಹತೆ ಪರಿಶೀಲಿಸಿ',
+                'Login': 'ಲಾಗಿನ್',
+                'Register': 'ನೋಂದಣಿ',
+                'Profile': 'ಪ್ರೊಫೈಲ್',
+                'Logout': 'ಲಾಗ್ಔಟ್',
+                'Admin Panel': 'ನಿರ್ವಾಹಕ ಪ್ಯಾನೆಲ್'
+            }
+        };
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'kn' : 'en';
+            localStorage.setItem('yojana_language', currentLanguage);
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            const lang = currentLanguage;
+
+            // Update navigation links
+            document.querySelectorAll('[data-en]').forEach(el => {
+                const enText = el.getAttribute('data-en');
+                const knText = el.getAttribute('data-kn');
+                if (lang === 'kn' && knText) {
+                    el.textContent = knText;
+                } else if (enText) {
+                    el.textContent = enText;
+                }
+            });
+
+            // Update language toggle button text
+            const langToggleText = document.getElementById('lang-text');
+            if (langToggleText) {
+                langToggleText.textContent = lang === 'en' ? 'ಕನ್ನಡ' : 'English';
+            }
+        }
+
+        // Load saved language preference
+        function loadLanguagePreference() {
+            const savedLang = localStorage.getItem('yojana_language');
+            if (savedLang) {
+                currentLanguage = savedLang;
+                applyTranslations();
+            }
+        }
+
+        // --- Navigation ---
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(el => el.style.display = 'none');
+            document.getElementById(pageId + '-page').style.display = 'block';
+
+            const navbarCollapse = document.getElementById('navbarNav');
+            if (navbarCollapse.classList.contains('show')) {
+                new bootstrap.Collapse(navbarCollapse).hide();
+            }
+
+            if (pageId === 'schemes') loadSchemes();
+            if (pageId === 'profile') loadProfile();
+            if (pageId === 'admin') loadAdminSchemes();
+        }
+
+        function updateAuthUI() {
+            if (isAdmin) {
+                document.querySelectorAll('.guest-only, .user-only').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+            } else if (currentUser) {
+                document.querySelectorAll('.guest-only, .admin-only').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.user-only').forEach(el => el.style.display = 'block');
+            } else {
+                document.querySelectorAll('.user-only, .admin-only').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.guest-only').forEach(el => el.style.display = 'block');
+            }
+        }
+
+        // --- Authentication ---
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/user');
+                if (res.ok) {
+                    const data = await res.json();
+                    currentUser = data.user;
+                    isAdmin = false;
+                } else {
+                    currentUser = null;
+                    isAdmin = false;
+                }
+                updateAuthUI();
+            } catch (e) {
+                console.error("Auth check failed", e);
+            }
+        }
+
+        document.getElementById('login-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    currentUser = result.user;
+                    isAdmin = false;
+                    updateAuthUI();
+                    showPage('home');
+                    alert('Login Successful!');
+                } else {
+                    alert(result.error);
+                }
+            } catch (e) {
+                alert('Login failed');
+            }
+        };
+
+        document.getElementById('admin-login-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    currentUser = null;
+                    isAdmin = true;
+                    updateAuthUI();
+                    showPage('admin');
+                    alert('Admin Login Successful!');
+                } else {
+                    alert(result.error);
+                }
+            } catch (e) {
+                alert('Admin login failed');
+            }
+        };
+
+        document.getElementById('register-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    alert('Registration Successful! Please Login.');
+                    showPage('login');
+                } else {
+                    alert(result.error);
+                }
+            } catch (e) {
+                alert('Registration failed');
+            }
+        };
+
+        async function logout() {
+            await fetch('/api/logout');
+            currentUser = null;
+            isAdmin = false;
+            updateAuthUI();
+            showPage('home');
+        }
+
+        // --- Eligibility Checker ---
+        document.getElementById('eligibility-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Convert numeric fields
+            data.age = parseInt(data.age);
+            data.income = parseInt(data.income);
+
+            try {
+                const res = await fetch('/api/check-eligibility', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+
+                const resultsDiv = document.getElementById('eligibility-results');
+                const listDiv = document.getElementById('eligibility-schemes-list');
+
+                if (result.schemes.length === 0) {
+                    listDiv.innerHTML = '<p class="text-muted">No schemes found matching your criteria. Try adjusting your filters.</p>';
+                } else {
+                    listDiv.innerHTML = '';
+                    result.schemes.forEach(scheme => {
+                        const card = `
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h5 class="card-title">${scheme.name}</h5>
+                                        <span class="badge bg-info mb-2">${scheme.category || 'General'}</span>
+                                        <span class="badge bg-success ms-2">${scheme.matchPercentage}% Match</span>
+                                    </div>
+                                </div>
+                                <p class="card-text text-muted mt-2">${scheme.description}</p>
+                                <p class="small"><strong>Benefits:</strong> ${scheme.benefits}</p>
+                                <p class="small"><strong>Eligibility:</strong> ${scheme.eligibility || 'See details on application page'}</p>
+                                <a href="${scheme.applicationLink || '#'}" target="_blank" class="btn btn-primary">
+                                    <i class="fas fa-external-link-alt me-2"></i>Apply Now
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                        listDiv.innerHTML += card;
+                    });
+                }
+
+                resultsDiv.style.display = 'block';
+            } catch (e) {
+                alert('Error checking eligibility');
+            }
+        };
+
+        // --- Schemes ---
+        function filterSchemesByCategory(category) {
+            document.getElementById('category-filter').value = category;
+            showPage('schemes');
+            loadSchemes();
+        }
+
+        async function loadSchemes() {
+            const query = document.getElementById('search-input').value;
+            const category = document.getElementById('category-filter').value;
+            const state = document.getElementById('state-filter').value;
+
+            const params = new URLSearchParams({ q: query, category: category, state: state });
+            const target = document.getElementById('schemes-list');
+            target.innerHTML = '<div class="text-center"><div class="spinner-border text-primary"></div></div>';
+
+            try {
+                const res = await fetch(`/api/schemes?${params}`);
+                const data = await res.json();
+
+                target.innerHTML = '';
+                if (data.schemes.length === 0) {
+                    target.innerHTML = '<div class="col-12 text-center text-muted">No schemes found matching your criteria.</div>';
+                    return;
+                }
+
+                data.schemes.forEach(scheme => {
+                    const card = `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <span class="badge bg-info mb-2">${scheme.category || 'General'}</span>
+                                <h5 class="card-title">${scheme.name}</h5>
+                                <p class="card-text text-muted small">${scheme.description.substring(0, 100)}...</p>
+                                <p class="small"><strong>Benefits:</strong> ${scheme.benefits}</p>
+                            </div>
+                            <div class="card-footer bg-white border-top-0">
+                                <a href="${scheme.applicationLink || '#'}" target="_blank" class="btn btn-sm btn-outline-primary w-100">View Details & Apply</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                    target.innerHTML += card;
+                });
+            } catch (e) {
+                target.innerHTML = '<div class="text-danger text-center">Failed to load schemes.</div>';
+            }
+        }
+
+        // --- Profile ---
+        async function loadProfile() {
+            if (!currentUser) return;
+            const form = document.getElementById('profile-form');
+
+            form.elements['name'].value = currentUser.name;
+            form.elements['email'].value = currentUser.email;
+
+            if (currentUser.profile) {
+                form.elements['age'].value = currentUser.profile.age || '';
+                form.elements['gender'].value = currentUser.profile.gender || '';
+                form.elements['state'].value = currentUser.profile.state || '';
+                form.elements['occupation'].value = currentUser.profile.occupation || '';
+                form.elements['income'].value = currentUser.profile.income || '';
+                form.elements['caste'].value = currentUser.profile.caste || 'General';
+            }
+        }
+
+        document.getElementById('profile-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            data.age = parseInt(data.age);
+            data.income = parseInt(data.income);
+
+            try {
+                const res = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    currentUser = result.user;
+                    alert('Profile Updated Successfully!');
+                } else {
+                    alert('Failed to update profile');
+                }
+            } catch (e) {
+                alert('Error updating profile');
+            }
+        };
+
+        // --- Admin Panel ---
+        async function loadAdminSchemes() {
+            const target = document.getElementById('admin-schemes-list');
+            target.innerHTML = '<tr><td colspan="4" class="text-center">Loading...</td></tr>';
+
+            try {
+                const res = await fetch('/api/schemes');
+                const data = await res.json();
+
+                target.innerHTML = '';
+                data.schemes.forEach(scheme => {
+                    const row = `
+                    <tr>
+                        <td>${scheme.name}</td>
+                        <td><span class="badge bg-info">${scheme.category || 'N/A'}</span></td>
+                        <td>${scheme.targetAudience || 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-2" onclick="editScheme(${scheme.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteScheme(${scheme.id})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                    target.innerHTML += row;
+                });
+            } catch (e) {
+                target.innerHTML = '<tr><td colspan="4" class="text-danger text-center">Failed to load schemes.</td></tr>';
+            }
+        }
+
+        function showAddSchemeForm() {
+            document.getElementById('scheme-form-title').textContent = 'Add New Scheme';
+            document.getElementById('scheme-form').reset();
+            document.getElementById('scheme-id').value = '';
+            document.getElementById('scheme-form-container').style.display = 'block';
+        }
+
+        function hideSchemeForm() {
+            document.getElementById('scheme-form-container').style.display = 'none';
+        }
+
+        async function editScheme(id) {
+            try {
+                const res = await fetch(`/api/schemes/${id}`);
+                const data = await res.json();
+                const scheme = data.scheme;
+
+                document.getElementById('scheme-form-title').textContent = 'Edit Scheme';
+                document.getElementById('scheme-id').value = scheme.id;
+
+                const form = document.getElementById('scheme-form');
+                form.elements['name'].value = scheme.name;
+                form.elements['category'].value = scheme.category || '';
+                form.elements['description'].value = scheme.description;
+                form.elements['benefits'].value = scheme.benefits;
+                form.elements['eligibility'].value = scheme.eligibility || '';
+                form.elements['applicationLink'].value = scheme.applicationLink || '';
+                form.elements['targetAudience'].value = scheme.targetAudience || '';
+                form.elements['minAge'].value = scheme.criteria.minAge || '';
+                form.elements['maxAge'].value = scheme.criteria.maxAge || '';
+                form.elements['minIncome'].value = scheme.criteria.minIncome || '';
+                form.elements['maxIncome'].value = scheme.criteria.maxIncome || '';
+                form.elements['allowedGenders'].value = scheme.criteria.allowedGenders.join(', ');
+                form.elements['allowedOccupations'].value = scheme.criteria.allowedOccupations.join(', ');
+                form.elements['allowedCastes'].value = scheme.criteria.allowedCastes.join(', ');
+                form.elements['allowedStates'].value = scheme.criteria.allowedStates.join(', ');
+
+                document.getElementById('scheme-form-container').style.display = 'block';
+            } catch (e) {
+                alert('Error loading scheme details');
+            }
+        }
+
+        async function deleteScheme(id) {
+            if (!confirm('Are you sure you want to delete this scheme?')) return;
+
+            try {
+                const res = await fetch(`/api/schemes/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    alert('Scheme deleted successfully');
+                    loadAdminSchemes();
+                } else {
+                    alert('Failed to delete scheme');
+                }
+            } catch (e) {
+                alert('Error deleting scheme');
+            }
+        }
+
+        document.getElementById('scheme-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Convert arrays
+            data.allowedGenders = data.allowedGenders.split(',').map(s => s.trim()).filter(s => s);
+            data.allowedOccupations = data.allowedOccupations.split(',').map(s => s.trim()).filter(s => s);
+            data.allowedCastes = data.allowedCastes.split(',').map(s => s.trim()).filter(s => s);
+            data.allowedStates = data.allowedStates.split(',').map(s => s.trim()).filter(s => s);
+
+            // Convert numbers
+            if (data.minAge) data.minAge = parseInt(data.minAge);
+            if (data.maxAge) data.maxAge = parseInt(data.maxAge);
+            if (data.minIncome) data.minIncome = parseInt(data.minIncome);
+            if (data.maxIncome) data.maxIncome = parseInt(data.maxIncome);
+
+            const schemeId = document.getElementById('scheme-id').value;
+            const method = schemeId ? 'PUT' : 'POST';
+            const url = schemeId ? `/api/schemes/${schemeId}` : '/api/schemes';
+
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    alert(schemeId ? 'Scheme updated successfully' : 'Scheme created successfully');
+                    hideSchemeForm();
+                    loadAdminSchemes();
+                } else {
+                    alert(result.error || 'Failed to save scheme');
+                }
+            } catch (e) {
+                alert('Error saving scheme');
+            }
+        };
+
+        // --- Chatbot ---
+        function toggleChat() {
+            const chatbox = document.getElementById('chatbox');
+            chatbox.style.display = chatbox.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            input.value = '';
+
+            const typingId = addMessage('Thinking...', 'bot');
+
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                const data = await res.json();
+
+                document.getElementById(typingId).remove();
+                addMessage(data.response, 'bot');
+            } catch (e) {
+                document.getElementById(typingId).remove();
+                addMessage('Sorry, I encountered an error.', 'bot');
+            }
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            div.textContent = text;
+            div.id = 'msg-' + Date.now();
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            return div.id;
+        }
+
+        // --- Init ---
+        loadLanguagePreference();
+        checkAuth();
+        showPage('home');
+    </script>
+</body>
+
+</html>
