@@ -85,22 +85,37 @@ mail = Mail(app)
 # ============ NOTIFICATION FUNCTIONS (SMS & EMAIL) ============
 
 def send_email_notification(to_email, subject, body):
-    """Send Email using Flask-Mail"""
     try:
+        print("📨 send_email_notification() CALLED")
+        print(
+            f"MAIL CONFIG → "
+            f"username={app.config.get('MAIL_USERNAME')}, "
+            f"password_set={'YES' if app.config.get('MAIL_PASSWORD') else 'NO'}, "
+            f"server={app.config.get('MAIL_SERVER')}, "
+            f"port={app.config.get('MAIL_PORT')}"
+        )
+
         if not app.config['MAIL_USERNAME'] or not app.config['MAIL_PASSWORD']:
             print("⚠️ Email credentials not configured - Email skipped")
             return False
-            
-        msg = Message(subject=subject,
-                      sender=app.config['MAIL_USERNAME'],
-                      recipients=[to_email])
+
+        msg = Message(
+            subject=subject,
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[to_email]
+        )
         msg.body = body
+
         mail.send(msg)
         print(f"📧 Email sent to {to_email}")
         return True
+
     except Exception as e:
-        print(f"❌ Email failed to {to_email}: {str(e)}")
+        print(f"❌ Email failed to {to_email}: {e}")
+        import traceback
+        traceback.print_exc()
         return False
+
 
 def send_sms_notification(phone_number, message):
     """Send SMS using Twilio"""
@@ -139,7 +154,7 @@ def send_sms_notification(phone_number, message):
 def notify_users_of_new_schemes(new_schemes_list):
     """
     Send personalized SMS and Email to all registered users about specific new schemes.
-    new_schemes_list: List of Scheme objects (not just count)
+    new_schemes_list: List of Scheme objects
     """
     try:
         if not new_schemes_list:
@@ -147,51 +162,87 @@ def notify_users_of_new_schemes(new_schemes_list):
 
         users = User.query.all()
         scheme_names = ", ".join([s.name for s in new_schemes_list])
-        
-        print(f"📢 Starting personalized broadcast for {len(new_schemes_list)} schemes to {len(users)} users...")
+
+        print(
+            f"📢 Starting personalized broadcast for "
+            f"{len(new_schemes_list)} schemes to {len(users)} users..."
+        )
 
         for user in users:
+            # 🔍 DEBUG (this is what we added)
+            print(
+                f"DEBUG USER → id={user.id}, name={user.name}, "
+                f"email={user.email}, mobile={user.mobile}"
+            )
+
             # --- Check 1: Profile Completeness ---
-            # If age is missing (or other key fields), consider profile incomplete
             if user.age is None:
-                msg_body = f"Hi {user.name}, {len(new_schemes_list)} new schemes added to YojanaMitra! Please complete your profile to see if you are eligible. Login: http://localhost:5000"
-                if user.mobile: send_sms_notification(user.mobile, msg_body)
-                if user.email: send_email_notification(user.email, "New Schemes Alert - YojanaMitra", msg_body)
-                continue
+                msg_body = (
+                    f"Hi {user.name}, {len(new_schemes_list)} new schemes "
+                    f"have been added to YojanaMitra! Please complete your "
+                    f"profile to see if you are eligible."
+                )
+
+                if user.mobile:
+                    send_sms_notification(user.mobile, msg_body)
+
+                if user.email:
+                    send_email_notification(
+                        user.email,
+                        "New Schemes Alert - YojanaMitra",
+                        msg_body
+                    )
+                else:
+                    print(f"⚠️ Email skipped: User {user.id} has no email")
+
+                continue  # move to next user
 
             # --- Check 2: Eligibility Match ---
             eligible_schemes = []
             for scheme in new_schemes_list:
-                # Use the existing matching engine
-                # calculate_match_score returns > 0 if eligible
                 try:
                     score = calculate_match_score(user, scheme)
                     if score > 0:
                         eligible_schemes.append(scheme.name)
                 except Exception as e:
-                    print(f"Error matching user {user.id} with scheme {scheme.id}: {e}")
+                    print(
+                        f"❌ Error matching user {user.id} "
+                        f"with scheme {scheme.id}: {e}"
+                    )
 
-            # --- Construct Custom Message ---
+            # --- Message construction ---
             if eligible_schemes:
-                # Case A: Eligible
-                scheme_list_str = ", ".join(eligible_schemes)
-                msg_body = f"Hi {user.name}, Good news! You are eligible for: {scheme_list_str}. Apply now on YojanaMitra!"
-                email_subject = f"You are eligible for {len(eligible_schemes)} new schemes! 🎉"
+                scheme_list = ", ".join(eligible_schemes)
+                msg_body = (
+                    f"Hi {user.name}, good news! You are eligible for: "
+                    f"{scheme_list}. Apply now on YojanaMitra!"
+                )
+                email_subject = (
+                    f"You are eligible for {len(eligible_schemes)} new schemes 🎉"
+                )
             else:
-                # Case B: Not Eligible, but notify anyway
-                msg_body = f"Hi {user.name}, {len(new_schemes_list)} new schemes added: {scheme_names}. They might not match your profile, but check them out anyway."
+                msg_body = (
+                    f"Hi {user.name}, {len(new_schemes_list)} new schemes "
+                    f"have been added: {scheme_names}. Check them out on YojanaMitra."
+                )
                 email_subject = "New Schemes Added - YojanaMitra"
 
-            # Dispatch
-            if user.mobile: send_sms_notification(user.mobile, msg_body)
-            if user.email: send_email_notification(user.email, email_subject, msg_body)
+            # --- Dispatch ---
+            if user.mobile:
+                send_sms_notification(user.mobile, msg_body)
+
+            if user.email:
+                send_email_notification(user.email, email_subject, msg_body)
+            else:
+                print(f"⚠️ Email skipped: User {user.id} has no email")
 
         print("✅ Personalized broadcast completed.")
-        
+
     except Exception as e:
-        print(f"❌ Error in personalized notification broadcast: {str(e)}")
+        print(f"❌ Error in notification broadcast: {e}")
         import traceback
         traceback.print_exc()
+
 
 # ====================================================
 
