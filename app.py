@@ -72,40 +72,44 @@ if os.getenv('RENDER') or os.getenv('FLASK_ENV') == 'production':
     app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
     print("🔒 Applied Secure Session Config for Production")
 
-# ----------------- Flask-Mail Setup -----------------
-from flask_mail import Mail, Message
+# ----------------- SendGrid Setup -----------------
+import sendgrid
+from sendgrid.helpers.mail import Mail, Email, To, Content
 
-app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
-app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
-app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'True') == 'True'
-app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
-
-mail = Mail(app)
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+FROM_EMAIL = os.getenv('FROM_EMAIL', '06052004shreyas2@gmail.com') # Verified in SendGrid
 
 # ============ NOTIFICATION FUNCTIONS (SMS & EMAIL) ============
 
 def send_email_notification(to_email, subject, body):
+    """Send Email using SendGrid HTTP API asynchronously (Better for Render)"""
     def _send():
         try:
-            msg = Message(
-                subject=subject,
-                sender=app.config['MAIL_USERNAME'],
-                recipients=[to_email]
-            )
-            msg.body = body
-            mail.send(msg)
-            print(f"📧 Email sent to {to_email}")
+            if not SENDGRID_API_KEY:
+                print("⚠️ SENDGRID_API_KEY not configured - Email skipped")
+                return
+
+            sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
+            from_email = Email(FROM_EMAIL)
+            to_email_obj = To(to_email)
+            content = Content("text/plain", body)
+            mail_obj = Mail(from_email, to_email_obj, subject, content)
+            
+            response = sg.client.mail.send.post(request_body=mail_obj.get())
+            
+            if response.status_code >= 200 and response.status_code < 300:
+                print(f"📧 Email sent to {to_email} via SendGrid")
+            else:
+                print(f"❌ SendGrid failed with status {response.status_code}: {response.body}")
+                
         except Exception as e:
-            print(f"❌ Email failed to {to_email}: {e}")
+            print(f"❌ Email failed to {to_email}: {str(e)}")
             import traceback
             traceback.print_exc()
 
-    print("📨 send_email_notification() CALLED (async)")
+    print(f"📨 send_email_notification() CALLED for {to_email} (async via SendGrid)")
     threading.Thread(target=_send).start()
     return True
-
-
 
 def send_sms_notification(phone_number, message):
     """Send SMS using Twilio"""
@@ -2155,6 +2159,40 @@ def seed_schemes():
     except Exception as e:
         print(f"Error seeding schemes: {e}")
         db.session.rollback()
+
+@app.route('/api/test-notifications', methods=['GET'])
+def test_notifications():
+    """Diagnostic endpoint to test Email and SMS"""
+    email = request.args.get('email')
+    phone = request.args.get('phone')
+    
+    results = {}
+    
+    if email:
+        results['email'] = send_email_notification(
+            email, 
+            "YojanaMitra - Test Notification", 
+            "This is a test email from the new SendGrid HTTP system. If you see this, your email system is working on Render!"
+        )
+    
+    if phone:
+        results['sms'] = send_sms_notification(
+            phone,
+            "YojanaMitra Test: SMS system check. If received, Twilio is connected correctly."
+        )
+        
+    if not email and not phone:
+        return jsonify({"error": "Please provide 'email' or 'phone' query parameter"}), 400
+        
+    return jsonify({
+        "message": "Notification tests triggered",
+        "results": results,
+        "config_check": {
+            "sendgrid_key_present": bool(SENDGRID_API_KEY),
+            "from_email": FROM_EMAIL,
+            "twilio_sid_present": bool(os.getenv('TWILIO_ACCOUNT_SID'))
+        }
+    }), 200
 
 if __name__ == '__main__':
     init_db()
