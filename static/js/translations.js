@@ -202,7 +202,25 @@ const translations = {
     "Allowed States": "ಅನುಮತಿಸಲಾದ ರಾಜ್ಯಗಳು",
     "Reset": "ಮರುಹೊಂದಿಸಿ",
     "Admin Access": "ನಿರ್ವಾಹಕ ಪ್ರವೇಶ",
-    "Enter your credentials to continue": "ಮುಂದುವರಿಯಲು ನಿಮ್ಮ ರುಜುವಾತುಗಳನ್ನು ನಮೂದಿಸಿ"
+    "Enter your credentials to continue": "ಮುಂದುವರಿಯಲು ನಿಮ್ಮ ರುಜುವಾತುಗಳನ್ನು ನಮೂದಿಸಿ",
+    "Official Scheme Details": "ಅಧಿಕೃತ ಯೋಜನೆಯ ವಿವರಗಳು",
+    "VERIFIED SOURCE": "ಪರಿಶೀಲಿಸಿದ ಮೂಲ",
+    "Benefits": "ಪ್ರಯೋಜನಗಳು",
+    "Eligibility Criteria": "ಅರ್ಹತಾ ಮಾನದಂಡಗಳು",
+    "Important Exclusions": "ಪ್ರಮುಖ ವಿನಾಯಿತಿಗಳು",
+    "Application Process": "ಅರ್ಜಿ ಸಲ್ಲಿಕೆ ಪ್ರಕ್ರಿಯೆ",
+    "Documents Required": "ಅಗತ್ಯವಿರುವ ದಾಖಲೆಗಳು",
+    "Apply on Official Portal": "ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಅನ್ವಯಿಸಿ",
+    "Close": "ಮುಚ್ಚಿ",
+    "modal_verified_source": "ಪರಿಶೀಲಿಸಿದ ಮೂಲ",
+    "modal_loading_details": "ವಿವರಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ... ✨",
+    "modal_category_default": "ವರ್ಗ",
+    "modal_benefits_title": "ಪ್ರಯೋಜನಗಳು",
+    "modal_eligibility_title": "ಅರ್ಹತಾ ಮಾನದಂಡಗಳು",
+    "modal_exclusions_title": "ಪ್ರಮುಖ ವಿನಾಯಿತಿಗಳು",
+    "modal_process_title": "ಅರ್ಜಿ ಸಲ್ಲಿಕೆ ಪ್ರಕ್ರಿಯೆ",
+    "modal_documents_title": "ಅಗತ್ಯವಿರುವ ದಾಖಲೆಗಳು",
+    "modal_apply_button": "ಅಧಿಕೃತ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಅನ್ವಯಿಸಿ"
 };
 
 let currentLang = localStorage.getItem('site_lang') || 'en';
@@ -218,7 +236,24 @@ function updateLanguage() {
     const langBtnText = document.getElementById('lang-btn-text');
     if (langBtnText) langBtnText.textContent = isKn ? 'English' : 'ಕನ್ನಡ';
 
-    // 1. Text Node Replacement (Recursive)
+    // 1. Data-Lang-Key Replacement (Recommended)
+    document.querySelectorAll('[data-lang-key]').forEach(el => {
+        const key = el.getAttribute('data-lang-key');
+
+        // Store original English text if not already stored
+        if (!el.hasAttribute('data-en-text')) {
+            el.setAttribute('data-en-text', el.textContent.trim());
+        }
+
+        if (isKn) {
+            if (translations[key]) el.textContent = translations[key];
+            else if (translations[el.getAttribute('data-en-text')]) el.textContent = translations[el.getAttribute('data-en-text')];
+        } else {
+            el.textContent = el.getAttribute('data-en-text');
+        }
+    });
+
+    // 2. Legacy Text Node Replacement (Recursive Fallback)
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
     let node;
     const nodesToUpdate = [];
@@ -226,60 +261,37 @@ function updateLanguage() {
     while (node = walker.nextNode()) {
         const text = node.nodeValue.trim();
         if (!text) continue;
-        // Avoid replacing inside scripts or styles
         if (node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE') continue;
+        if (node.parentNode.hasAttribute('data-lang-key')) continue; // Skip already handled
 
         nodesToUpdate.push({ node, text });
     }
 
     nodesToUpdate.forEach(({ node, text }) => {
         if (isKn) {
-            // ENGLISH -> KANNADA
+            if (translations[text]) node.nodeValue = node.nodeValue.replace(text, translations[text]);
+        } else {
+            const key = Object.keys(translations).find(k => translations[k] === text);
+            if (key) node.nodeValue = key;
+        }
+    });
+
+    // 3. Placeholders & Options
+    document.querySelectorAll('input, textarea, select option').forEach(el => {
+        const text = el.getAttribute('placeholder') || el.textContent.trim();
+        if (!text) return;
+
+        if (isKn) {
             if (translations[text]) {
-                node.nodeValue = node.nodeValue.replace(text, translations[text]);
-            } else {
-                // Phrase matching fallback for partial sentences
-                Object.keys(translations).forEach(eng => {
-                    if (text.includes(eng) && eng.length > 3) { // Avoid short common words replacing parts of words
-                        // This is risky, but useful for "Welcome user" type strings
-                        // node.nodeValue = node.nodeValue.replace(eng, translations[eng]);
-                    }
-                });
+                if (el.tagName === 'OPTION') el.textContent = translations[text];
+                else el.setAttribute('placeholder', translations[text]);
             }
         } else {
-            // KANNADA -> ENGLISH
-            // Reverse lookup: Find key where value == text
-            // Note: This only works perfectly if 1:1 mapping and exact string match.
-            // Since we store state in DOM, usually we rely on page reload or exact matches.
-            // A better approach is to store original English text in a data attribute, but for this simple implementation:
             const key = Object.keys(translations).find(k => translations[k] === text);
             if (key) {
-                node.nodeValue = key;
+                if (el.tagName === 'OPTION') el.textContent = key;
+                else el.setAttribute('placeholder', key);
             }
-        }
-    });
-
-    // 2. Placeholders
-    document.querySelectorAll('input, textarea').forEach(el => {
-        const placeholder = el.getAttribute('placeholder');
-        if (!placeholder) return;
-
-        if (isKn) {
-            if (translations[placeholder]) el.setAttribute('placeholder', translations[placeholder]);
-        } else {
-            const key = Object.keys(translations).find(k => translations[k] === placeholder);
-            if (key) el.setAttribute('placeholder', key);
-        }
-    });
-
-    // 3. Select Options (Text Only)
-    document.querySelectorAll('select option').forEach(opt => {
-        const text = opt.textContent.trim();
-        if (isKn) {
-            if (translations[text]) opt.textContent = translations[text];
-        } else {
-            const key = Object.keys(translations).find(k => translations[k] === text);
-            if (key) opt.textContent = key;
         }
     });
 }

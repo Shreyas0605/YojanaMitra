@@ -122,8 +122,8 @@ def get_email_html_template(title, content_html, user_name="User"):
     """
 
 def send_email_notification(to_email, subject, body, html_content=None, user_name="User"):
-    """Send Email using SendGrid HTTP API asynchronously (Better for Render)"""
-    def _send():
+    """Send Email using SendGrid HTTP API asynchronously (Explicit capture to prevent identity mixing)"""
+    def _send_thread_worker(target_email, email_subject, email_body, final_html_content, name):
         try:
             if not SENDGRID_API_KEY:
                 print("⚠️ SENDGRID_API_KEY not configured - Email skipped")
@@ -131,34 +131,40 @@ def send_email_notification(to_email, subject, body, html_content=None, user_nam
 
             sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
             from_email = Email(FROM_EMAIL)
-            to_email_obj = To(to_email)
+            to_email_obj = To(target_email)
             
             # If html_content is provided, use it. Otherwise, wrap body in template.
-            if not html_content:
-                final_html = get_email_html_template(subject, f"<p>{body}</p>", user_name)
+            if not final_html_content:
+                final_html = get_email_html_template(email_subject, f"<p>{email_body}</p>", name)
             else:
-                final_html = html_content
+                final_html = final_html_content
                 
             content = Content("text/html", final_html)
-            mail_obj = Mail(from_email, to_email_obj, subject, content)
+            mail_obj = Mail(from_email, to_email_obj, email_subject, content)
             
             # Add Unsubscribe Header for Gmail/Yahoo reputation
-            mail_obj.add_header(Header("List-Unsubscribe", f"<mailto:unsubscribe@yojanamitra.in?subject=unsubscribe>, <https://yojan-mitra.onrender.com/unsubscribe?email={to_email}>"))
+            mail_obj.add_header(Header("List-Unsubscribe", f"<mailto:unsubscribe@yojanamitra.in?subject=unsubscribe>, <https://yojan-mitra.onrender.com/unsubscribe?email={target_email}>"))
             
             response = sg.client.mail.send.post(request_body=mail_obj.get())
             
             if response.status_code >= 200 and response.status_code < 300:
-                print(f"📧 HTML Email sent to {to_email} via SendGrid")
+                print(f"📧 HTML Email successfully sent to {target_email} addressed to {name}")
             else:
                 print(f"❌ SendGrid failed with status {response.status_code}: {response.body}")
                 
         except Exception as e:
-            print(f"❌ Email failed to {to_email}: {str(e)}")
+            print(f"❌ Email failed to {target_email}: {str(e)}")
             import traceback
             traceback.print_exc()
 
-    print(f"📨 send_email_notification() CALLED for {to_email} (async HTML via SendGrid)")
-    threading.Thread(target=_send).start()
+    print(f"📨 Queueing async email for {to_email} (Addressing: {user_name})")
+    
+    # Pass arguments explicitly to the thread to avoid closure/binding issues in loops
+    thread = threading.Thread(
+        target=_send_thread_worker, 
+        args=(to_email, subject, body, html_content, user_name)
+    )
+    thread.start()
     return True
 
 def send_sms_notification(phone_number, message):
