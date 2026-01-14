@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Document Vault - YojanaMitra</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --accent: #007bff;
+            --background: #f4f7f9;
+        }
+
+        body {
+            background-color: var(--background);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .vault-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .vault-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .upload-zone {
+            background: white;
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--accent);
+            background: #ebf8ff;
+        }
+
+        .upload-zone i {
+            font-size: 48px;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .doc-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            position: relative;
+            border-left: 4px solid var(--accent);
+        }
+
+        .doc-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .doc-type {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .doc-meta {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .confidence-tag {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            background: #e2e8f0;
+        }
+
+        .audit-panel {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .issue-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #f56565;
+        }
+
+        .issue-item i {
+            color: #f56565;
+            font-size: 1.2em;
+        }
+
+        .loader {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="main-navbar">
+        <div class="nav-content">
+            <a href="/" class="logo">YojanaMitra</a>
+            <div class="nav-links">
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/vault.html" class="active"><i class="fas fa-shield-halved"></i> My Vault</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="vault-container">
+        <div class="vault-header">
+            <div>
+                <h1>Document Vault</h1>
+                <p>Securely store and verify your documents with AI</p>
+            </div>
+            <button class="btn" onclick="checkMismatches()"><i class="fas fa-sync"></i> Audit Documents</button>
+        </div>
+
+        <div id="auditResults" class="audit-panel">
+            <h3><i class="fas fa-triangle-exclamation"></i> Potential Application Blockers</h3>
+            <div id="issuesList"></div>
+        </div>
+
+        <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <div class="loader" id="uploadLoader">
+                <div style="text-align:center">
+                    <div class="spinner" style="margin: 0 auto 10px"></div>
+                    <p>AI is analyzing your document... ✨</p>
+                </div>
+            </div>
+            <i class="fas fa-cloud-upload-alt"></i>
+            <h2>Drag & Drop Documents</h2>
+            <p>Supported: Aadhaar, Ration Card, Income, Caste, Marks Card (JPG, PNG, PDF)</p>
+            <input type="file" id="fileInput" hidden multiple accept="image/*,.pdf">
+        </div>
+
+        <div class="doc-grid" id="docGrid">
+            <!-- Documents will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadDocuments);
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        // Handle File Selection
+        fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        // Drag & Drop
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        async function handleFiles(files) {
+            const loader = document.getElementById('uploadLoader');
+            loader.style.display = 'flex';
+
+            for (let file of files) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    const response = await fetch('/api/documents/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if (data.error) alert(data.error);
+                } catch (err) {
+                    console.error('Upload failed', err);
+                }
+            }
+
+            loader.style.display = 'none';
+            loadDocuments();
+            checkMismatches();
+        }
+
+        async function loadDocuments() {
+            const grid = document.getElementById('docGrid');
+            try {
+                const response = await fetch('/api/documents');
+                const data = await response.json();
+
+                grid.innerHTML = data.documents.length ? '' : '<p style="text-align:center; grid-column: 1/-1;">No documents uploaded yet.</p>';
+
+                data.documents.forEach(doc => {
+                    const extracted = doc.extractedData;
+                    const card = document.createElement('div');
+                    card.className = 'doc-card';
+                    card.innerHTML = `
+                        <span class="doc-type">${doc.docType} <span class="confidence-tag">${Math.round(doc.confidenceScore * 100)}% Match</span></span>
+                        <div class="doc-meta">Uploaded: ${new Date(doc.uploadDate).toLocaleDateString()}</div>
+                        <div style="font-size:0.85em; background: #f8f9fa; padding: 10px; border-radius: 8px;">
+                            ${Object.entries(extracted).slice(0, 3).map(([k, v]) => `<div><strong>${k}:</strong> ${v}</div>`).join('')}
+                        </div>
+                        <a href="${doc.url}" target="_blank" style="display:block; margin-top:10px; font-size:0.9em; color:var(--accent)">View Full Document</a>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (err) {
+                console.error('Failed to load documents', err);
+            }
+        }
+
+        async function checkMismatches() {
+            const panel = document.getElementById('auditResults');
+            const list = document.getElementById('issuesList');
+
+            try {
+                const response = await fetch('/api/documents/cross-validate');
+                const data = await response.json();
+
+                if (data.issues && data.issues.length > 0) {
+                    panel.style.display = 'block';
+                    list.innerHTML = data.issues.map(issue => `
+                        <div class="issue-item">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                <strong>${issue.type}</strong>
+                                <p style="margin: 5px 0;">${issue.message}</p>
+                                <small style="color: #4a5568">💡 ${issue.suggestion}</small>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    panel.style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Mismatch check failed', err);
+            }
+        }
+    </script>
+</body>
+
+</html>

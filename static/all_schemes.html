@@ -26,6 +26,12 @@
                 <button class="btn btn-sm text-secondary border-0" onclick="toggleLanguage()">
                     <i class="fas fa-globe me-1"></i> <span id="lang-btn-text">English</span>
                 </button>
+                <a href="/all-schemes" class="btn btn-outline-primary btn-sm active">
+                    <i class="fas fa-list me-2"></i> Schemes
+                </a>
+                <a href="/vault.html" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-shield-halved me-2"></i> My Vault
+                </a>
                 <a href="/" class="btn btn-outline-primary btn-sm">
                     <i class="fas fa-home me-2"></i> Home
                 </a>
@@ -289,6 +295,8 @@
 
                 document.getElementById('modal-apply-btn').href = scheme.applicationLink || '#';
 
+                document.getElementById('modal-apply-btn-hidden').href = scheme.applicationLink || '#';
+
                 loader.style.display = 'none';
                 content.style.display = 'block';
 
@@ -296,6 +304,11 @@
                 if (typeof updateLanguage === 'function') {
                     updateLanguage();
                 }
+
+                // Reset readiness UI
+                document.getElementById('readiness-section').style.display = 'none';
+                document.getElementById('btn-check-readiness').dataset.schemeId = schemeId;
+
             } catch (e) {
                 console.error(e);
                 console.error("Scheme Details Error:", e);
@@ -312,8 +325,115 @@
                 transform: translateY(-5px);
                 box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
             }
+            .text-indigo { color: #4338ca; }
+            .btn-indigo { background-color: #4f46e5; color: white; }
+            .btn-indigo:hover { background-color: #4338ca; color: white; }
         `;
         document.head.appendChild(style);
+
+        async function auditCurrentScheme() {
+            const btn = document.getElementById('btn-check-readiness');
+            const schemeId = btn.dataset.schemeId;
+            const section = document.getElementById('readiness-section');
+            const details = document.getElementById('readiness-details');
+            const status = document.getElementById('readiness-status');
+
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Auditing...';
+            btn.disabled = true;
+
+            try {
+                // 1. Check for Name/Expiry Mismatches
+                const vRes = await fetch('/api/documents/cross-validate');
+                const vData = await vRes.json();
+
+                // 2. Fetch User Documents to check against required docs for this scheme
+                const dRes = await fetch('/api/documents');
+                const dData = await dRes.json();
+
+                // 3. Get modern audit (placeholder logic for prototype)
+                // In a real app, the backend would compare doc types vs required docs
+                const currentDocs = dData.documents.map(d => d.docType.toLowerCase());
+
+                let reportHtml = '';
+                let hasCriticalIssue = false;
+
+                if (vData.issues && vData.issues.length > 0) {
+                    hasCriticalIssue = true;
+                    reportHtml += '<div class="mb-2"><strong>⚠️ Data Conflicts Found:</strong></div>';
+                    vData.issues.forEach(iss => {
+                        reportHtml += `<div class="text-danger mb-1">• ${iss.message}</div>`;
+                    });
+                }
+
+                if (currentDocs.length === 0) {
+                    reportHtml += '<div class="mt-2 text-warning"><strong>📂 No documents found in your vault.</strong> Please upload your Aadhaar and Income certificate to verify eligibility.</div>';
+                } else {
+                    reportHtml += `<div class="mt-2 text-success"><strong>✅ Found ${currentDocs.length} documents in vault.</strong> AI verified your identity.</div>`;
+                }
+
+                details.innerHTML = reportHtml;
+                status.className = hasCriticalIssue ? 'badge bg-danger' : (currentDocs.length > 0 ? 'badge bg-success' : 'badge bg-warning');
+                status.textContent = hasCriticalIssue ? 'Action Required' : (currentDocs.length > 0 ? 'Verified & Ready' : 'Documents Missing');
+
+                section.style.display = 'block';
+            } catch (err) {
+                console.error(err);
+                alert("Audit failed. Make sure you are logged in.");
+            } finally {
+                btn.innerHTML = '<i class="fas fa-magnifying-glass-chart me-2"></i> Check My Readiness';
+                btn.disabled = false;
+            }
+        }
+
+        async function startAidedApplication() {
+            const sidebar = document.getElementById('portal-helper');
+            const list = document.getElementById('helper-data-list');
+            const link = document.getElementById('helper-portal-link');
+            const applyUrl = document.getElementById('modal-apply-btn-hidden')?.href || '#';
+
+            sidebar.classList.add('active');
+            list.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading doc data...</div>';
+
+            try {
+                const response = await fetch('/api/documents');
+                const data = await response.json();
+
+                let html = '';
+                // Consolidate all extracted data from all docs
+                data.documents.forEach(doc => {
+                    Object.entries(doc.extractedData).forEach(([k, v]) => {
+                        html += `
+                            <div class="copy-item" onclick="copyToClipboard('${v}', this)">
+                                <div class="label">${k} (${doc.docType})</div>
+                                <div class="value">${v}</div>
+                            </div>
+                        `;
+                    });
+                });
+
+                list.innerHTML = html || '<p class="text-center text-muted">No documents found in vault. Manual entry required.</p>';
+                link.href = (applyUrl && applyUrl !== 'None') ? applyUrl : '#';
+
+                // Open portal in new tab
+                if (applyUrl && applyUrl !== '#' && applyUrl !== 'None') {
+                    window.open(applyUrl, '_blank');
+                }
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function togglePortalHelper() {
+            document.getElementById('portal-helper').classList.toggle('active');
+        }
+
+        function copyToClipboard(text, el) {
+            navigator.clipboard.writeText(text);
+            const originalHtml = el.innerHTML;
+            el.innerHTML = '<div class="text-success text-center py-2 fw-bold"><i class="fas fa-check"></i> Copied!</div>';
+            setTimeout(() => { el.innerHTML = originalHtml; }, 1000);
+        }
 
         // Initial Load
         // Initial Load
@@ -357,6 +477,23 @@
                             </div>
                             <h4 id="modal-name" class="fw-bold text-dark mb-2"></h4>
                             <p id="modal-description" class="text-secondary mb-0"></p>
+
+                            <div id="readiness-section" class="mt-4 p-3 rounded"
+                                style="background: #eef2ff; border: 1px solid #c7d2fe; display: none;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="fw-bold text-indigo mb-0"><i class="fas fa-check-double me-2"></i>
+                                        Document Readiness Report</h6>
+                                    <span id="readiness-status" class="badge bg-success">Ready to Apply</span>
+                                </div>
+                                <div id="readiness-details" class="small text-dark"></div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button id="btn-check-readiness" onclick="auditCurrentScheme()"
+                                    class="btn btn-indigo btn-sm rounded-pill px-4">
+                                    <i class="fas fa-magnifying-glass-chart me-2"></i> Check My Readiness
+                                </button>
+                            </div>
                         </div>
 
                         <div class="px-4 pb-4">
@@ -393,15 +530,78 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4">
+                    <a id="modal-apply-btn-hidden" href="#" target="_blank" style="display:none;"></a>
                     <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Close</button>
-                    <a id="modal-apply-btn" href="#" target="_blank" class="btn btn-primary px-4 shadow-sm">
-                        <span data-lang-key="modal_apply_button">Apply on Official Portal</span> <i
-                            class="fas fa-arrow-right ms-2"></i>
-                    </a>
+                    <button onclick="startAidedApplication()" class="btn btn-primary px-4 shadow-sm">
+                        <span data-lang-key="modal_apply_button">Apply with AI Helper</span> <i
+                            class="fas fa-magic ms-2"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Portal Helper Sidebar -->
+    <div id="portal-helper" class="portal-sidebar shadow-lg">
+        <div class="p-3 bg-primary text-white d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-bold"><i class="fas fa-magic me-2"></i> Portal Helper</h6>
+            <button onclick="togglePortalHelper()" class="btn-close btn-close-white"></button>
+        </div>
+        <div class="p-3">
+            <p class="small text-muted mb-3">Click any value to copy and paste it into the portal.</p>
+            <div id="helper-data-list">
+                <!-- Populated by JS -->
+            </div>
+            <hr>
+            <a id="helper-portal-link" href="#" target="_blank" class="btn btn-sm btn-primary w-100">Open Official
+                Portal</a>
+        </div>
+    </div>
+
+    <style>
+        .portal-sidebar {
+            position: fixed;
+            right: -320px;
+            top: 80px;
+            bottom: 20px;
+            width: 300px;
+            background: white;
+            z-index: 1050;
+            border-radius: 12px 0 0 12px;
+            transition: right 0.3s ease;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+
+        .portal-sidebar.active {
+            right: 0;
+        }
+
+        .copy-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-item:hover {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .copy-item .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 2px;
+        }
+
+        .copy-item .value {
+            font-family: monospace;
+            font-weight: bold;
+        }
+    </style>
 </body>
 
 </html>

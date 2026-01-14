@@ -4,6 +4,7 @@ Production-ready backend with Gemini AI integration
 """
 
 from flask import Flask, request, jsonify, session, send_from_directory, redirect, url_for
+from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,6 +16,7 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
+import PIL.Image
 
 # Load environment variables (.env)
 load_dotenv()
@@ -51,6 +53,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 CORS(app, supports_credentials=True)
+
+# File Upload Config
+UPLOAD_FOLDER = 'static/uploads/documents'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'pdf'}
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # ----------------- Gemini AI Setup -----------------
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
@@ -199,6 +211,47 @@ def send_sms_notification(phone_number, message):
     except Exception as e:
         print(f"❌ SMS failed for {phone_number}: {str(e)}")
         return False
+
+# ============ DOCUMENT AI & VAULT FUNCTIONS ============
+
+def process_document_ai(image_path):
+    """
+    Categorize and extract details from a government document image using Gemini Vision.
+    """
+    if not GEMINI_API_KEY:
+        print("⚠️ GEMINI_API_KEY not configured - Document processing skipped")
+        return {"doc_type": "Unknown", "extracted_data": {}, "confidence": 0.0}
+
+    try:
+        img = PIL.Image.open(image_path)
+        
+        prompt = """
+        Analyze this Indian government document and return a JSON object.
+        
+        1. doc_type: Categorize it (e.g., "Aadhaar Card", "Ration Card", "Income Certificate", "Caste Certificate", "Marks Card", "Voter ID", "PAN Card").
+        2. extracted_data: Extract all text details like Name, ID Number, Date of Birth, Date of Issue, Expiry Date, Address, Parents' names, Income Limit, etc.
+        3. confidence: A score from 0.0 to 1.0.
+        
+        Return ONLY the JSON. No markdown formatting or backticks.
+        {
+          "doc_type": "...",
+          "extracted_data": { ... },
+          "confidence": 0.95
+        }
+        """
+        
+        vision_model = genai.GenerativeModel('gemini-flash-latest')
+        response = vision_model.generate_content([prompt, img])
+        
+        # Clean response text
+        text = response.text.replace('```json', '').replace('```', '').strip()
+        result = json.loads(text)
+        print(f"📄 AI Processed Document: {result.get('doc_type', 'Unknown')} (Confidence: {result.get('confidence', 0.0)})")
+        return result
+        
+    except Exception as e:
+        print(f"❌ Gemini Vision Error: {e}")
+        return {"doc_type": "Manual Review Required", "extracted_data": {"error": str(e)}, "confidence": 0.0}
 
 
 def notify_users_of_new_schemes(new_schemes_list):
@@ -437,6 +490,34 @@ class User(db.Model):
                 'educationMilestones': json.loads(self.education_milestones) if self.education_milestones else [],
                 'careerGoal': self.career_goal
             } if (self.age is not None or self.email) else {}
+        }
+
+class UserDocument(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    filename = db.Column(db.String(255), nullable=False)
+    original_name = db.Column(db.String(255), nullable=False)
+    doc_type = db.Column(db.String(100)) # Aadhaar Card, Ration Card, etc.
+    extracted_data = db.Column(db.Text) # JSON string
+    confidence_score = db.Column(db.Float)
+    upload_date = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    user = db.relationship('User', backref=db.backref('documents', lazy=True))
+
+    def to_dict(self):
+        try:
+            data = json.loads(self.extracted_data) if self.extracted_data else {}
+        except:
+            data = {}
+        return {
+            'id': self.id,
+            'docType': self.doc_type,
+            'filename': self.filename,
+            'originalName': self.original_name,
+            'uploadDate': self.upload_date.isoformat(),
+            'extractedData': data,
+            'confidenceScore': self.confidence_score,
+            'url': f"/static/uploads/documents/{self.filename}"
         }
 
 class Scheme(db.Model):
@@ -921,6 +1002,119 @@ def admin_me():
     if session.get('user_type') == 'admin':
         return jsonify({'message': 'Authenticated', 'user': {'isAdmin': True}}), 200
     return jsonify({'error': 'Unauthorized'}), 401
+
+# ----------------- Document Vault Routes -----------------
+
+@app.route('/api/documents/upload', methods=['POST'])
+def upload_document():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    
+    if file and allowed_file(file.filename):
+        filename = secure_filename(f"user_{user_id}_{datetime.utcnow().timestamp()}_{file.filename}")
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        
+        # Process with AI
+        ai_result = process_document_ai(file_path)
+        
+        # Save to DB
+        doc = UserDocument(
+            user_id=user_id,
+            filename=filename,
+            original_name=file.filename,
+            doc_type=ai_result.get('doc_type', 'Unknown'),
+            extracted_data=json.dumps(ai_result.get('extracted_data', {})),
+            confidence_score=ai_result.get('confidence', 0.0)
+        )
+        db.session.add(doc)
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Document uploaded and analyzed successfully',
+            'document': doc.to_dict()
+        }), 201
+    
+    return jsonify({'error': 'Invalid file type'}), 400
+
+@app.route('/api/documents', methods=['GET'])
+def get_user_documents():
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    documents = UserDocument.query.filter_by(user_id=user_id).order_by(UserDocument.upload_date.desc()).all()
+    return jsonify({'documents': [doc.to_dict() for doc in documents]}), 200
+
+@app.route('/api/documents/cross-validate', methods=['GET'])
+def cross_validate_documents():
+    """
+    Check for mismatches between documents and user profile.
+    """
+    user_id = session.get('user_id')
+    if not user_id:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    user = User.query.get(user_id)
+    documents = UserDocument.query.filter_by(user_id=user_id).all()
+    
+    issues = []
+    processed_names = []
+    
+    user_name_parts = set(user.name.lower().split())
+    
+    for doc in documents:
+        data = json.loads(doc.extracted_data) if doc.extracted_data else {}
+        doc_name = data.get('Name') or data.get('Full Name') or data.get('name')
+        
+        if doc_name:
+            doc_name_clean = doc_name.lower().strip()
+            # Basic partial match check
+            doc_name_parts = set(doc_name_clean.split())
+            
+            # Intersection of name parts
+            overlap = user_name_parts.intersection(doc_name_parts)
+            if not overlap and len(user_name_parts) > 0:
+                issues.append({
+                    'type': 'Name Mismatch',
+                    'document': doc.doc_type,
+                    'severity': 'High',
+                    'message': f"Name on {doc.doc_type} ('{doc_name}') doesn't match your profile name ('{user.name}')",
+                    'suggestion': "Update your profile or upload a document with the correct name to avoid rejection."
+                })
+        
+        # Check Expiry
+        expiry = data.get('Expiry Date') or data.get('Valid Until') or data.get('expiry_date')
+        if expiry:
+            try:
+                 # Simple date parsing logic (can be improved)
+                 # Expecting formats like DD/MM/YYYY or YYYY-MM-DD
+                 import dateutil.parser
+                 expiry_date = dateutil.parser.parse(expiry)
+                 if expiry_date < datetime.now():
+                     issues.append({
+                         'type': 'Document Expired',
+                         'document': doc.doc_type,
+                         'severity': 'Critical',
+                         'message': f"Your {doc.doc_type} expired on {expiry}",
+                         'suggestion': "Apply for a renewal immediately. Most schemes will reject expired documents."
+                     })
+            except:
+                pass # Silently fail for complex date formats in prototype
+
+    return jsonify({
+        'status': 'success' if not issues else 'warning',
+        'issues_count': len(issues),
+        'issues': issues
+    }), 200
 
 @app.route('/api/profile', methods=['POST'])
 def save_profile():

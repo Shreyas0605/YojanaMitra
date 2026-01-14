@@ -52,6 +52,11 @@
 
                     <button class="btn-gradient guest-only border-0" onclick="showPage('register')">Get Started</button>
 
+                    <a href="/vault.html" class="text-dark fw-medium text-decoration-none user-only me-3"
+                        style="display:none; font-size: 0.95rem;">
+                        <i class="fas fa-shield-halved me-1"></i> My Vault
+                    </a>
+
                     <!-- User Logged In State -->
                     <button class="btn-gradient user-only border-0" onclick="showPage('profile')"
                         style="display:none;">My Dashboard</button>
@@ -253,12 +258,17 @@
                         </div>
                         <!-- Card 6 -->
                         <div class="col-md-4">
-                            <div class="feature-card">
-                                <div class="icon-square">
-                                    <i class="fas fa-mobile-alt"></i>
+                            <div class="feature-card"
+                                style="border: 2px solid #eef2ff; background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);">
+                                <div class="icon-square" style="background: #4f46e5; color: white;">
+                                    <i class="fas fa-shield-halved"></i>
                                 </div>
-                                <h3>Mobile Friendly</h3>
-                                <p>Access Yojana Mitra anywhere, anytime on any device with our responsive design.</p>
+                                <h3 class="text-indigo">AI Document Auditor</h3>
+                                <p>Upload your IDs and let AI cross-verify them. Detect mismatches and expiry dates
+                                    before you apply.</p>
+                                <a href="/vault.html"
+                                    class="small fw-bold text-decoration-none text-indigo mt-2 d-inline-block">Open
+                                    Vault <i class="fas fa-arrow-right ms-1"></i></a>
                             </div>
                         </div>
                     </div>
