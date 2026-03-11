@@ -1,5 +1,5 @@
-from app import app, db
+from app import app, init_db
 
-# Initialize DB tables on cold start (runs once per serverless instance)
+# Initialize DB and seed admin on cold start
 with app.app_context():
-    db.create_all()
+    init_db()
