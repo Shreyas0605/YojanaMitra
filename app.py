@@ -69,8 +69,11 @@ CORS(app, supports_credentials=True)
 # File Upload Config
 UPLOAD_FOLDER = 'static/uploads/documents'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'pdf'}
-if not os.path.exists(UPLOAD_FOLDER):
+# Only create upload folder in writable environments (not on Vercel serverless)
+try:
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+except OSError:
+    pass
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
