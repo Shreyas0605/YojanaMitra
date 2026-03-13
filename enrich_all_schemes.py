@@ -5,7 +5,7 @@ import time
 from app import app, db, Scheme
 
 # Configure Gemini
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or "AIzaSyC9BQ_rJWTwLNgNUDJeP4FEsFY37ffPHiE"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-flash-latest')
 

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YojanaMitra — Login & Register</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+/* ─────────────────────────────────────────────────────────────
+   GLOBAL & THEME
+───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; scroll-behavior: smooth; }
+
+:root {
+  --white: #ffffff;
+  --bg-page: #f8faff;
+  --accent: #5560f5;
+  --accent-dark: #3d47d4;
+  --accent-light: #eef1ff;
+  --text-dark: #0f172a;
+  --text-mid: #4b5263;
+  --text-muted: #8a92a6;
+  --border: #e2e8f0;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --font: 'Plus Jakarta Sans', sans-serif;
+  --orange: #f97316;
+  --green: #10b981;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg-page);
+  color: var(--text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HEADER
+───────────────────────────────────────────────────────────── */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  background: var(--accent);
+  color: var(--white);
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.back-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.2s;
+}
+.back-link:hover { color: var(--text-dark); }
+
+/* ─────────────────────────────────────────────────────────────
+   MAIN LAYOUT
+───────────────────────────────────────────────────────────── */
+main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1250px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 40px 60px;
+  gap: 60px;
+  align-items: center;
+}
+
+/* Left Pane: Feature Showcase */
+.showcase {
+  max-width: 540px;
+}
+
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+
+.showcase h1 {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+}
+
+.showcase h1 span {
+  color: var(--accent);
+}
+
+.showcase p.sub {
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+
+.feature-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.f-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: 0.3s;
+}
+.f-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+
+.f-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.f-icon.blue { background: #eef1ff; color: #5560f5; }
+.f-icon.green { background: #ecfdf5; color: #10b981; }
+.f-icon.orange { background: #fff7ed; color: #f97316; }
+
+.f-info h4 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.f-info p { font-size: 14px; color: var(--text-muted); line-height: 1.4; }
+
+/* Right Pane: Auth Card */
+.auth-column {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.03);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 5px;
+  border-radius: 14px;
+  margin-bottom: 32px;
+}
+
+.tab-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.tab-btn.active {
+  background: var(--white);
+  color: var(--text-dark);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.auth-card h2 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.auth-card p.auth-sub {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+/* Input Styles */
+.form-group { margin-bottom: 24px; position: relative; }
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.form-input {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 500;
+  transition: 0.2s;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--accent);
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--accent-light);
+}
+
+.toggle-pw {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: 0.2s;
+}
+.toggle-pw:hover { color: var(--text-dark); }
+
+/* Buttons */
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  background: var(--accent);
+  color: var(--white);
+  border: none;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 12px;
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(85, 96, 245, 0.25);
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 16px;
+  background: var(--orange);
+  color: var(--white);
+  border: none;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: #ea580c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(249, 115, 22, 0.25);
+}
+
+/* Google Button */
+.google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text-dark);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 24px;
+}
+
+.google-btn:hover { background: #f8fafc; border-color: var(--text-muted); }
+.google-btn img { width: 20px; }
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 30px 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); }
+.divider:not(:empty)::before { margin-right: 15px; }
+.divider:not(:empty)::after { margin-left: 15px; }
+
+.footer-note {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 24px;
+}
+
+.footer-note a { color: var(--accent); text-decoration: none; font-weight: 700; }
+
+.alert {
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  display: none;
+}
+.alert-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+.alert-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+
+/* Strength meter */
+.pw-strength {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+.pw-strength-bar { height: 100%; width: 0; transition: 0.3s; }
+.pw-label { font-size: 11px; margin-top: 6px; display: block; font-weight: 600; }
+
+[data-form="register"] { display: none; }
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  main { grid-template-columns: 1fr; gap: 60px; padding: 40px 30px; }
+  .showcase { text-align: center; margin: 0 auto; }
+  .auth-column { justify-content: center; }
+  header { padding: 20px 30px; }
+}
+
+@media (max-width: 640px) {
+  .showcase h1 { font-size: 36px; }
+  .auth-card { padding: 30px 20px; }
+}
+</style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-mark">YM</div>
+    YojanaMitra
+  </a>
+  <a href="index.html" class="back-link">
+    <i class="fas fa-arrow-left"></i> Back to Home
+  </a>
+</header>
+
+<main>
+  <!-- Left Column -->
+  <section class="showcase">
+    <div class="badge-pill">Trusted by 3M+ Citizens</div>
+    <h1>Your gateway to every <span>welfare scheme</span> you deserve.</h1>
+    <p class="sub">Create a free account and let our AI match you to thousands of government schemes — in under 5 minutes.</p>
+
+    <div class="feature-cards">
+      <div class="f-card">
+        <div class="f-icon blue"><i class="fas fa-check-circle"></i></div>
+        <div class="f-info">
+          <h4>AI Eligibility Audit</h4>
+          <p>Instant score out of 100 for any government scheme.</p>
+        </div>
+      </div>
+      <div class="f-card">
+        <div class="f-icon green"><i class="fas fa-shield-alt"></i></div>
+        <div class="f-info">
+          <h4>OCR Secure Vault</h4>
+          <p>Upload once — AI extracts all data from your documents.</p>
+        </div>
+      </div>
+      <div class="f-card">
+        <div class="f-icon orange"><i class="fas fa-chart-line"></i></div>
+        <div class="f-info">
+          <h4>Lifecycle Forecasting</h4>
+          <p>Discover future schemes based on your age & career.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Right Column -->
+  <section class="auth-column">
+    <div class="auth-card">
+      <div class="tabs">
+        <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+        <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <div id="auth-alert" class="alert"></div>
+
+      <div id="login-header">
+        <h2>Welcome back</h2>
+        <p class="auth-sub">Login to access your matched schemes and vault.</p>
+      </div>
+      
+      <div id="register-header" style="display:none">
+        <h2>Join YojanaMitra</h2>
+        <p class="auth-sub">Create your account to unlock personalized benefits.</p>
+      </div>
+
+      <!-- Google Login Prominence -->
+      <button class="google-btn" onclick="initiateGoogleLogin()">
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="G">
+        Continue with Google
+      </button>
+
+      <div class="divider">or login with email</div>
+
+      <!-- Login Form -->
+      <form id="login-form" data-form="login">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="email" class="form-input" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+            <label class="form-label" style="margin:0">Password</label>
+            <a href="#" style="font-size:12px; color:var(--accent); text-decoration:none; font-weight:700">Forgot password?</a>
+          </div>
+          <div style="position:relative">
+            <input type="password" name="password" id="login-pw" class="form-input" placeholder="Enter your password" required />
+            <i class="fas fa-eye toggle-pw" id="toggle-login-pw" onclick="togglePw('login-pw', 'toggle-login-pw')"></i>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary">Login to YojanaMitra</button>
+        <a href="dashboard.html" class="btn-secondary">
+          <i class="fas fa-th-large"></i> Go to My Dashboard
+        </a>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" data-form="register">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" name="name" class="form-input" placeholder="John Doe" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="email" class="form-input" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div style="position:relative">
+            <input type="password" name="password" id="reg-pw" class="form-input" placeholder="Min. 8 characters" required oninput="checkStrength(this.value)" />
+            <i class="fas fa-eye toggle-pw" id="toggle-reg-pw" onclick="togglePw('reg-pw', 'toggle-reg-pw')"></i>
+          </div>
+          <div class="pw-strength"><div class="pw-strength-bar" id="strength-bar"></div></div>
+          <span class="pw-label" id="strength-label">Security level: Too weak</span>
+        </div>
+        <button type="submit" class="btn-primary">Create Free Account</button>
+      </form>
+
+      <div class="footer-note" id="login-footer">
+        Don't have an account? <a href="javascript:void(0)" onclick="switchTab('register')">Register free</a>
+      </div>
+      <div class="footer-note" id="register-footer" style="display:none">
+        Already have an account? <a href="javascript:void(0)" onclick="switchTab('login')">Sign in here</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+function switchTab(type) {
+  const tabs = {
+    login: {
+      btn: document.getElementById('tab-login'),
+      header: document.getElementById('login-header'),
+      form: document.getElementById('login-form'),
+      footer: document.getElementById('login-footer'),
+      otherBtn: document.getElementById('tab-register'),
+      otherHeader: document.getElementById('register-header'),
+      otherForm: document.getElementById('register-form'),
+      otherFooter: document.getElementById('register-footer'),
+      hash: 'login'
+    },
+    register: {
+      btn: document.getElementById('tab-register'),
+      header: document.getElementById('register-header'),
+      form: document.getElementById('register-form'),
+      footer: document.getElementById('register-footer'),
+      otherBtn: document.getElementById('tab-login'),
+      otherHeader: document.getElementById('login-header'),
+      otherForm: document.getElementById('login-form'),
+      otherFooter: document.getElementById('login-footer'),
+      hash: 'register'
+    }
+  };
+
+  const t = tabs[type];
+  t.btn.classList.add('active');
+  t.otherBtn.classList.remove('active');
+  t.header.style.display = 'block';
+  t.otherHeader.style.display = 'none';
+  t.form.style.display = 'block';
+  t.otherForm.style.display = 'none';
+  t.footer.style.display = 'block';
+  t.otherFooter.style.display = 'none';
+  window.location.hash = t.hash;
+  
+  document.getElementById('auth-alert').style.display = 'none';
+}
+
+function togglePw(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.replace('fa-eye', 'fa-eye-slash');
+  } else {
+    input.type = 'password';
+    icon.classList.replace('fa-eye-slash', 'fa-eye');
+  }
+}
+
+function checkStrength(pw) {
+  const bar = document.getElementById('strength-bar');
+  const label = document.getElementById('strength-label');
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+  const colors = ['#e2ebf0', '#ef4444', '#f59e0b', '#10b981'];
+  const texts = ['Too weak', 'Weak', 'Strong', 'Extra Secure'];
+  
+  bar.style.width = (score * 25) + '%';
+  bar.style.background = colors[score] || '#ef4444';
+  label.innerText = 'Security level: ' + (texts[score] || 'Too weak');
+}
+
+async function checkAuth() {
+  try {
+    const res = await fetch('/api/user');
+    if (res.ok) window.location.href = 'dashboard.html';
+  } catch (e) {}
+}
+
+window.onload = () => {
+  checkAuth();
+  if (window.location.hash === '#register') switchTab('register');
+  else switchTab('login');
+};
+
+function showAlert(msg, type='error') {
+  const el = document.getElementById('auth-alert');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.className = `alert alert-${type}`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* Auth Logic */
+document.getElementById('login-form').onsubmit = async (e) => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      showAlert('Login successful! Welcome back.', 'success');
+      setTimeout(() => window.location.href = 'dashboard.html', 800);
+    } else {
+      const err = await res.json();
+      showAlert(err.error || 'Check your credentials and try again.');
+    }
+  } catch (e) { showAlert('System unavailable. Please try later.'); }
+};
+
+document.getElementById('register-form').onsubmit = async (e) => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target).entries());
+  try {
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      showAlert('Success! Account created. Signing you in...', 'success');
+      setTimeout(() => switchTab('login'), 1200);
+    } else {
+      const err = await res.json();
+      showAlert(err.error || 'Registration failed. Try a different email.');
+    }
+  } catch (e) { showAlert('Network error. Profile not saved.'); }
+};
+
+/* Google Auth */
+function initiateGoogleLogin() {
+  const clientId = "886008127383"; // Simplified ID or real one if available
+  const fullId = "886008127383-v80l90m0uukpgov20n0223n748ivcc5d.apps.googleusercontent.com";
+  
+  try {
+    google.accounts.id.initialize({
+      client_id: fullId,
+      callback: handleCredentialResponse
+    });
+    google.accounts.id.prompt();
+  } catch (err) {
+    showAlert("Google Services restricted. Try manual login.");
+  }
+}
+
+async function handleCredentialResponse(response) {
+  try {
+    const res = await fetch('/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ credential: response.credential })
+    });
+    if (res.ok) {
+      showAlert('Google login successful!', 'success');
+      setTimeout(() => window.location.href = 'dashboard.html', 800);
+    } else {
+      showAlert('Google verify failed.');
+    }
+  } catch (e) { showAlert("OAuth server unreachable."); }
+}
+</script>
+
+</body>
+</html>

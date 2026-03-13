@@ -25,6 +25,19 @@
         align-items: center;
         justify-content: center;
     }
+    .chat-toggle-btn::after {
+        content: '';
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        border: 2px solid rgba(59, 130, 246, 0.45);
+        animation: chatbot-ping 2s ease-out 2s infinite;
+        pointer-events: none;
+    }
+    @keyframes chatbot-ping {
+        0%   { transform: scale(1); opacity: 0.8; }
+        100% { transform: scale(1.55); opacity: 0; }
+    }
     .chat-toggle-btn:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(59, 130, 246, 0.5); }
     .chatbox {
         position: fixed;

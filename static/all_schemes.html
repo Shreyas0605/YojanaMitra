@@ -403,35 +403,65 @@
             const applyUrl = document.getElementById('modal-apply-btn-hidden')?.href || '#';
 
             sidebar.classList.add('active');
-            list.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm text-primary"></div> Loading doc data...</div>';
+            list.innerHTML = '<div class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary mb-2"></div><div class="small text-muted">Loading profile data...</div></div>';
 
             try {
                 const response = await fetch('/api/documents');
+                if (!response.ok) throw new Error('Failed to fetch documents');
+                
                 const data = await response.json();
 
                 let html = '';
                 // Consolidate all extracted data from all docs
-                data.documents.forEach(doc => {
-                    Object.entries(doc.extractedData).forEach(([k, v]) => {
-                        html += `
-                            <div class="copy-item" onclick="copyToClipboard('${v}', this)">
-                                <div class="label">${k} (${doc.docType})</div>
-                                <div class="value">${v}</div>
-                            </div>
-                        `;
+                if (data.documents && data.documents.length > 0) {
+                    data.documents.forEach(doc => {
+                        if (doc.extractedData) {
+                            Object.entries(doc.extractedData).forEach(([k, v]) => {
+                                if (v && String(v).trim() !== '') {
+                                    html += `
+                                        <div class="copy-item" onclick="copyToClipboard('${String(v).replace(/'/g, "\\'")}', this)">
+                                            <div class="label">${k} (${doc.docType})</div>
+                                            <div class="value">${v}</div>
+                                        </div>
+                                    `;
+                                }
+                            });
+                        }
                     });
-                });
+                }
 
-                list.innerHTML = html || '<p class="text-center text-muted">No documents found in vault. Manual entry required.</p>';
-                link.href = (applyUrl && applyUrl !== 'None') ? applyUrl : '#';
-
-                // Open portal in new tab
-                if (applyUrl && applyUrl !== '#' && applyUrl !== 'None') {
-                    window.open(applyUrl, '_blank');
+                list.innerHTML = html || `
+                    <div class="text-center py-4">
+                        <i class="fas fa-folder-open text-muted mb-2 fa-2x opacity-20"></i>
+                        <p class="small text-muted mb-0">No documents found in vault.<br>Sync your documents to see data here.</p>
+                    </div>
+                `;
+                
+                // Fix Redirection Link
+                const validUrl = (applyUrl && applyUrl !== '#' && applyUrl !== 'None' && !applyUrl.includes('undefined')) ? applyUrl : '#';
+                link.href = validUrl;
+                
+                if (validUrl === '#') {
+                    link.classList.add('disabled', 'opacity-50');
+                    link.style.pointerEvents = 'none';
+                    link.textContent = 'Portal Link Unavailable';
+                } else {
+                    link.classList.remove('disabled', 'opacity-50');
+                    link.style.pointerEvents = 'auto';
+                    link.textContent = 'Open Official Portal';
+                    
+                    // Auto-open portal in new tab as requested
+                    window.open(validUrl, '_blank');
                 }
 
             } catch (err) {
-                console.error(err);
+                console.error("Portal Helper Error:", err);
+                list.innerHTML = `
+                    <div class="text-center py-4 text-danger">
+                        <i class="fas fa-exclamation-triangle mb-2"></i>
+                        <div class="small">Error loading data. Please refresh.</div>
+                    </div>
+                `;
             }
         }
 
@@ -496,8 +526,8 @@
 
                             <div class="mt-3">
                                 <button id="btn-check-readiness" onclick="auditCurrentScheme()"
-                                    class="btn btn-indigo btn-sm rounded-pill px-4">
-                                    <i class="fas fa-magnifying-glass-chart me-2"></i> Check My Readiness
+                                    class="btn btn-light border shadow-sm btn-sm rounded-pill px-4 fw-bold">
+                                    <i class="fas fa-magnifying-glass-chart me-2 text-primary"></i> Check My Readiness
                                 </button>
                             </div>
                         </div>
@@ -547,39 +577,41 @@
         </div>
     </div>
     <!-- Portal Helper Sidebar -->
-    <div id="portal-helper" class="portal-sidebar shadow-lg">
-        <div class="p-3 bg-primary text-white d-flex justify-content-between align-items-center">
-            <h6 class="mb-0 fw-bold"><i class="fas fa-magic me-2"></i> Portal Helper</h6>
-            <button onclick="togglePortalHelper()" class="btn-close btn-close-white"></button>
+    <div id="portal-helper" class="portal-sidebar shadow-lg border">
+        <div class="p-3 bg-white border-bottom d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-bold text-primary"><i class="fas fa-magic me-2"></i> Portal Helper</h6>
+            <button onclick="togglePortalHelper()" class="btn-close"></button>
         </div>
         <div class="p-3">
-            <p class="small text-muted mb-3">Click any value to copy and paste it into the portal.</p>
+            <p class="small text-muted mb-3" style="font-size: 0.75rem;">Click any value to copy and paste it into the portal.</p>
             <div id="helper-data-list">
                 <!-- Populated by JS -->
             </div>
-            <hr>
-            <a id="helper-portal-link" href="#" target="_blank" class="btn btn-sm btn-primary w-100">Open Official
-                Portal</a>
+            <div class="mt-4 pt-3 border-top">
+                <a id="helper-portal-link" href="#" target="_blank" class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm">
+                    Open Official Portal <i class="fas fa-external-link-alt ms-2 small"></i>
+                </a>
+            </div>
         </div>
     </div>
 
     <style>
         .portal-sidebar {
             position: fixed;
-            right: -320px;
-            top: 80px;
-            bottom: 20px;
-            width: 300px;
+            right: -340px;
+            top: 100px;
+            bottom: 30px;
+            width: 320px;
             background: white;
-            z-index: 1050;
-            border-radius: 12px 0 0 12px;
-            transition: right 0.3s ease;
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 1060;
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 10px 40px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
         }
 
         .portal-sidebar.active {
-            right: 0;
+            right: 20px;
         }
 
         .copy-item {

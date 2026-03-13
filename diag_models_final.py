@@ -2,7 +2,7 @@ import google.generativeai as genai
 import os
 
 # Use the Vault Key for diagnosis
-key = "AIzaSyDKIs5LJqP5GW8BAJZbkXEDPtAOseI5IUo"
+key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=key)
 
 print("--- DIAGNOSING AVAILABLE MODELS ---")

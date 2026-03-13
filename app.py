@@ -17,6 +17,7 @@ import google.generativeai as genai
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 import PIL.Image
+import re
 
 # Load environment variables (.env)
 load_dotenv()
@@ -1585,17 +1586,17 @@ def analyze_scheme_readiness_ai(scheme_id):
     except Exception as e:
         safe_print(f"ERROR in AI Readiness Analysis: {str(e)}")
         # Fallback to empty/basic response to avoid completely breaking the UI
-        return jsonify({{
+        return jsonify({
             "score": 0,
             "items": [
-                {{
+                {
                     "title": "AI Analysis Failed",
                     "text": f"Could not complete AI audit: {str(e)}",
                     "type": "error",
                     "icon": "fa-triangle-exclamation"
-                }}
+                }
             ]
-        }}), 500
+        }), 500
 
 @app.route('/api/schemes', methods=['POST'])
 def create_scheme():
@@ -1742,10 +1743,11 @@ def get_recommendations():
     schemes = Scheme.query.all()
     recommendations = []
     for scheme in schemes:
-        match_score = calculate_match_score(user, scheme)
+        match_score, missing_reqs = calculate_match_score(user, scheme)
         if match_score > 0:
             scheme_dict = scheme.to_dict()
             scheme_dict['matchPercentage'] = match_score
+            scheme_dict['missingDocs'] = missing_reqs
             recommendations.append(scheme_dict)
     recommendations.sort(key=lambda x: x['matchPercentage'], reverse=True)
     return jsonify({'recommendations': recommendations}), 200
@@ -1832,10 +1834,11 @@ def check_eligibility():
     scheme_id_map = {}
     
     for scheme in schemes:
-        match_score = calculate_match_score(temp_user, scheme)
+        match_score, missing_reqs = calculate_match_score(temp_user, scheme)
         if match_score > 0:
             scheme_dict = scheme.to_dict()
             scheme_dict['matchPercentage'] = match_score
+            scheme_dict['missingDocs'] = missing_reqs
             recommendations.append(scheme_dict)
             matched_ids.add(str(scheme.id))
             scheme_id_map[str(scheme.id)] = scheme.name
@@ -1862,7 +1865,134 @@ def check_eligibility():
         'has_conflicts': len(unique_conflicts) > 0
     }), 200
 
-# ----------------- Admin Routes & Scheme CRUD -----------------
+# ----------------- Scheme Readiness AI Analysis -----------------
+@app.route('/api/schemes/<int:scheme_id>/readiness-ai', methods=['POST'])
+def scheme_readiness_ai(scheme_id):
+    """
+    Generate an AI-powered readiness report for a specific scheme based on user profile.
+    Cached on the frontend using localStorage; this endpoint is only called on first check or recheck.
+    """
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+
+    scheme = Scheme.query.get(scheme_id)
+    if not scheme:
+        return jsonify({'error': 'Scheme not found'}), 404
+
+    user = User.query.get(session['user_id'])
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    profile = request.get_json() or {}
+
+    if not GEMINI_API_KEY:
+        return jsonify({'error': 'AI not configured'}), 503
+
+    # Build context for the AI
+    scheme_info = f"""
+Scheme Name: {scheme.name}
+Category: {scheme.category or 'General'}
+Description: {scheme.description or ''}
+Eligibility Criteria: {scheme.eligibility or ''}
+Benefits: {scheme.benefits or ''}
+Min Age: {scheme.min_age or 'N/A'}, Max Age: {scheme.max_age or 'N/A'}
+Allowed Castes: {scheme.allowed_castes or 'All'}
+Allowed States: {scheme.allowed_states or 'All India'}
+Max Income: {scheme.max_income or 'No limit'}
+Min Education: {scheme.min_education_level or 'None'}
+Aadhaar Required: {getattr(scheme, 'aadhaar_required', 'No')}
+Bank Account Required: {getattr(scheme, 'bank_account_required', 'No')}
+"""
+
+    user_info = f"""
+Name: {user.name}
+Age: {profile.get('age', 'Unknown')}
+Gender: {profile.get('gender', 'Unknown')}
+State: {profile.get('state', 'Unknown')}
+District: {profile.get('district', 'Unknown')}
+Caste: {profile.get('caste', 'Unknown')}
+Annual Income: {profile.get('income', 'Unknown')}
+Education: {profile.get('education', 'Unknown')}
+Occupation: {profile.get('occupation', 'Unknown')}
+Aadhaar Available: {profile.get('aadhaarAvailable', 'Unknown')}
+Bank Account: {profile.get('bankAccountAvailable', 'Unknown')}
+Ration Card: {profile.get('rationCardAvailable', 'Unknown')} ({profile.get('rationCardType', '')})
+Disability: {profile.get('disability', 'No')}
+Domicile Certificate: {profile.get('domicileStatus', 'Unknown')}
+Income Certificate: {profile.get('incomeCertificateAvailable', 'Unknown')}
+"""
+
+    prompt = f"""
+You are an expert Indian government scheme advisor. Analyze whether this user is ready to apply for the given scheme.
+
+USER PROFILE:
+{user_info}
+
+SCHEME DETAILS:
+{scheme_info}
+
+Return a JSON response with these exact fields:
+{{
+  "score": 0-100 (an integer representing the overall readiness percentage),
+  "overallStatus": "READY" | "PARTIALLY_READY" | "NOT_READY",
+  "overallSummaryEn": "A one sentence summary of the readiness check in English",
+  "items": [
+    {{
+      "title": "Short title of the requirement (e.g. Age Eligibility, State Document)",
+      "text": "Detailed explanation of the match or mismatch",
+      "type": "success" | "warning" | "error",
+      "icon": "fa-check-circle" | "fa-exclamation-triangle" | "fa-times-circle"
+    }}
+  ]
+}}
+Check: Age, Gender, State/Location, Caste/Category, Income, Education, Aadhaar Card, Bank Account, Ration Card, Domicile Certificate, Income Certificate, Occupation.
+Only include relevant criteria (skip ones with "N/A" or "All" requirements).
+Return ONLY valid JSON, no markdown code fences.
+"""
+
+    try:
+        response = model.generate_content(prompt)
+        raw = response.text.strip()
+        print(f"DEBUG: Raw AI Response for scheme {scheme_id}:\n{raw}")
+        
+        # More robust extraction: find the first { and last } to isolate JSON
+        json_match = re.search(r'(\{.*\})', raw, re.DOTALL)
+        if json_match:
+            raw_json = json_match.group(1)
+        else:
+            raw_json = raw
+
+        # Strip fences just in case re.search didn't catch everything perfectly
+        raw_json = re.sub(r'^```[a-zA-Z]*\n?', '', raw_json).strip()
+        raw_json = re.sub(r'```$', '', raw_json).strip()
+        
+        report = json.loads(raw_json)
+        
+        # Validate required fields are present
+        if not isinstance(report, dict) or 'items' not in report:
+            print(f"DEBUG: Invalid report structure: {report}")
+            raise ValueError(f"AI returned unexpected structure")
+        
+        # Flattened response for compatibility with all_schemes.html
+        response_data = {
+            'schemeId': scheme_id,
+            'schemeName': scheme.name,
+            'score': report.get('score', 0),
+            'items': report.get('items', []),
+            'overallStatus': report.get('overallStatus', 'NOT_READY'),
+            'overallSummaryEn': report.get('overallSummaryEn', 'Check details below.'),
+            'generatedAt': datetime.now(timezone.utc).isoformat()
+        }
+        
+        return jsonify(response_data), 200
+    except json.JSONDecodeError as e:
+        logger.error(f"Readiness AI JSON parse error for scheme {scheme_id}: {e}. Raw: {raw[:200]}")
+        return jsonify({'error': f'AI returned malformed response. Please retry.'}), 500
+    except Exception as e:
+        logger.error(f"Readiness AI error for scheme {scheme_id}: {e}")
+        return jsonify({'error': f'AI analysis failed: {str(e)}'}), 500
+
+
 @app.route('/api/admin/login', methods=['POST'])
 def admin_login():
     print("Admin login request received")
@@ -1937,8 +2067,10 @@ def lifecycle_forecast():
         
         for scheme in schemes:
             # Only match if they are NOT eligible now (to find FUTURE opportunities)
-            if calculate_match_score(user, scheme) == 0:
-                if calculate_match_score(f_user, scheme) > 0.5:
+            current_score, _ = calculate_match_score(user, scheme)
+            if current_score == 0:
+                future_score, _ = calculate_match_score(f_user, scheme)
+                if future_score > 50:
                     upcoming.append({
                         'id': scheme.id,
                         'name': scheme.name,
@@ -2112,9 +2244,9 @@ def safe_print(msg):
 
 def calculate_match_score(user, scheme):
     """
-    Maximum Precision Matching Engine (98%+)
-    Mirrors Government Portal logic: Failure in ANY criteria = 0% Match.
-    Only users who satisfy 100% of technical requirements are shown as 'Qualified'.
+    Refined Matching Engine
+    Hard criteria mismatches = (0, []) Match.
+    Soft criteria mismatches subtract from score and append to missingRequirements.
     """
     
     # helper to check if a value is in a JSON list
@@ -2122,148 +2254,166 @@ def calculate_match_score(user, scheme):
         if not json_str: return True
         try:
             items = json.loads(json_str)
-            if not items or "All" in items: return True
+            if not items or "All" in items or "Any" in items: return True
+            if isinstance(value, str):
+                return value in items
+            elif isinstance(value, list):
+                return any(v in items for v in value)
             return value in items
         except: return True
 
-    # --- PHASE 1: MANDATORY GUARDS (STRICT ELIGIBILITY) ---
-    
+    score = 100
+    missing_docs = []
+
+    # --- HARD GUARDS (Unchangeable criteria) ---
     # 1. State Guard
     if not is_in_json(user.state, scheme.allowed_states):
-        return 0
+        return (0, [])
         
     # 2. Gender Guard
     if not is_in_json(user.gender, scheme.allowed_genders):
-        safe_print(f"DEBUG: Failed Gender Guard for {scheme.name}")
-        return 0
+        return (0, [])
         
     # 3. Age Guard
     if scheme.min_age and (user.age is None or user.age < scheme.min_age):
-        safe_print(f"DEBUG: Failed Min Age Guard for {scheme.name}")
-        return 0
+        return (0, [])
     if scheme.max_age and (user.age is None or user.age > scheme.max_age):
-        safe_print(f"DEBUG: Failed Max Age Guard for {scheme.name}")
-        return 0
+        return (0, [])
 
-    # 4. Caste Guard
+    # 4. Caste & Category Guard
     if scheme.allowed_castes:
         if not is_in_json(user.caste, scheme.allowed_castes):
-            return 0
+            return (0, [])
 
-    # 5. Income Guard (Strict Limit)
+    # 5. Income Guard (Max limit is strict)
     if scheme.max_income is not None:
         if user.income is None or user.income > scheme.max_income:
-            safe_print(f"DEBUG: Failed Income Guard for {scheme.name}")
-            return 0 # Fail if over limit or if info is missing (Precision)
+            return (0, [])
 
-    # 6. Occupation Guard
+    # 6. Ration Card Type Guard (APL/BPL/etc cannot be changed easily)
+    allowed_ration = getattr(scheme, 'allowed_ration_card_types', None)
+    if allowed_ration and allowed_ration not in ["null", "[]", ""]:
+         # If scheme requires a specific ration card type, and user has one, it must match
+         user_ration_type = getattr(user, 'ration_card_type', None)
+         has_ration_card = getattr(user, 'ration_card_available', 'Yes') == 'Yes'
+         if has_ration_card and user_ration_type:
+              if not is_in_json(user_ration_type, allowed_ration):
+                   return (0, [])
+
+    # 7. Religion Guard
+    if getattr(scheme, 'allowed_religions', None):
+        if not is_in_json(getattr(user, 'religion', ''), scheme.allowed_religions):
+            return (0, [])
+
+    # 8. Occupation Guards
     if scheme.allowed_occupations:
         user_occ_match = is_in_json(user.occupation, scheme.allowed_occupations) or \
                          (getattr(user, 'is_farmer', 'No') == 'Yes' and is_in_json('Farmer', scheme.allowed_occupations))
         if not user_occ_match:
-            return 0
+            return (0, [])
 
-    # 6b. Parent Occupation Guards (Holistic Precision)
     if getattr(scheme, 'allowed_father_occupations', None):
         if not is_in_json(getattr(user, 'father_occupation', ''), scheme.allowed_father_occupations):
-            safe_print(f"DEBUG: Failed Father Occ Guard for {scheme.name}")
-            return 0
+            return (0, [])
     if getattr(scheme, 'allowed_mother_occupations', None):
         if not is_in_json(getattr(user, 'mother_occupation', ''), scheme.allowed_mother_occupations):
-            safe_print(f"DEBUG: Failed Mother Occ Guard for {scheme.name}")
-            return 0
+            return (0, [])
 
-    # 6c. Religion Guard
-    if getattr(scheme, 'allowed_religions', None):
-        if not is_in_json(getattr(user, 'religion', ''), scheme.allowed_religions):
-            safe_print(f"DEBUG: Failed Religion Guard for {scheme.name}")
-            return 0
-
-    # 6d. Land Type Guard
+    # 9. Land Type Guard
     land_req = getattr(scheme, 'land_type_requirement', 'Any') or 'Any'
     if land_req != 'Any':
         if getattr(user, 'land_type', '') != land_req:
-            return 0
+            return (0, [])
 
-    # 7. Education Guard (Ranking & Exclusion)
+    # 10. Education Guard (Ranking & Exclusion) - Kept as hard guard as degrees can't be obtained instantly
     user_rank = EDUCATION_LEVELS.get(user.education or '', 0)
     req_rank = EDUCATION_LEVELS.get(scheme.min_education_level or '', 0)
     
     if req_rank > 0 and user_rank < req_rank:
-        return 0 # Underqualified
+        return (0, []) # Underqualified
         
-    # Overqualification Exclusion (e.g. Graduates blocked from Pre-Matric)
     scheme_label = (scheme.name + " " + (scheme.category or "")).lower()
     if ('pre matric' in scheme_label or 'pre-matric' in scheme_label) and user_rank >= 4:
-        return 0
+        return (0, [])
 
-    # 8. Residence Guard (Urban/Rural)
+    # 11. Residence Guard
     if scheme.residence_requirement and scheme.residence_requirement != 'Any':
         if user.residence != scheme.residence_requirement:
-            safe_print(f"DEBUG: Failed Residence Guard for {scheme.name}")
-            return 0
+            return (0, [])
 
-    # 9. Social Requirement Guards
-    if scheme.minority_requirement == 'Yes' and user.minority_status != 'Yes':
-        safe_print(f"DEBUG: Failed Minority Guard for {scheme.name}")
-        return 0
-    if scheme.widow_requirement == 'Yes' and user.is_widow_single_woman != 'Yes':
-        safe_print(f"DEBUG: Failed Widow Guard for {scheme.name}")
-        return 0
+    # 12. Social Requirement Guards (Unchangeable demographics)
+    if scheme.minority_requirement == 'Yes' and getattr(user, 'minority_status', getattr(user, 'minority', 'No')) != 'Yes':
+        return (0, [])
+    if scheme.widow_requirement == 'Yes' and getattr(user, 'is_widow_single_woman', 'No') != 'Yes':
+        return (0, [])
     if scheme.disability_requirement == 'Yes' and user.disability != 'Yes':
-        safe_print(f"DEBUG: Failed Disability Guard for {scheme.name}")
-        return 0
+        return (0, [])
     if scheme.senior_citizen_requirement == 'Yes':
-        if not (user.is_senior_citizen == 'Yes' or (user.age and user.age >= 60)):
-            safe_print(f"DEBUG: Failed Senior Guard for {scheme.name}")
-            return 0
+        if not (getattr(user, 'is_senior_citizen', 'No') == 'Yes' or (user.age and user.age >= 60)):
+            return (0, [])
+    if scheme.orphan_requirement == 'Yes' and getattr(user, 'is_orphan', 'No') != 'Yes':
+        return (0, [])
+    if scheme.tribal_requirement == 'Yes' and user.caste != 'ST' and getattr(user, 'is_tribal', 'No') != 'Yes':
+        return (0, [])
 
-    # 10. Marital Status Guard
+    # 13. Marital Status Guard
     if scheme.allowed_marital_status:
         if not is_in_json(user.marital_status, scheme.allowed_marital_status):
-            safe_print(f"DEBUG: Failed Marital Guard for {scheme.name}")
-            return 0
+            return (0, [])
 
-    # --- PHASE 1.5: KEYWORD SECURITY GUARD (Advanced Precision) ---
-    # Smart check for niche keywords. If found, user MUST have matching profile attributes.
-    scheme_text_lower = (scheme.name + " " + scheme.description).lower()
+    # 14. Keyword Security Guards
+    scheme_text_lower = (scheme.name + " " + (scheme.description or "")).lower()
     
-    # 11. Artisan/Weaver Guard (The "Artisan Fix")
     if any(kw in scheme_text_lower for kw in ['weaver', 'handloom', 'artisan', 'handicraft']):
         is_weaver_domain = is_in_json(getattr(user, 'father_occupation', ''), '["Weaver", "Artisan"]') or \
                            is_in_json(getattr(user, 'mother_occupation', ''), '["Weaver", "Artisan"]') or \
                            is_in_json(user.occupation, '["Weaver", "Artisan"]')
         if not is_weaver_domain:
-            return 0
+            return (0, [])
 
-    # 12. Orphan Guard
-    if 'orphan' in scheme_text_lower or 'anath' in scheme_text_lower:
-        if getattr(user, 'is_orphan', 'No') != 'Yes':
-            return 0
-
-    # 13. Tribal Guard
-    if 'tribal' in scheme_text_lower or 'primitive' in scheme_text_lower:
-        if user.caste != 'ST' and getattr(user, 'is_tribal', 'No') != 'Yes':
-            return 0
-
-    # --- PHASE 2: SCORING (RANKING ELIGIBLE USERS) ---
-    # Since we passed all guards, user is definitely eligible (98%+ confidence).
-    # We now assign a high score and use keywords for sorting priority.
+    # --- SOFT GUARDS (Changeable/Procure-able criteria) ---
+    # These subtract from the base score of 100 instead of eliminating the scheme
     
-    score = 90 # Guaranteed baseline for qualifying users
-    
+    # Missing Aadhaar
+    aadhaar_req = getattr(scheme, 'aadhaar_required', 'No')
+    if aadhaar_req == 'Yes' and getattr(user, 'aadhaar_available', 'Yes') == 'No':
+        score -= 20
+        missing_docs.append("Aadhaar Card")
+        
+    # Missing Bank Account
+    bank_req = getattr(scheme, 'bank_account_required', 'No')
+    if bank_req == 'Yes' and getattr(user, 'bank_account_available', 'Yes') == 'No':
+        score -= 15
+        missing_docs.append("Bank Account")
+        
+    # Missing Ration Card (when specific type is required, and user doesn't have ANY ration card)
+    if allowed_ration and allowed_ration not in ["null", "[]", ""]:
+        if getattr(user, 'ration_card_available', 'Yes') == 'No':
+             score -= 20
+             missing_docs.append("Ration Card")
+             
+    # Missing Income Certificate when income limit exists
+    if scheme.max_income is not None and getattr(user, 'income_certificate_available', 'Yes') == 'No':
+         score -= 15
+         missing_docs.append("Income Certificate")
+         
+    # Missing Domicile (most state schemes require it implicitly)
+    if getattr(scheme, 'allowed_states', None) and getattr(user, 'domicile_status', 'Yes') == 'No':
+         score -= 10
+         missing_docs.append("Domicile Certificate")
+
     # Add priority points for high relevance
     keywords = []
-    if user.is_farmer == 'Yes': keywords.append('Farmer')
-    if user.occupation == 'Student': keywords.append('Scholarship')
-    if user.disability == 'Yes': keywords.append('Disability')
+    if getattr(user, 'is_farmer', 'No') == 'Yes': keywords.append('farmer')
+    if user.occupation == 'Student': keywords.append('scholarship')
+    if user.disability == 'Yes': keywords.append('disability')
     
-    scheme_text = (scheme.name + " " + scheme.description + " " + (scheme.eligibility or "")).lower()
     for kw in keywords:
-        if kw.lower() in scheme_text:
-            score += 5 # Max 10 points for perfect keyword alignment
+        if kw in scheme_text_lower:
+            score += 5 # Max 15 points
             
-    return min(100, score)
+    # Normalize score between 20 and 100
+    return (min(100, max(20, score)), missing_docs)
 
 # ----------------- Pending Schemes & Approval Workflow Routes -----------------
 @app.route('/api/admin/pending-schemes', methods=['GET'])

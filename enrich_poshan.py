@@ -3,7 +3,7 @@ import os
 import json
 from app import app, db, Scheme
 
-GEMINI_API_KEY = "AIzaSyC9BQ_rJWTwLNgNUDJeP4FEsFY37ffPHiE"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-flash-latest')
 

@@ -1,14 +1,27 @@
+# Secrets
 .env
+*.key
+secrets.py
+
+# Logs and Data
 yojanamitra.db
-__pycache__/
 *.log
-instance/
+translation_test_log.txt
+*.txt
+
+# Python
+__pycache__/
 *.pyc
+.venv/
+
+# IDE and Workspaces
 .vscode/
-node_modules/
+instance/
 dist/
 build/
-.venv/
-static/uploads/
+node_modules/
+
+# Backups
 static_backup_current/
+static/uploads/
 test_ai.py

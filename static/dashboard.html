@@ -1,0 +1,3099 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YojanaMitra - Smart Welfare Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css?v=2" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top border-bottom border-secondary border-opacity-10"
+        style="backdrop-filter: blur(20px);">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/index.html">
+                <i class="fas fa-handshake" style="color: #2563eb; font-size: 1.8rem; margin-right: 0.5rem;"></i>
+                <span
+                    style="color: #0f172a; font-size: 1.3rem; font-weight: 700; background: transparent !important;">Yojana
+                    Mitra</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Spacer -->
+                <div class="mx-auto"></div>
+
+                <!-- Right Side Actions -->
+                <div class="d-flex align-items-center gap-3">
+                    <div id="google_translate_element" class="me-2"></div>
+                    <script type="text/javascript">
+                        function googleTranslateElementInit() {
+                            new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+                        }
+                    </script>
+                    <script type="text/javascript"
+                        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+                    <a href="/all-schemes" class="text-dark fw-medium text-decoration-none me-3"
+                        style="font-size: 0.95rem;">
+                        All Schemes
+                    </a>
+
+                    <a href="#" class="navbar-pill text-decoration-none" onclick="showPage('eligibility')">
+                        Know Your Eligibility
+                    </a>
+
+                    <a href="#" class="text-dark fw-medium text-decoration-none guest-only" onclick="showPage('login')"
+                        style="font-size: 0.95rem;">Sign In</a>
+
+                    <button class="btn-gradient guest-only border-0" onclick="showPage('register')">Get Started</button>
+
+                    <a href="/vault.html" class="text-dark fw-medium text-decoration-none user-only me-3"
+                        style="display:none; font-size: 0.95rem;">
+                        <i class="fas fa-shield-halved me-1"></i> My Vault
+                    </a>
+
+                    <!-- User Logged In State -->
+                    <button class="btn-gradient user-only border-0" onclick="showPage('profile')"
+                        style="display:none;">My Dashboard</button>
+
+                    <button class="btn btn-sm btn-outline-secondary user-only border-0 fw-bold ms-2"
+                        onclick="handleLogout()" style="display:none; font-size: 0.9rem;">
+                        <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </button>
+
+                    <a href="admin.html" class="btn btn-sm btn-outline-danger ms-2 border-0 fw-bold" target="_blank"
+                        style="font-size: 0.85rem;">
+                        <i class="fas fa-lock me-1"></i> Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="container-fluid p-0 flex-grow-1">
+
+
+    <!-- ELIGIBILITY CHECKER PAGE -->
+    <div id="eligibility-page" class="page-section" style="display:none; padding: 40px 0; background: #f8fafc;">
+        <div class="container" style="max-width: 900px;">
+            <div class="text-center mb-5">
+                <a href="/index.html" class="d-inline-block mb-3 text-decoration-none fw-bold"
+                    style="color: #2563eb;">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                </a>
+                <h1 class="fw-bold display-5 mb-3">Check Your Eligibility</h1>
+                <p class="text-muted lead">Complete your profile to unlock all 60+ government schemes.</p>
+            </div>
+
+            <div class="card border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+                <div class="card-header bg-white border-bottom py-3 px-4">
+                    <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-id-card me-2"></i>Comprehensive Profile Form
+                    </h5>
+                </div>
+                <div class="card-body p-5">
+                    <div id="eligibility-form-container">
+                        <form id="eligibility-form">
+                            <!-- 1. Identity & Demographics -->
+                            <h6 class="text-secondary text-uppercase small fw-bold mb-3 border-bottom pb-2">1. Identity
+                                & Demographics</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Full Name</label>
+                                    <input type="text" name="name" class="form-control" placeholder="Your Name">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Date of Birth</label>
+                                    <input type="date" name="dob" class="form-control"
+                                        onchange="calculateAge(this.value, 'calc-age')">
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small fw-bold">Age</label>
+                                    <input type="number" name="age" id="calc-age" class="form-control bg-light"
+                                        readonly>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small fw-bold">Gender</label>
+                                    <select name="gender" class="form-select">
+                                        <option value="">Select</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Marital Status</label>
+                                    <select name="marital_status" class="form-select">
+                                        <option value="">Select</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Widowed">Widowed</option>
+                                        <option value="Divorced">Divorced</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Aadhaar Available?</label>
+                                    <select name="aadhaarAvailable" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Caste Category</label>
+                                    <select name="caste" class="form-select" required>
+                                        <option value="General">General</option>
+                                        <option value="OBC">OBC</option>
+                                        <option value="SC">SC</option>
+                                        <option value="ST">ST</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Tribal Community?</label>
+                                    <select name="isTribal" class="form-select">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Religion</label>
+                                    <select name="religion" class="form-select">
+                                        <option value="Hindu">Hindu</option>
+                                        <option value="Muslim">Muslim</option>
+                                        <option value="Christian">Christian</option>
+                                        <option value="Sikh">Sikh</option>
+                                        <option value="Buddhist">Buddhist</option>
+                                        <option value="Jain">Jain</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 2. Location & Residence -->
+                            <h6 class="text-secondary text-uppercase small fw-bold mb-3 border-bottom pb-2">2.
+                                Location
+                                & Residence</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">State</label>
+                                    <select name="state" id="state-select" class="form-select"
+                                        onchange="populateDistricts(this.value, 'district-select')">
+                                        <option value="">Select State</option>
+                                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                        <option value="Karnataka">Karnataka</option>
+                                        <option value="Maharashtra">Maharashtra</option>
+                                        <option value="Tamil Nadu">Tamil Nadu</option>
+                                        <option value="Delhi">Delhi</option>
+                                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">District</label>
+                                    <select name="district" id="district-select" class="form-select"
+                                        onchange="populateTaluks(this.value, 'taluk-select')">
+                                        <option value="">Select District</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Block / Taluk</label>
+                                    <select name="blockTaluk" id="taluk-select" class="form-select">
+                                        <option value="">Select Taluk</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Residence Type</label>
+                                    <select name="residence" class="form-select">
+                                        <option value="Rural">Rural (Village)</option>
+                                        <option value="Urban">Urban (City)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Domicile Certificate?</label>
+                                    <select name="domicileStatus" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 3. Family & Income -->
+                            <h6 class="text-secondary text-uppercase small fw-bold mb-3 border-bottom pb-2">3.
+                                Family &
+                                Income</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Family Type</label>
+                                    <select name="familyType" class="form-select">
+                                        <option value="Nuclear">Nuclear</option>
+                                        <option value="Joint">Joint</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Category (Caste)</label>
+                                    <select name="caste" class="form-select">
+                                        <option value="General">General</option>
+                                        <option value="OBC">OBC</option>
+                                        <option value="SC">SC</option>
+                                        <option value="ST">ST</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Annual Income (₹)</label>
+                                    <input type="number" name="income" class="form-control" placeholder="e.g. 150000"
+                                        onchange="calcIncomeSlab(this.value)">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Income Certificate?</label>
+                                    <select name="incomeCertificateAvailable" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Ration Card?</label>
+                                    <select name="rationCardAvailable" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Ration Type</label>
+                                    <select name="rationCardType" class="form-select">
+                                        <option value="APL">APL (Above Poverty)</option>
+                                        <option value="BPL">BPL (Below Poverty)</option>
+                                        <option value="AAY">AAY (Antyodaya)</option>
+                                        <option value="PHH">PHH</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 4. Education & Occupation -->
+                            <h6 class="text-secondary text-uppercase small fw-bold mb-3 border-bottom pb-2">4.
+                                Education
+                                & Work</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Education Level</label>
+                                    <select name="education" class="form-select">
+                                        <option value="Below 10th">Below 10th</option>
+                                        <option value="10th Pass">10th Pass</option>
+                                        <option value="12th Pass">12th Pass</option>
+                                        <option value="Graduate">Graduate</option>
+                                        <option value="Post Graduate">Post Graduate</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Occupation</label>
+                                    <select name="occupation" class="form-select"
+                                        onchange="toggleFarmerFields(this.value, 'farmer-fields')">
+                                        <option value="Student">Student</option>
+                                        <option value="Farmer">Farmer</option>
+                                        <option value="Daily Wage Worker">Daily Wage Worker</option>
+                                        <option value="Self Employed">Self Employed</option>
+                                        <option value="Salaried">Salaried</option>
+                                        <option value="Unemployed">Unemployed</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Govt Employee in Family?</label>
+                                    <select name="govtEmployeeInFamily" class="form-select">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Farmer Specific (Dynamic) -->
+                            <div id="farmer-fields" class="bg-light p-3 rounded mb-4" style="display:none;">
+                                <h6 class="text-success text-uppercase small fw-bold mb-3">Farmer Details</h6>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label small fw-bold">Own Land?</label>
+                                        <select name="ownAgriculturalLand" class="form-select">
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label small fw-bold">Land Size (Acres)</label>
+                                        <input type="number" name="landSizeAcres" class="form-control" step="0.1">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold">Tenant Farmer?</label>
+                                        <select name="isTenantFarmer" class="form-select">
+                                            <option value="No">No</option>
+                                            <option value="Yes">Yes</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label small fw-bold">Land Type</label>
+                                        <select name="landType" class="form-select">
+                                            <option value="">Select</option>
+                                            <option value="Irrigated">Irrigated</option>
+                                            <option value="Rainfed">Rainfed</option>
+                                            <option value="Dry">Dry</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 5. Family Background -->
+                            <h6 class="text-secondary text-uppercase small fw-bold mb-3 border-bottom pb-2">5.
+                                Family Background</h6>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Father's Occupation</label>
+                                    <select name="fatherOccupation" class="form-select">
+                                        <option value="Farmer">Farmer</option>
+                                        <option value="Daily Wage Worker">Daily Wage Worker</option>
+                                        <option value="Salaried">Salaried</option>
+                                        <option value="Self Employed">Self Employed</option>
+                                        <option value="Unemployed">Unemployed</option>
+                                        <option value="Deceased">Deceased</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Mother's Occupation</label>
+                                    <select name="motherOccupation" class="form-select">
+                                        <option value="Housewife">Housewife</option>
+                                        <option value="Farmer">Farmer</option>
+                                        <option value="Daily Wage Worker">Daily Wage Worker</option>
+                                        <option value="Salaried">Salaried</option>
+                                        <option value="Self Employed">Self Employed</option>
+                                        <option value="Deceased">Deceased</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold">Is Orphan?</label>
+                                    <select name="isOrphan" class="form-select">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="Briefly">Defunct/Semi-Orphan</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 6. Vulnerability & Other -->
+                            <h6 class="text-secondary text-uppercase small fw-bold mb-3 border-bottom pb-2">6. Other
+                                Details</h6>
+                            <div class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Disability?</label>
+                                    <select name="disability" class="form-select"
+                                        onchange="toggleDisability(this.value, 'disability-percent')">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Disability %</label>
+                                    <input type="number" name="disabilityPercentage" id="disability-percent"
+                                        class="form-control" disabled placeholder="e.g. 40">
+                                    <div class="form-text small" style="font-size: 0.75rem;">If applicable</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Bank Account?</label>
+                                    <select name="bankAccountAvailable" class="form-select">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Widow / Single Woman?</label>
+                                    <select name="isWidowSingleWoman" class="form-select">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mt-5 text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm">
+                                    <i class="fas fa-search me-2"></i> Find My Eligible Schemes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="eligibility-quick-match-container"
+                        style="display:none; text-align: center; padding: 2rem 0;">
+                        <div class="mb-4">
+                            <div class="display-1 text-primary mb-3"><i class="fas fa-user-check"></i></div>
+                            <h3 class="fw-bold">Your Profile is Ready!</h3>
+                            <p class="text-muted">Head to your dashboard to view personalized schemes.</p>
+                        </div>
+                        <button onclick="showPage('profile')"
+                            class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-lg fw-bold"
+                            style="font-size: 1.25rem;">
+                            <i class="fas fa-tachometer-alt me-2"></i> Go to My Dashboard
+                        </button>
+                        <div class="mt-4">
+                            <button onclick="toggleEligibilityForm(true)"
+                                class="btn btn-link text-secondary text-decoration-none">
+                                <i class="fas fa-edit me-1"></i> I want to update my details before searching
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End eligibility-page -->
+
+
+
+    <script>
+        // --- Helper Functions for Data Entry ---
+        function calculateAge(dob, targetId = 'calc-age') {
+            if (!dob) return;
+            const birthDate = new Date(dob);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            const target = document.getElementById(targetId);
+            if (target) target.value = age;
+        }
+
+        function toggleFarmerFields(occupation, targetId = 'farmer-fields') {
+            const el = document.getElementById(targetId);
+            const isFarmer = (occupation === 'Farmer' || occupation === 'Agriculturist' || occupation === 'Worker'); // Worker can also be agri worker
+            if (el) el.style.display = isFarmer ? 'block' : 'none';
+        }
+
+        function toggleDisability(val, targetId = 'disability-percent') {
+            const el = document.getElementById(targetId);
+            if (el) {
+                el.disabled = (val !== 'Yes');
+                if (val === 'No') el.value = '';
+            }
+        }
+
+        function toggleEligibilityForm(show) {
+            const formCard = document.getElementById('eligibility-form-card');
+            const resultsDiv = document.getElementById('eligibility-results');
+            const formContainer = document.getElementById('eligibility-form-container');
+            const quickMatchContainer = document.getElementById('eligibility-quick-match-container');
+
+            // If showing form, ensure results are hidden
+            if (show) {
+                if (formCard) formCard.style.display = 'block';
+                if (formContainer) formContainer.style.display = 'block';
+                if (quickMatchContainer) quickMatchContainer.style.display = 'none';
+                // Ensure we are on eligibility page
+                showPage('eligibility');
+            } else {
+                // Logic for "Form Disabled" / "Profile Ready" state
+                if (window.location.hash === '#eligibility') {
+                    if (formContainer) formContainer.style.display = 'none';
+                    if (quickMatchContainer) quickMatchContainer.style.display = 'block';
+                } else {
+                    // If called from dashboard to show results, hide the card entirely
+                    if (formCard) formCard.style.display = 'none';
+                }
+            }
+        }
+
+        // Init page - Check if profile exists
+        function initEligibilityPage() {
+            if (currentUser && currentUser.profile && currentUser.profile.state) {
+                // Show "Profile Ready" state
+                toggleEligibilityForm(false);
+            } else {
+                toggleEligibilityForm(true);
+            }
+        }
+
+        // Call this when navigating to eligibility page
+        window.addEventListener('hashchange', () => {
+            if (window.location.hash === '#eligibility') {
+                initEligibilityPage();
+            }
+        });
+
+        // Also run on initial page load if already on eligibility
+        if (window.location.hash === '#eligibility') {
+            setTimeout(() => initEligibilityPage(), 500);
+        }
+
+        // Trigger on DOM ready as well
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash === '#eligibility') {
+                setTimeout(() => initEligibilityPage(), 800);
+            }
+        });
+
+
+    </script>
+    </div><!-- Final explicit closure of any leaky containers -->
+
+    <!-- Main Container for Schemes & Profile -->
+    <div class="container flex-grow-1 py-4">
+        <!-- SCHEMES PAGE -->
+        <div id="schemes-page" class="page-section" style="display:none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-list-alt me-2"></i>Government Schemes</h2>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <input type="text" id="search-input" class="form-control" placeholder="Search schemes...">
+                        </div>
+                        <div class="col-md-3">
+                            <select id="category-filter" class="form-select">
+                                <option value="All">All Categories</option>
+                                <option value="Agriculture">Agriculture</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                                <option value="Housing">Housing</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="state-filter" class="form-select">
+                                <option value="All">All States</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Karnataka">Karnataka</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-primary w-100" onclick="loadSchemes()"><i
+                                    class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="schemes-list" class="row g-4"></div>
+        </div>
+
+        <!-- PROFILE PAGE (DASHBOARD) -->
+        <div id="profile-page" class="page-section" style="display:none;">
+            <!-- Dedicated Prompt Area -->
+            <div id="profile-view-container"></div>
+
+            <div id="profile-main-content" class="dashboard-container">
+                <!-- Dashboard Toggle Navigation -->
+                <div class="container mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="dashboard-nav-pills bg-white p-1 rounded-pill shadow-sm border">
+                            <button id="btn-view-summary" onclick="toggleDashboardView('summary')" class="btn btn-primary rounded-pill px-4">Summary</button>
+                            <button id="btn-view-edit" onclick="toggleDashboardView('edit')" class="btn btn-link text-secondary text-decoration-none rounded-pill px-4">Edit Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1. DASHBOARD SUMMARY VIEW -->
+                <div id="dashboard-summary-view">
+                    <!-- Dashboard Hero Banner -->
+                    <div class="container mb-5">
+                        <div class="dashboard-hero">
+                            <div class="hero-dot-grid"></div>
+
+                            <div class="hero-left">
+                                <div class="hero-avatar-wrap">
+                                    <img src="" id="dash-user-avatar" alt="Avatar" onerror="this.style.display='none'; document.getElementById('dash-user-initials').style.display='flex';">
+                                    <div id="dash-user-initials" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-weight:800;">YM</div>
+                                    <div class="hero-online-dot"></div>
+                                </div>
+                                <div class="hero-user-info">
+                                    <div class="hero-welcome-text" id="dash-user-name">Welcome</div>
+                                    <div class="hero-location">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        <span id="dash-user-location">Location not set</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="hero-tip-pill">
+                                <div class="hero-tip-accent"></div>
+                                <div class="hero-tip-content">
+                                    <div class="hero-tip-label">Daily Tip</div>
+                                    <div class="hero-tip-text" id="dash-daily-tip">Check the 'What's New' section daily for the latest government announcements.</div>
+                                </div>
+                            </div>
+
+                            <div class="hero-right">
+                                <div class="hero-stats-row">
+                                    <div class="hero-stat-chip">
+                                        <div class="hero-stat-num" id="stat-total-matches-hero">0</div>
+                                        <div class="hero-stat-lbl">Matched Schemes</div>
+                                    </div>
+                                    <div class="hero-divider"></div>
+                                    <div class="hero-stat-chip">
+                                        <div class="hero-stat-num" id="stat-eligibility-score-hero">0%</div>
+                                        <div class="hero-stat-lbl">Eligibility Score</div>
+                                    </div>
+                                </div>
+                                <button class="hero-cta-btn" onclick="document.getElementById('dash-matched-list').scrollIntoView({behavior: 'smooth'})">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                    Check Readiness Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container mb-5">
+                        <div class="row g-4">
+                            <!-- News & Announcements -->
+                            <div class="col-lg-6">
+                                <div class="dash-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h5 class="fw-bold text-dark mb-0"><i class="fas fa-newspaper text-primary me-2"></i>What's New</h5>
+                                        <span class="badge bg-primary rounded-pill">3 New Updates</span>
+                                    </div>
+                                    <div id="dash-news-list">
+                                        <div class="news-card">
+                                            <div class="small text-muted mb-1">2 Hours Ago</div>
+                                            <div class="fw-bold text-dark small">New Scholarship for Rural Students launched in Karnataka</div>
+                                        </div>
+                                        <div class="news-card">
+                                            <div class="small text-muted mb-1">Yesterday</div>
+                                            <div class="fw-bold text-dark small">Deadline extended for PM-Kisan verification (E-KYC)</div>
+                                        </div>
+                                        <div class="news-card">
+                                            <div class="small text-muted mb-1">3 Days Ago</div>
+                                            <div class="fw-bold text-dark small">Introduction of 'Scheme Mitra' AI Chatbot in multiple languages</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Next Steps / Checklist -->
+                            <div class="col-lg-6">
+                                <div class="dash-card">
+                                    <h5 class="fw-bold text-dark mb-4"><i class="fas fa-tasks text-success me-2"></i>Your Next Steps</h5>
+                                    <div class="checklist-item">
+                                        <div class="check-circle completed"><i class="fas fa-check"></i></div>
+                                        <div>
+                                            <div class="fw-bold text-dark small">Basic Profile Completed</div>
+                                            <div class="text-muted" style="font-size: 0.7rem;">Verified Identity & Contact Info</div>
+                                        </div>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div class="check-circle completed"><i class="fas fa-check"></i></div>
+                                        <div>
+                                            <div class="fw-bold text-dark small">Eligibility Analysis Done</div>
+                                            <div class="text-muted" style="font-size: 0.7rem;">Discovered matching schemes</div>
+                                        </div>
+                                    </div>
+                                    <div class="checklist-item">
+                                        <div id="checklist-apply" class="check-circle"><i class="fas fa-arrow-right"></i></div>
+                                        <div>
+                                            <div class="fw-bold text-dark small">Apply for Your First Scheme</div>
+                                            <div class="text-muted" style="font-size: 0.7rem;">Get the benefits you deserve</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="row g-4">
+                            <!-- Stats Column -->
+                            <div class="col-lg-8">
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-4">
+                                        <div class="dash-card">
+                                            <div class="stat-icon-wrapper" style="background: #eff6ff; color: #2563eb;">
+                                                <i class="fas fa-check-double"></i>
+                                            </div>
+                                            <div class="stat-label-small">Matched Schemes</div>
+                                            <div class="stat-value-large" id="stat-total-matches">0</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="dash-card">
+                                            <div class="stat-icon-wrapper" style="background: #eff6ff; color: #2563eb;">
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="stat-label-small">Eligibility Score</div>
+                                            <div class="stat-value-large" id="stat-eligibility-score">0%</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="dash-card">
+                                            <div class="stat-icon-wrapper" style="background: #eff6ff; color: #2563eb;">
+                                                <i class="fas fa-file-export"></i>
+                                            </div>
+                                            <div class="stat-label-small">Applied</div>
+                                            <div class="stat-value-large" id="stat-schemes-applied">0</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Matched Schemes List -->
+                                <div class="dash-card mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h5 class="fw-bold text-dark mb-0">Recommended Schemes</h5>
+                                        <a href="#" onclick="showPage('eligible-schemes')" class="small fw-bold text-primary text-decoration-none">See All <i class="fas fa-arrow-right ms-1"></i></a>
+                                    </div>
+                                    <div id="dash-matched-list">
+                                        <!-- Populated by JS -->
+                                        <div class="text-center py-5 text-muted">
+                                            <i class="fas fa-search-plus fa-3x mb-3 opacity-25"></i>
+                                            <p>Analyzing matching schemes for your profile...</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Recent Matches / History -->
+                                <div class="dash-card">
+                                    <h5 class="fw-bold text-dark mb-4">Discovery Status</h5>
+                                    <div id="dash-recent-list">
+                                        <!-- Populated by JS -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sidebar Column (Score Card) -->
+                            <div class="col-lg-4">
+                                <div class="dash-card text-center mb-4">
+                                    <h5 class="fw-bold text-dark mb-4">Your Profile Score</h5>
+                                    <div class="score-circle-wrapper">
+                                        <svg class="score-svg" viewBox="0 0 100 100" width="160" height="160">
+                                            <circle class="score-bg" cx="50" cy="50" r="45"></circle>
+                                            <circle class="score-progress" id="score-progress-circle" cx="50" cy="50" r="45" stroke-dasharray="282.7" stroke-dashoffset="282.7"></circle>
+                                        </svg>
+                                        <div class="score-text">
+                                            <div class="score-number" id="dash-score-num">0</div>
+                                            <div class="score-label">OUT OF 100</div>
+                                        </div>
+                                    </div>
+                                    <p class="text-muted small mb-4">Your eligibility score has improved by <strong class="text-success">+12%</strong> this month based on updated profile details.</p>
+                                    <button class="btn btn-primary w-100 rounded-pill py-2 fw-bold" onclick="toggleDashboardView('edit')">
+                                        Improve Score <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Document Vault Quick Link -->
+                                <div class="dash-card bg-white border" style="box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="stat-icon-wrapper bg-primary bg-opacity-10 text-primary mb-0">
+                                            <i class="fas fa-handshake"></i>
+                                        </div>
+                                        <div class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1 fw-bold" style="font-size: 0.7rem;">
+                                            SECURE VAULT
+                                        </div>
+                                    </div>
+                                    <h5 class="fw-bold text-dark mb-2">My Document Vault</h5>
+                                    <p class="small text-muted mb-4 text-balance">Securely store and manage your official documents for quick applications.</p>
+                                    <a href="/vault.html" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm">
+                                        Open Vault <i class="fas fa-external-link-alt ms-2 small"></i>
+                                    </a>
+                                </div>
+
+                                <!-- Community Insights (New) -->
+                                <div class="dash-card mt-4">
+                                    <h6 class="fw-bold text-dark mb-3"><i class="fas fa-users text-primary me-2"></i>Community Insights</h6>
+                                    <div class="community-insight-pill">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>1.2k recently applied in your area</span>
+                                    </div>
+                                    <div class="community-insight-pill" style="background: rgba(16, 185, 129, 0.05); color: #059669; border-color: rgba(16, 185, 129, 0.1);">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Avg. approval time: 14 days</span>
+                                    </div>
+                                    <p class="text-muted extra-small mt-2 mb-0" style="font-size: 0.7rem;">Real-time data based on recent community activity.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Detailed Matching Schemes Section (Restored) -->
+                        <div class="mt-5 pt-4 border-top">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <h4 class="fw-bold text-dark mb-1">Eligible Schemes & Discovery</h4>
+                                    <p class="text-muted small mb-0">Based on your detailed profile analysis and readiness check.</p>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button onclick="localStorage.removeItem('yojanamitra_applied'); alert('Applications reset! Refreshing...'); window.location.reload();" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1" style="font-size: 0.8rem;">
+                                        <i class="fas fa-undo-alt me-1"></i>Reset Applied
+                                    </button>
+                                    <span class="badge bg-blue-100 text-blue-800 rounded-pill px-3 py-2" id="dash-match-count-badge" style="background: #eff6ff; color: #1e40af;">0 Schemes Matched</span>
+                                </div>
+                            </div>
+                            
+                            <div id="dashboard-detailed-matches" class="row g-4">
+                                <!-- Detailed Cards Populated by JS -->
+                                <div class="col-12 text-center py-5">
+                                    <div class="spinner-border text-primary opacity-25" role="status"></div>
+                                    <p class="mt-3 text-muted">Refreshing your matches...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- End Container -->
+                </div><!-- End dashboard-summary-view -->
+
+                <!-- 2. PROFILE EDIT VIEW (Current Form) -->
+                <div id="dashboard-edit-view" style="display:none;">
+                    <div class="container py-4">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10">
+                                <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden;">
+                                    <div class="card-header py-4 px-4 bg-white border-bottom">
+                                        <h4 class="mb-0 text-dark fw-bold"><i class="fas fa-user-edit me-2 text-primary"></i>Update Your Profile</h4>
+                                        <p class="mb-0 text-muted small mt-1">Keep your details current to get the best scheme matches.</p>
+                                    </div>
+                                    <div class="card-body p-4 p-md-5">
+                                        <form id="profile-form">
+                                            <!-- Existing form content inside -->
+                                            <!-- (Wait, I need to make sure I don't lose the existing fields) -->
+                                            <!-- I will re-insert the form fields here in a sub-step or as one big block -->
+                                    <!-- 1. Identity & Demographics -->
+                                    <h5 class="fw-bold text-dark mb-3"
+                                        style="color: #1e293b; border-bottom: 2px solid #eff6ff; padding-bottom: 0.5rem;">
+                                        <i class="fas fa-id-card me-2 text-primary"></i>1. Identity & Demographics
+                                    </h5>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Full Name</label>
+                                            <input type="text" class="form-control" name="name"
+                                                style="background-color: #ffffff;">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Email</label>
+                                            <input type="email" class="form-control" name="email"
+                                                style="background-color: #ffffff;">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Mobile Number</label>
+                                            <input type="tel" class="form-control" name="mobile"
+                                                style="background-color: #ffffff;">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Date of Birth</label>
+                                            <input type="date" name="dob" class="form-control"
+                                                onchange="calculateAge(this.value, 'profile-age')">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label fw-semibold small">Age</label>
+                                            <input type="number" name="age" id="profile-age" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-semibold small">Gender</label>
+                                            <select name="gender" class="form-select">
+                                                <option value="">Select</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-semibold small">Marital Status</label>
+                                            <select name="maritalStatus" class="form-select">
+                                                <option value="">Select</option>
+                                                <option value="Single">Single</option>
+                                                <option value="Married">Married</option>
+                                                <option value="Widowed">Widowed</option>
+                                                <option value="Divorced">Divorced</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2. Location & Residence -->
+                                    <h5 class="fw-bold text-dark mb-3"
+                                        style="color: #1e293b; border-bottom: 2px solid #eff6ff; padding-bottom: 0.5rem;">
+                                        <i class="fas fa-map-marker-alt me-2 text-primary"></i>2. Location & Residence
+                                    </h5>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">State</label>
+                                            <select name="state" id="profile-state-select" class="form-select"
+                                                onchange="populateDistricts(this.value, 'profile-district-select', 'profile-taluk-select')">
+                                                <option value="">Select State</option>
+                                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                                <option value="Karnataka">Karnataka</option>
+                                                <option value="Maharashtra">Maharashtra</option>
+                                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                                <option value="Delhi">Delhi</option>
+                                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">District</label>
+                                            <select name="district" id="profile-district-select" class="form-select"
+                                                onchange="populateTaluks(this.value, 'profile-taluk-select', 'profile-state-select')">
+                                                <option value="">Select District</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Taluk</label>
+                                            <select name="blockTaluk" id="profile-taluk-select" class="form-select">
+                                                <option value="">Select Taluk</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Residence Type</label>
+                                            <select name="residence" class="form-select">
+                                                <option value="Rural">Rural</option>
+                                                <option value="Urban">Urban</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Domicile Certificate?</label>
+                                            <select name="domicileStatus" class="form-select">
+                                                <option value="Yes">Yes</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- 3. Family & Income -->
+                                    <h5 class="fw-bold text-dark mb-3"
+                                        style="color: #1e293b; border-bottom: 2px solid #eff6ff; padding-bottom: 0.5rem;">
+                                        <i class="fas fa-users me-2 text-primary"></i>3. Family & Income
+                                    </h5>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Caste Category</label>
+                                            <select name="caste" class="form-select">
+                                                <option value="General">General</option>
+                                                <option value="OBC">OBC</option>
+                                                <option value="SC">SC</option>
+                                                <option value="ST">ST</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Annual Income (₹)</label>
+                                            <input type="number" name="income" class="form-control">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Ration Card Type</label>
+                                            <select name="rationCardType" class="form-select">
+                                                <option value="None">None</option>
+                                                <option value="APL">APL</option>
+                                                <option value="BPL">BPL</option>
+                                                <option value="AAY">AAY</option>
+                                                <option value="PHH">PHH</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Minority Status?</label>
+                                            <select name="minorityStatus" class="form-select">
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">BPL/EWS Card?</label>
+                                            <select name="ewsStatus" class="form-select">
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Religion</label>
+                                            <select name="religion" class="form-select">
+                                                <option value="Hindu">Hindu</option>
+                                                <option value="Muslim">Muslim</option>
+                                                <option value="Christian">Christian</option>
+                                                <option value="Sikh">Sikh</option>
+                                                <option value="Buddhist">Buddhist</option>
+                                                <option value="Jain">Jain</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- 4. Family Background -->
+                                    <h5 class="fw-bold text-dark mb-3"
+                                        style="color: #1e293b; border-bottom: 2px solid #eff6ff; padding-bottom: 0.5rem;">
+                                        <i class="fas fa-id-card-alt me-2 text-primary"></i>4. Family Background
+                                    </h5>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Father's Occupation</label>
+                                            <select name="fatherOccupation" class="form-select">
+                                                <option value="None">None/Other</option>
+                                                <option value="Government">Government Employee</option>
+                                                <option value="Private">Private Sector</option>
+                                                <option value="Farmer">Farmer</option>
+                                                <option value="Artisan">Artisan/Handicraft</option>
+                                                <option value="Weaver">Weaver/Handloom</option>
+                                                <option value="Laborer">Laborer</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Mother's Occupation</label>
+                                            <select name="motherOccupation" class="form-select">
+                                                <option value="Homemaker">Homemaker</option>
+                                                <option value="Government">Government Employee</option>
+                                                <option value="Private">Private Sector</option>
+                                                <option value="Farmer">Farmer</option>
+                                                <option value="Artisan">Artisan/Handicraft</option>
+                                                <option value="Weaver">Weaver/Handloom</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Is Tribal Community?</label>
+                                            <select name="isTribal" class="form-select">
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Is Orphan?</label>
+                                            <select name="isOrphan" class="form-select">
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Agricultural Land Type</label>
+                                            <select name="landType" class="form-select">
+                                                <option value="None">No Land</option>
+                                                <option value="Dry">Dry Land</option>
+                                                <option value="Wet">Wet/Irrigated</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- 5. Education & Work -->
+                                    <h5 class="fw-bold text-dark mb-3"
+                                        style="color: #1e293b; border-bottom: 2px solid #eff6ff; padding-bottom: 0.5rem;">
+                                        <i class="fas fa-briefcase me-2 text-primary"></i>5. Education & Work
+                                    </h5>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Education</label>
+                                            <select name="education" class="form-select">
+                                                <option value="Below 10th">Below 10th</option>
+                                                <option value="10th Pass">10th Pass</option>
+                                                <option value="12th Pass">12th Pass</option>
+                                                <option value="Graduate">Graduate</option>
+                                                <option value="Post Graduate">Post Graduate</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Occupation</label>
+                                            <select name="occupation" class="form-select"
+                                                onchange="toggleFarmerFields(this.value, 'profile-farmer-fields')">
+                                                <option value="Student">Student</option>
+                                                <option value="Farmer">Farmer</option>
+                                                <option value="Worker">Daily Wage Worker</option>
+                                                <option value="Self Employed">Self Employed</option>
+                                                <option value="Unemployed">Unemployed</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div id="profile-farmer-fields" class="bg-light p-3 rounded mb-4"
+                                        style="display:none;">
+                                        <h6 class="text-success small fw-bold mb-3">Farmer Specifics</h6>
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label small">Own Agricultural Land?</label>
+                                                <select name="isFarmer" class="form-select">
+                                                    <option value="No">No</option>
+                                                    <option value="Yes">Yes</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small">Land Size (Acres)</label>
+                                                <input type="number" name="landSizeAcres" class="form-control"
+                                                    step="0.1">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 6. Vulnerability -->
+                                    <h5 class="fw-bold text-dark mb-3"
+                                        style="color: #1e293b; border-bottom: 2px solid #eff6ff; padding-bottom: 0.5rem;">
+                                        <i class="fas fa-wheelchair me-2 text-primary"></i>6. Vulnerability & Extra
+                                    </h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Physically Disabled?</label>
+                                            <select name="disability" class="form-select"
+                                                onchange="toggleDisability(this.value, 'profile-disability-percent')">
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Disability %</label>
+                                            <input type="number" name="disabilityPercentage"
+                                                id="profile-disability-percent" class="form-control" disabled>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold small">Widow / Single Woman?</label>
+                                            <select name="isWidowSingleWoman" class="form-select">
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end pt-4 mt-4 border-top">
+                                        <button type="submit" class="btn btn-primary px-5 py-2 fw-bold"
+                                            style="border-radius: 8px;">
+                                            <i class="fas fa-save me-2"></i>Save Final Profile
+                                        </button>
+                                    </div>
+                                </form>
+                            </div><!-- End Card Body -->
+                        </div><!-- End Card -->
+                    </div><!-- End Col -->
+                </div><!-- End Row -->
+            </div><!-- End Container -->
+        </div><!-- End dashboard-edit-view -->
+    </div><!-- End profile-main-content -->
+</div><!-- End profile-page -->
+
+    <!-- Benefit Analysis Modal (Multi-Mode: Advisor & Conflict) -->
+    <div class="modal fade" id="benefitAnalysisModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg overflow-hidden" style="border-radius: 20px;">
+                <div id="comp-modal-header" class="modal-header border-0 p-4" style="background: #f8fafc;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div id="comp-icon-box" class="bg-primary bg-opacity-10 p-2 rounded-3">
+                            <i id="comp-icon" class="fas fa-balance-scale text-primary"></i>
+                        </div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="comp-modal-title">Benefit Advisor</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-4">
+                        <div id="comp-main-icon-container">
+                            <i id="comp-main-icon"
+                                class="fas fa-lightbulb text-warning fa-3x mb-3 animate__animated animate__pulse animate__infinite"></i>
+                        </div>
+                        <h5 class="fw-bold" id="comp-main-title">Wait! Better Value Detected</h5>
+                        <p class="text-muted small" id="comp-main-subtitle">We analyzed your profile and found a
+                            potentially better alternative.</p>
+                    </div>
+
+                    <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
+                        <div class="p-3 border rounded bg-light" style="width: 46%; opacity: 0.7;">
+                            <small class="d-block text-muted mb-1">Current Choice</small>
+                            <span class="fw-bold text-dark small d-block text-truncate" id="comp-target-name">Target
+                                Scheme</span>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-2">
+                            <i class="fas fa-exchange-alt text-primary small"></i>
+                        </div>
+                        <div class="p-3 border rounded bg-white border-primary shadow-sm" style="width: 46%;">
+                            <small class="d-block text-primary mb-1 fw-bold">Recommended</small>
+                            <span class="fw-bold text-dark small d-block text-truncate" id="comp-alt-name">Alternative
+                                Scheme</span>
+                        </div>
+                    </div>
+
+                    <div id="comp-alert-box" class="alert alert-info small text-start border-0 shadow-sm mb-4">
+                        <i id="comp-alert-icon" class="fas fa-info-circle me-2"></i><span id="comp-alt-reason">This
+                            scheme offers higher coverage.</span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button id="comp-btn-switch" class="btn btn-primary fw-bold py-2 shadow-sm"
+                            style="border-radius: 10px;">
+                            Check Recommended Scheme
+                        </button>
+                        <button id="comp-btn-proceed" class="btn btn-link text-secondary text-decoration-none small">
+                            No thanks, continue to application
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN PAGE - Brickshare Style -->
+    <div id="login-page" class="page-section" style="display:none; padding: 0;">
+        <div class="auth-brickshare">
+            <!-- Left: Image -->
+            <div class="brick-left">
+                <img src="static/img/login.png" alt="Government Building" onerror="this.style.display='none'">
+            </div>
+
+            <!-- Right: Form -->
+            <div class="brick-right">
+                <div class="brick-logo">
+                    <div class="brick-logo-icon">YM</div>
+                    <span>Yojana Mitra</span>
+                </div>
+
+                <h1 class="brick-title">Welcome to <span class="blue">Yojana Mitra</span></h1>
+                <p class="brick-subtitle">Access comprehensive government schemes with a single secure profile.</p>
+
+                <form id="login-form" class="brick-form" novalidate autocomplete="off">
+                    <!-- Error Message Container -->
+                    <div id="login-message" class="alert small mb-3 text-center" style="display:none;"></div>
+
+                    <div class="brick-input-wrapper">
+                        <i class="far fa-envelope brick-input-icon"></i>
+                        <input type="email" name="email" class="brick-input" placeholder="Enter your email" required
+                            autocomplete="off">
+                    </div>
+
+                    <div class="brick-input-wrapper">
+                        <i class="fas fa-lock brick-input-icon"></i>
+                        <input type="password" name="password" class="brick-input" placeholder="..........." required
+                            autocomplete="new-password">
+                    </div>
+
+                    <div class="brick-actions">
+                        <label class="brick-remember">
+                            <input type="checkbox"> Remember me
+                        </label>
+                        <span class="brick-forgot">Forgot password?</span>
+                    </div>
+
+                    <button type="submit" class="btn-brick-primary">Login</button>
+                </form>
+
+                <div class="brick-divider">Or login with</div>
+
+                <div class="brick-social">
+                    <button class="brick-social-btn"><i class="fab fa-facebook"></i> Facebook</button>
+                    <button class="brick-social-btn"><i class="fab fa-linkedin"></i> LinkedIn</button>
+                    <button class="brick-social-btn" onclick="initiateGoogleLogin()" type="button"><i
+                            class="fab fa-google"></i> Google</button>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem; color: #94a3b8;">
+                    New on our platform? <button onclick="showPage('register')"
+                        style="background: none; border: none; color: #2563eb; font-weight: 600; cursor: pointer;">Create
+                        profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- REGISTER PAGE - Brickshare Style -->
+    <div id="register-page" class="page-section" style="display:none; padding: 0;">
+        <div class="auth-brickshare">
+            <!-- Left: Image -->
+            <div class="brick-left">
+                <img src="static/img/register.png" alt="Government Building" onerror="this.style.display='none'">
+            </div>
+
+            <!-- Right: Form -->
+            <div class="brick-right">
+                <div class="brick-logo">
+                    <div class="brick-logo-icon">YM</div>
+                    <span>Yojana Mitra</span>
+                </div>
+
+                <h1 class="brick-title">Join <span class="blue">Yojana Mitra</span></h1>
+                <p class="brick-subtitle">Create an account to discover schemes tailored just for you</p>
+
+                <form id="register-form" class="brick-form" novalidate autocomplete="off">
+                    <!-- Error Message Container -->
+                    <div id="register-message" class="alert small mb-3 text-center" style="display:none;"></div>
+
+                    <div class="brick-input-wrapper">
+                        <i class="far fa-user brick-input-icon"></i>
+                        <input type="text" name="name" class="brick-input" placeholder="Full Name" required
+                            autocomplete="off">
+                    </div>
+
+                    <div class="brick-input-wrapper">
+                        <i class="far fa-envelope brick-input-icon"></i>
+                        <input type="email" name="email" class="brick-input" placeholder="Email Address" required
+                            autocomplete="off">
+                    </div>
+
+                    <div class="brick-input-wrapper">
+                        <i class="fas fa-phone brick-input-icon"></i>
+                        <input type="tel" name="mobile" class="brick-input" placeholder="Mobile Number" required
+                            autocomplete="off">
+                    </div>
+
+                    <div class="brick-input-wrapper">
+                        <i class="fas fa-lock brick-input-icon"></i>
+                        <input type="password" name="password" class="brick-input" placeholder="Create Password"
+                            required autocomplete="new-password">
+                    </div>
+
+                    <button type="submit" class="btn-brick-primary">Create Account</button>
+                </form>
+
+                <div style="text-align: center; margin-top: 2rem; color: #94a3b8;">
+                    Already have an account? <button onclick="showPage('login')"
+                        style="background: none; border: none; color: #2563eb; font-weight: 600; cursor: pointer;">Sign
+                        In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Admin Panel is now in admin.html -->
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Global Chatbot -->
+    <script src="js/chatbot.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // --- State Management ---
+        let currentUser = null;
+        let isAdmin = false;
+
+        // --- Navigation ---
+        function showPage(pageId) {
+            // Hide all page sections and remove active class
+            document.querySelectorAll('.page-section').forEach(el => {
+                el.style.display = 'none';
+                el.classList.remove('active');
+            });
+
+            const targetPage = document.getElementById(pageId + '-page');
+            if (targetPage) {
+                targetPage.style.display = 'block';
+                // Trigger reflow for animation
+                void targetPage.offsetWidth;
+                targetPage.classList.add('active');
+            }
+
+            const navbarCollapse = document.getElementById('navbarNav');
+            if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                new bootstrap.Collapse(navbarCollapse).hide();
+            }
+
+            if (pageId === 'schemes') loadSchemes();
+            if (pageId === 'profile') loadProfile();
+            if (pageId === 'eligibility') {
+                // Conditional View: if logged in and profile has at least state/age
+                if (currentUser && currentUser.profile && currentUser.profile.state) {
+                    toggleEligibilityForm(false); // Shows "Profile Ready" -> Go to Dashboard
+                } else {
+                    toggleEligibilityForm(true);
+                }
+            }
+        }
+
+        function updateAuthUI() {
+            if (isAdmin) {
+                document.querySelectorAll('.guest-only, .user-only').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+            } else if (currentUser) {
+                document.querySelectorAll('.guest-only, .admin-only').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.user-only').forEach(el => el.style.display = 'block');
+            } else {
+                document.querySelectorAll('.user-only, .admin-only').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.guest-only').forEach(el => el.style.display = 'block');
+            }
+        }
+
+        // --- Authentication ---
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/user');
+                if (res.ok) {
+                    const data = await res.json();
+                    currentUser = data.user;
+                    isAdmin = false;
+                } else {
+                    currentUser = null;
+                    isAdmin = false;
+                }
+                updateAuthUI();
+            } catch (e) {
+                console.error("Auth check failed", e);
+            }
+        }
+
+        // --- Google Authentication Handler ---
+        function initiateGoogleLogin() {
+            // IMPORTANT: Replace this with your real Google Client ID from Google Cloud Console
+            // Currently using a placeholder which will cause "Something went wrong" in the Google Popup.
+            const clientId = "PLACEHOLDER_CLIENT_ID.apps.googleusercontent.com";
+
+            if (clientId.includes("PLACEHOLDER")) {
+                alert("Google Login is not configured yet. \n\nTo enable this, you must: \n1. Go to Google Cloud Console \n2. Create a Project and OAuth 2.0 Client ID \n3. Replace 'PLACEHOLDER' with your real ID in index.html line 1473.");
+                return;
+            }
+
+            try {
+                google.accounts.id.initialize({
+                    client_id: clientId,
+                    callback: handleCredentialResponse
+                });
+                google.accounts.id.prompt();
+            } catch (err) {
+                console.error("Google script error:", err);
+                alert("Could not initialize Google Login. Please ensure you are running on a valid domain (e.g., localhost or a public URL).");
+            }
+        }
+
+        async function handleCredentialResponse(response) {
+            const msgId = 'login-message';
+            try {
+                const res = await fetch('/api/auth/google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ credential: response.credential })
+                });
+
+                if (res.ok) {
+                    const result = await res.json();
+                    showMessage(msgId, 'Google Login Successful!', 'success');
+                    currentUser = result.user;
+                    isAdmin = false;
+                    setTimeout(() => {
+                        updateAuthUI();
+                        showPage('profile');
+                        document.getElementById(msgId).style.display = 'none';
+                    }, 1000);
+                } else {
+                    const result = await res.json();
+                    showMessage(msgId, result.error || 'Google login failed');
+                }
+            } catch (e) {
+                console.error("Google Auth failed", e);
+                showMessage(msgId, "Google Authentication Service Unavailable");
+            }
+        }
+
+        // Helper to show inline messages
+        function showMessage(elementId, msg, type = 'error') {
+            const el = document.getElementById(elementId);
+            el.textContent = msg;
+            el.style.display = 'block';
+            el.className = `alert small mb-3 text-center ${type === 'success' ? 'alert-success' : 'alert-danger'}`;
+        }
+
+        document.getElementById('login-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const msgId = 'login-message';
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Simple Validation
+            if (!data.email || !data.password) {
+                showMessage(msgId, 'Please fill in all fields');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!res.ok) {
+                    try {
+                        const result = await res.json();
+                        showMessage(msgId, result.error || 'Login failed');
+                    } catch (jsonErr) {
+                        console.error('Server response (non-JSON):', await res.text());
+                        showMessage(msgId, `Server error (${res.status}). Check if backend is running.`);
+                    }
+                    return;
+                }
+
+                const result = await res.json();
+                showMessage(msgId, 'Login Successful!', 'success');
+                currentUser = result.user;
+                isAdmin = false;
+                setTimeout(() => {
+                    updateAuthUI();
+                    showPage('profile');
+                    document.getElementById(msgId).style.display = 'none';
+                }, 1000);
+            } catch (e) {
+                console.error('Login error:', e);
+                if (e.name === 'TypeError' && e.message.includes('fetch')) {
+                    showMessage(msgId, 'Cannot connect to server. Is the backend running on port 5000?');
+                } else {
+                    showMessage(msgId, 'Network error: ' + e.message);
+                }
+            }
+        };
+
+        document.getElementById('register-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const msgId = 'register-message';
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Validation
+            if (!data.name || !data.email || !data.password) {
+                showMessage(msgId, 'Please fill in all required fields');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!res.ok) {
+                    try {
+                        const result = await res.json();
+                        showMessage(msgId, result.error || 'Registration failed');
+                    } catch (jsonErr) {
+                        console.error('Server response (non-JSON):', jsonErr);
+                        showMessage(msgId, `Server error (${res.status}). Check if backend is running.`);
+                    }
+                    return;
+                }
+
+                const result = await res.json();
+                showMessage(msgId, 'Registration Successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    showPage('login');
+                    document.getElementById(msgId).style.display = 'none';
+                }, 1500);
+            } catch (e) {
+                console.error('Registration error:', e);
+                if (e.name === 'TypeError' && e.message.includes('fetch')) {
+                    showMessage(msgId, 'Cannot connect to server. Is the backend running on port 5000?');
+                } else {
+                    showMessage(msgId, 'Network error: ' + e.message);
+                }
+            }
+        };
+
+        async function logout() {
+            await fetch('/api/logout');
+            currentUser = null;
+            isAdmin = false;
+            updateAuthUI();
+            window.location.href = '/index.html';
+        }
+
+        // Wrapper function for navbar logout button
+        function handleLogout() {
+            // Clear form inputs to prevent login issues
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) loginForm.reset();
+            const loginMsg = document.getElementById('login-message');
+            if (loginMsg) loginMsg.style.display = 'none';
+
+            logout();
+        }
+
+        // --- Eligibility Checker ---
+        // --- Eligibility Checker Form Submit -> Save Profile & Redirect ---
+        document.getElementById('eligibility-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Convert numeric fields
+            data.age = parseInt(data.age);
+            data.income = parseInt(data.income);
+
+            const container = document.getElementById('eligibility-form-container');
+            const originalContent = container.innerHTML;
+            container.innerHTML = '<div class="text-center py-5"><div class="spinner-border text-primary"></div><p class="mt-2">Saving Profile...</p></div>';
+
+            try {
+                // 1. Update Profile First
+                const res = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    const result = await res.json();
+                    currentUser = result.user; // Update session
+
+                    // 2. Show Success & Redirect Option (Disable Page)
+                    container.innerHTML = `
+                        <div class="text-center py-5">
+                            <div class="mb-4 text-success display-1"><i class="fas fa-check-circle"></i></div>
+                            <h3 class="fw-bold">Profile Saved Successfully!</h3>
+                            <p class="text-muted mb-4">Your details have been updated. You can now view all eligible schemes in your dashboard.</p>
+                            <button onclick="showPage('profile')" class="btn btn-primary btn-lg rounded-pill shadow px-5">
+                                <i class="fas fa-columns me-2"></i> Go to My Dashboard
+                            </button>
+                        </div>
+                    `;
+                    // Ensure form card is visible (it should be)
+                } else {
+                    throw new Error('Profile save failed');
+                }
+
+            } catch (e) {
+                console.error("Profile save error:", e);
+                container.innerHTML = originalContent; // Revert
+                alert('Error saving profile. Please try again.');
+                // Re-attach listener? No, innerHTML wiped it. Ideally we should have used a separate overlay.
+                // Reloading page simplest fallback for error here or just alert.
+                // Keeping it simple: alert and restore is tricky without re-rendering. 
+                // Better to just alert and NOT wipe innerHTML first.
+                // Updated logic: Don't wipe until success.
+            }
+        };
+
+        // Redefine safely
+        document.getElementById('eligibility-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = e.submitter;
+            const originalText = btn.innerHTML;
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // --- Client-Side Validation ---
+            const requiredFields = ['name', 'age', 'income', 'caste', 'state', 'district', 'occupation'];
+            const missing = requiredFields.filter(field => !data[field] || data[field].toString().trim() === '');
+
+            if (missing.length > 0) {
+                alert(`Please fill in all required fields:\n- ${missing.join('\n- ')}`);
+                return;
+            }
+
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Saving...';
+            btn.disabled = true;
+
+            data.age = parseInt(data.age);
+            data.income = parseInt(data.income);
+
+            try {
+                const res = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    const result = await res.json();
+                    currentUser = result.user;
+
+                    // Disable Page / Show Success
+                    const container = document.getElementById('eligibility-form-container');
+                    container.innerHTML = `
+                        <div class="text-center py-5 animate__animated animate__fadeIn">
+                            <div class="mb-3 text-success" style="font-size: 4rem;"><i class="fas fa-check-circle"></i></div>
+                            <h3 class="fw-bold text-dark">Profile Saved!</h3>
+                            <p class="text-muted mb-4">Your eligibility criteria has been updated.</p>
+                            <button onclick="showPage('profile')" class="btn btn-primary btn-lg rounded-pill shadow-sm px-5">
+                                <i class="fas fa-arrow-right me-2"></i> Go to My Dashboard
+                            </button>
+                        </div>
+                    `;
+                    document.getElementById('eligibility-page').scrollIntoView();
+                } else {
+                    const errorData = await res.json();
+                    alert('Failed to save profile: ' + (errorData.error || res.statusText));
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error connecting to server: ' + err.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        // Helper to redirect to MyScheme for better details
+        function getRedirectLink(schemeName, originalLink) {
+            if (originalLink && originalLink.includes('myscheme.gov.in')) {
+                return originalLink;
+            }
+            return `https://www.myscheme.gov.in/search?q=${encodeURIComponent(schemeName)}`;
+        }
+
+        function renderEligibilityResults(data) {
+            const schemes = data.schemes || [];
+            const conflicts = data.conflicts || [];
+            currentEligibleSchemes = schemes; // Store globally
+            const listDiv = document.getElementById('eligibility-schemes-list');
+            const bannerDiv = document.getElementById('conflict-banner-full-view');
+
+            // 1. Show Conflict Warnings (Red Banner)
+            if (bannerDiv) {
+                if (conflicts.length > 0) {
+                    bannerDiv.innerHTML = `
+                        <div class="alert alert-danger border-danger shadow-sm mb-4 animate__animated animate__fadeInDown">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <div class="bg-danger bg-opacity-25 p-2 rounded-circle text-danger">
+                                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="alert-heading fw-bold mb-1">Attention Required: Mutually Exclusive Schemes</h5>
+                                    <p class="mb-0 small text-danger-emphasis">Your profile matches multiple schemes that cannot be held simultaneously. Please review your active applications carefully.</p>
+                                    <div class="mt-2">
+                                        ${conflicts.map(c => `<span class="badge bg-white text-danger border border-danger me-2 mb-1"><i class="fas fa-ban me-1"></i>${c}</span>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    bannerDiv.style.display = 'block';
+                } else {
+                    bannerDiv.style.display = 'none';
+                    bannerDiv.innerHTML = '';
+                }
+            }
+
+            let finalHtml = '';
+
+            // 2. Show Schemes
+            if (schemes.length === 0) {
+                finalHtml += '<div class="col-12 text-center text-muted py-5">No matching schemes found at this time.</div>';
+            } else {
+                finalHtml += schemes.map(scheme => `
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-0 shadow-sm scheme-card hover-lift">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-primary bg-opacity-10 text-primary">${scheme.category || 'General'}</span>
+                                <span class="badge bg-success bg-opacity-10 text-success">${scheme.matchPercentage}% Match</span>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark">${scheme.name}</h5>
+                            ${scheme.matchPercentage < 100 && scheme.missingDocs && scheme.missingDocs.length > 0 ? `<div class="mb-2"><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25" style="font-size: 0.75rem;"><i class="fas fa-exclamation-triangle me-1"></i>Missing: ${scheme.missingDocs.join(', ')}</span></div>` : ''}
+                            <p class="card-text text-muted small">${scheme.description.substring(0, 100)}...</p>
+                            
+                            <div class="mt-3 p-2 bg-light rounded small">
+                                <strong><i class="fas fa-gift me-1 text-info"></i> Benefits:</strong><br>
+                                ${scheme.benefits ? scheme.benefits.substring(0, 80) + '...' : 'View details'}
+                            </div>
+
+                            ${scheme.conflicts && scheme.conflicts.length > 0 ?
+                        `<div class="mt-2 text-danger small fst-italic">
+                                    <i class="fas fa-info-circle me-1"></i>Conflicts with: ${scheme.conflicts.join(', ')}
+                                </div>` : ''}
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <!-- Smart Apply Button -->
+                            <button onclick="checkAlternatives(${scheme.id}, '${scheme.category}', '${getRedirectLink(scheme.name, scheme.applicationLink)}', '${scheme.name.replace(/'/g, "\\'")}')" 
+                                class="btn btn-primary w-100 rounded-pill">
+                                View Details & Apply <i class="fas fa-external-link-alt ms-1 small"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>`).join('');
+            }
+
+            listDiv.innerHTML = finalHtml;
+        }
+
+
+        // --- Schemes ---
+        function filterSchemesByCategory(category) {
+            document.getElementById('category-filter').value = category;
+            showPage('schemes');
+            loadSchemes();
+        }
+
+        let curr_page = 1;
+
+        async function loadSchemes(page = 1) {
+            curr_page = page;
+            const query = document.getElementById('search-input').value;
+            const category = document.getElementById('category-filter').value;
+            const state = document.getElementById('state-filter').value;
+
+            const params = new URLSearchParams({ q: query, category: category, state: state, page: page, limit: 9 });
+            const target = document.getElementById('schemes-list');
+            target.innerHTML = '<div class="col-12 text-center py-5"><div class="spinner-border text-primary"></div></div>';
+
+            try {
+                const res = await fetch(`/api/schemes?${params}`);
+                const data = await res.json();
+
+                if (!data.schemes || data.schemes.length === 0) {
+                    target.innerHTML = '<div class="col-12 text-center text-muted py-5">No schemes found matching your criteria.</div>';
+                    return;
+                }
+
+                // Batch DOM Update
+                const cardsHtml = data.schemes.map(scheme => `
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 border-0 shadow-sm scheme-card hover-lift">
+                             <div class="card-body">
+                                <span class="badge bg-info bg-opacity-10 text-info mb-2">${scheme.category || 'General'}</span>
+                                <h5 class="card-title fw-bold text-dark mt-2">${scheme.name}</h5>
+                                <p class="card-text text-muted small">${scheme.description ? scheme.description.substring(0, 100) : ''}...</p>
+                                <div class="mt-3 p-2 bg-light rounded small">
+                                    <strong><i class="fas fa-gift me-1 text-info"></i> Benefits:</strong><br>
+                                    ${scheme.benefits ? (scheme.benefits.substring(0, 80) + '...') : 'View details'}
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent border-0 pb-3">
+                                <button onclick="showSchemeDetails(${scheme.id})" class="btn btn-sm btn-outline-primary w-100 rounded-pill">View Details & Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Pagination Controls
+                let paginationHtml = '';
+                if (data.total_pages > 1) {
+                    paginationHtml = `
+                        <div class="col-12 mt-4 text-center">
+                            <button class="btn btn-outline-primary me-2" ${data.page <= 1 ? 'disabled' : ''} onclick="loadSchemes(${data.page - 1})">
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <span class="mx-2 text-muted">Page ${data.page} of ${data.total_pages}</span>
+                            <button class="btn btn-outline-primary ms-2" ${data.page >= data.total_pages ? 'disabled' : ''} onclick="loadSchemes(${data.page + 1})">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    `;
+                }
+
+                target.innerHTML = cardsHtml + paginationHtml;
+
+            } catch (e) {
+                console.error("Load schemes error:", e);
+                target.innerHTML = '<div class="col-12 text-danger text-center py-5">Failed to load schemes. Please try again.</div>';
+            }
+        }
+
+        // --- Profile ---
+        // --- Helper Functions for Profile (Restored) ---
+        function populateDistricts(state, districtId, talukId) {
+            const districtSelect = document.getElementById(districtId);
+            const talukSelect = document.getElementById(talukId);
+            if (!districtSelect) return;
+
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+            if (talukSelect) talukSelect.innerHTML = '<option value="">Select Taluk</option>';
+
+            if (state && locationData[state]) {
+                Object.keys(locationData[state]).forEach(district => {
+                    districtSelect.innerHTML += `<option value="${district}">${district}</option>`;
+                });
+            }
+        }
+
+        function populateTaluks(district, talukId, stateId) {
+            const talukSelect = document.getElementById(talukId);
+            const state = document.getElementById(stateId)?.value;
+            if (!talukSelect) return;
+
+            talukSelect.innerHTML = '<option value="">Select Taluk</option>';
+
+            let currentState = state;
+            if (!currentState && currentUser && currentUser.profile) currentState = currentUser.profile.state;
+
+            if (currentState && locationData[currentState] && locationData[currentState][district]) {
+                locationData[currentState][district].forEach(taluk => {
+                    talukSelect.innerHTML += `<option value="${taluk}">${taluk}</option>`;
+                });
+            }
+        }
+
+        function toggleFarmerFields(value, targetId) {
+            const el = document.getElementById(targetId);
+            if (el) el.style.display = (value === 'Farmer') ? 'flex' : 'none';
+        }
+
+        function toggleDisability(value, targetId) {
+            const el = document.getElementById(targetId);
+            if (el) el.style.display = (value === 'Yes') ? 'block' : 'none';
+        }
+
+        // --- Profile ---
+        async function loadProfile() {
+            const page = document.getElementById('profile-page');
+            const mainContent = document.getElementById('profile-main-content');
+            const viewContainer = document.getElementById('profile-view-container');
+            const form = document.getElementById('profile-form');
+
+            if (!page || !mainContent || !viewContainer) {
+                console.error("Dashboard containers not found!");
+                return;
+            }
+
+            // Ensure the page div has the active class and correct opacity
+            page.style.display = 'block';
+            page.classList.add('active');
+            page.style.opacity = '1';
+
+            // Case 1: Not Logged In
+            if (!currentUser) {
+                console.log("loadProfile: No user logged in");
+                mainContent.style.display = 'none';
+                viewContainer.style.display = 'block';
+                viewContainer.innerHTML = `
+                    <div class="row justify-content-center py-5">
+                        <div class="col-md-6">
+                            <div class="card shadow-lg border-0 text-center p-5" style="border-radius: 16px;">
+                                <i class="fas fa-user-lock fa-4x text-primary mb-4"></i>
+                                <h4 class="fw-bold text-dark mb-3">Welcome to Your Dashboard</h4>
+                                <p class="text-muted mb-4">Please sign in to access your personalized dashboard and view schemes matching your profile.</p>
+                                <button class="btn btn-primary btn-lg px-5" onclick="showPage('login')">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+                // User is logged in - check if profile is filled
+            console.log("User logged in:", currentUser.name);
+            if (!currentUser.profile) currentUser.profile = {};
+            const hasProfile = currentUser.profile.state && currentUser.profile.age;
+
+            if (!hasProfile) {
+                console.log("loadProfile: Profile incomplete");
+                mainContent.style.display = 'none';
+                viewContainer.style.display = 'block';
+                viewContainer.innerHTML = `
+                    <div class="row justify-content-center py-5">
+                        <div class="col-md-8">
+                            <div class="card shadow-lg border-0 p-5" style="border-radius: 16px; border-left: 5px solid #2563eb;">
+                                <div class="text-center mb-4">
+                                    <i class="fas fa-clipboard-list fa-4x text-primary mb-3"></i>
+                                    <h4 class="fw-bold text-dark">Complete Your Profile</h4>
+                                </div>
+                                <p class="text-muted text-center mb-4" style="font-size: 1.1rem;">
+                                    To view your personalized dashboard with matching government schemes, 
+                                    please fill out your details in the <strong>Know Your Eligibility</strong> page first.
+                                </p>
+                                <div class="bg-light rounded p-4 mb-4">
+                                    <h6 class="fw-bold text-dark mb-3"><i class="fas fa-info-circle me-2 text-primary"></i>Why is this needed?</h6>
+                                    <ul class="mb-0 text-muted">
+                                        <li>We use your information to find schemes you're eligible for</li>
+                                        <li>Get personalized recommendations based on your profile</li>
+                                        <li>Save time by seeing only relevant schemes</li>
+                                    </ul>
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-primary btn-lg px-5" onclick="showPage('eligibility')">
+                                        <i class="fas fa-edit me-2"></i>Fill My Profile Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Case 3: Profile Complete - Show Dashboard Summary by Default
+            console.log("loadProfile: Profile complete, showing dashboard");
+            viewContainer.style.display = 'none';
+            mainContent.style.display = 'block';
+            toggleDashboardView('summary');
+
+            if (!form) {
+                console.error("CRITICAL: profile-form element not found!");
+                return;
+            }
+
+            try {
+                // Populate basic fields
+                if (form.elements['name']) form.elements['name'].value = currentUser.name || '';
+                if (form.elements['email']) form.elements['email'].value = currentUser.email || '';
+                if (form.elements['mobile']) form.elements['mobile'].value = currentUser.mobile || '';
+
+                // Populate profile fields
+                const fields = ['age', 'gender', 'maritalStatus', 'aadhaarAvailable', 'caste', 'isTribal', 'religion',
+                    'residence', 'domicileStatus', 'familyType', 'annualFamilyIncome', 'incomeCertificateAvailable',
+                    'rationCardAvailable', 'rationCardType', 'education', 'occupation', 'govtEmployeeInFamily',
+                    'isFarmer', 'landSizeAcres', 'isTenantFarmer', 'disability', 'disabilityPercentage',
+                    'isWidowSingleWoman', 'bankAccountAvailable', 'income', 'dob', 'state'];
+
+                fields.forEach(key => {
+                    if (form.elements[key]) {
+                        form.elements[key].value = currentUser.profile[key] || '';
+                    }
+                });
+
+                // Handle dynamic field visibility
+                if (currentUser.profile.occupation === 'Farmer') {
+                    toggleFarmerFields('Farmer', 'profile-farmer-fields');
+                }
+                if (currentUser.profile.disability === 'Yes') {
+                    toggleDisability('Yes', 'profile-disability-percent');
+                }
+
+                // Populate Dependent Dropdowns
+                if (currentUser.profile.state) {
+                    populateDistricts(currentUser.profile.state, 'profile-district-select', 'profile-taluk-select');
+                    setTimeout(() => {
+                        const districtSelect = document.getElementById('profile-district-select');
+                        if (districtSelect) districtSelect.value = currentUser.profile.district || '';
+                        if (currentUser.profile.district) {
+                            populateTaluks(currentUser.profile.district, 'profile-taluk-select', 'profile-state-select');
+                            setTimeout(() => {
+                                const talukSelect = document.getElementById('profile-taluk-select');
+                                if (talukSelect) talukSelect.value = currentUser.profile.blockTaluk || '';
+                            }, 100);
+                        }
+                    }, 100);
+                }
+
+                console.log("Profile data populated in form");
+            } catch (e) {
+            }
+        }
+
+        // --- Dashboard View Management ---
+        let currentEligibleSchemes = []; // Stores latest eligible schemes for Benefit Advisor and Conflict checks
+
+        function toggleDashboardView(view) {
+            const summaryView = document.getElementById('dashboard-summary-view');
+            const editView = document.getElementById('dashboard-edit-view');
+            const btnSummary = document.getElementById('btn-view-summary');
+            const btnEdit = document.getElementById('btn-view-edit');
+
+            if (view === 'summary') {
+                summaryView.style.display = 'block';
+                editView.style.display = 'none';
+                btnSummary.classList.add('btn-primary');
+                btnSummary.classList.remove('btn-link', 'text-secondary', 'text-decoration-none');
+                btnEdit.classList.remove('btn-primary');
+                btnEdit.classList.add('btn-link', 'text-secondary', 'text-decoration-none');
+                renderDashboardSummary();
+            } else {
+                summaryView.style.display = 'none';
+                editView.style.display = 'block';
+                btnEdit.classList.add('btn-primary');
+                btnEdit.classList.remove('btn-link', 'text-secondary', 'text-decoration-none');
+                btnSummary.classList.remove('btn-primary');
+                btnSummary.classList.add('btn-link', 'text-secondary', 'text-decoration-none');
+            }
+        }
+
+        async function renderDashboardSummary() {
+            if (!currentUser) return;
+
+            // 1. Basic Info & Hero
+            document.getElementById('dash-user-name').textContent = `Welcome back, ${currentUser.name.split(' ')[0]}!`;
+            const location = currentUser.profile.district ? `${currentUser.profile.district}, ${currentUser.profile.state}` : (currentUser.profile.state || 'Location not set');
+            document.getElementById('dash-user-location').textContent = location;
+            
+            // Avatar logic
+            const avatarImg = document.getElementById('dash-user-avatar');
+            const initialsBox = document.getElementById('dash-user-initials');
+            if (currentUser.name) {
+                const parts = currentUser.name.split(' ');
+                const initials = parts.length > 1 ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase() : parts[0].substring(0, 2).toUpperCase();
+                if (initialsBox) initialsBox.textContent = initials;
+            }
+            if (avatarImg) avatarImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=2563eb&color=fff&size=256&bold=true`;
+
+            // 2. Random Daily Tip
+            const tips = [
+                "Keep your Aadhaar linked to your bank account for faster benefit transfers.",
+                "Check the 'What's New' section daily for the latest government announcements.",
+                "The Eligibility Score improves as you provide more details in your profile.",
+                "Use the Document Vault to store your income certificate and ration card securely.",
+                "Small farmers can explore specific subsidies for irrigation and equipment."
+            ];
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            const tipEl = document.getElementById('dash-daily-tip');
+            if (tipEl) tipEl.textContent = randomTip;
+
+            // 3. Load Stats, Matches and Checklist
+            try {
+                const res = await fetch('/api/check-eligibility', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentUser.profile)
+                });
+                const result = await res.json();
+                const eligibleSchemes = result.schemes || [];
+                currentEligibleSchemes = eligibleSchemes; // Store globally for benefit/conflict checks
+                
+                // Track applications in localStorage (Simulated)
+                const appliedSchemes = JSON.parse(localStorage.getItem('yojanamitra_applied') || '[]');
+                
+                // Update Stats
+                const totalMatches = eligibleSchemes.length;
+                const matchesEl = document.getElementById('stat-total-matches');
+                const matchesHeroEl = document.getElementById('stat-total-matches-hero');
+                if (matchesEl) matchesEl.textContent = totalMatches;
+                if (matchesHeroEl) matchesHeroEl.textContent = totalMatches;
+
+                const appliedCount = appliedSchemes.length;
+                const appliedEl = document.getElementById('stat-schemes-applied');
+                if (appliedEl) appliedEl.textContent = appliedCount;
+                
+                // Calculate Eligibility Score (Mock Formula)
+                const profileKeys = ['age', 'gender', 'state', 'income', 'caste', 'occupation', 'education'];
+                const completed = profileKeys.filter(k => currentUser.profile[k]).length;
+                const completionScore = (completed / profileKeys.length) * 50;
+                const avgMatchScore = eligibleSchemes.length > 0 ? (eligibleSchemes.reduce((acc, s) => acc + s.matchPercentage, 0) / eligibleSchemes.length) * 0.5 : 0;
+                const totalScore = Math.min(100, Math.round(completionScore + avgMatchScore));
+                
+                const totalScoreLabel = totalScore + '%';
+                const scoreEl = document.getElementById('stat-eligibility-score');
+                const scoreHeroEl = document.getElementById('stat-eligibility-score-hero');
+                if (scoreEl) scoreEl.textContent = totalScoreLabel;
+                if (scoreHeroEl) scoreHeroEl.textContent = totalScoreLabel;
+
+                const dashScoreNumEl = document.getElementById('dash-score-num');
+                if (dashScoreNumEl) dashScoreNumEl.textContent = totalScore;
+                
+                // Update Progress Circle
+                const circle = document.getElementById('score-progress-circle');
+                if (circle) {
+                    const radius = circle.r.baseVal.value;
+                    const circumference = 2 * Math.PI * radius;
+                    const offset = circumference - (totalScore / 100) * circumference;
+                    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+                    circle.style.strokeDashoffset = offset;
+                }
+
+                // 4. Update Checklist based on activity
+                const checklistApply = document.getElementById('checklist-apply');
+                if (checklistApply) {
+                    if (appliedSchemes.length > 0) {
+                        checklistApply.classList.add('completed');
+                        checklistApply.innerHTML = '<i class="fas fa-check"></i>';
+                    } else {
+                        checklistApply.classList.remove('completed');
+                        checklistApply.innerHTML = '<i class="fas fa-arrow-right"></i>';
+                    }
+                }
+
+                // 3. Render Recommended Schemes
+                const matchedList = document.getElementById('dash-matched-list');
+                if (eligibleSchemes.length > 0) {
+                    matchedList.innerHTML = eligibleSchemes.slice(0, 3).map(scheme => `
+                        <div class="dash-scheme-item">
+                            <div class="scheme-info">
+                                <div class="scheme-title-dash">${scheme.name}</div>
+                                <div class="scheme-meta-dash mb-1">
+                                    <span><i class="fas fa-tag me-1 text-primary"></i>${scheme.category || 'General'}</span>
+                                    <span class="text-success fw-bold"><i class="fas fa-bolt me-1"></i>${scheme.matchPercentage}% Match</span>
+                                </div>
+                                ${scheme.matchPercentage < 100 && scheme.missingDocs && scheme.missingDocs.length > 0 ? `<div class="small mt-1"><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25" style="font-size: 0.7rem;"><i class="fas fa-exclamation-triangle me-1"></i>Missing: ${scheme.missingDocs.join(', ')}</span></div>` : ''}
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <button onclick="showSchemeDetails(${scheme.id})" class="btn btn-sm btn-link text-primary fw-bold text-decoration-none">Details</button>
+                                ${appliedSchemes.includes(scheme.id) 
+                                    ? '<span class="status-pill status-applied"><i class="fas fa-check me-1"></i>Applied</span>' 
+                                    : `<button onclick="applyForScheme(${scheme.id}, '${scheme.name.replace(/'/g, "\\'")}')" class="btn btn-sm btn-primary rounded-pill px-3">Apply</button>`
+                                }
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    matchedList.innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-layer-group fa-3x text-muted mb-3 opacity-25"></i>
+                            <h6 class="fw-bold text-dark">No schemes perfectly match yet</h6>
+                            <p class="text-muted small px-4">Based on your current profile, we couldn't find 100% matches. Try adding more details like occupation or income.</p>
+                            <button onclick="toggleDashboardView('edit')" class="btn btn-sm btn-outline-primary rounded-pill mt-2">Update My Profile</button>
+                        </div>
+                    `;
+                }
+
+                // 4. Render Discovery/History
+                const recentList = document.getElementById('dash-recent-list');
+                const recentSchemes = eligibleSchemes.slice(3, 7);
+                if (recentSchemes.length > 0) {
+                    recentList.innerHTML = recentSchemes.map(scheme => `
+                        <div class="dash-scheme-item">
+                            <div class="scheme-info">
+                                <div class="scheme-title-dash small">${scheme.name}</div>
+                                <div class="scheme-meta-dash">
+                                    <span class="status-pill status-available">Discovery</span>
+                                    <span class="small">${scheme.matchPercentage}% Match</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    recentList.innerHTML = `
+                        <div class="text-center py-4 text-muted small bg-light rounded-3 border-dashed" style="border: 2px dashed #e2e8f0;">
+                            <i class="fas fa-microscope mb-2 opacity-50"></i>
+                            <div>Recently scanned schemes will appear here</div>
+                        </div>
+                    `;
+                }
+                
+                // 5. Render Detailed Schemes
+                renderDetailedSchemesList(eligibleSchemes, 'dashboard-detailed-matches');
+                renderDetailedSchemesList(eligibleSchemes, 'edit-view-matches', true);
+                
+                const matchCountBadge = document.getElementById('dash-match-count-badge');
+                if (matchCountBadge) matchCountBadge.textContent = `${eligibleSchemes.length} Schemes Matched`;
+
+            } catch (err) {
+                console.error("Dashboard Render Error:", err);
+            }
+        }
+
+        function renderDetailedSchemesList(schemes, containerId, isCompact = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            if (schemes.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-search-minus fa-3x text-muted mb-3 opacity-25"></i>
+                        <h6 class="fw-bold text-dark">No schemes perfectly match yet</h6>
+                        <p class="text-muted small px-4">Based on your current profile, we couldn't find 100% matches. Try adding more details.</p>
+                    </div>`;
+                return;
+            }
+
+            const userId = currentUser ? currentUser.id : 'guest';                container.innerHTML = schemes.map(scheme => {
+                    const cacheKey = `readiness_${userId}_${scheme.id}`;
+                    const cached = (() => { try { return JSON.parse(localStorage.getItem(cacheKey)); } catch(e) { return null; } })();
+                    
+                    // Buttons area - consolidated to single button
+                    const actionButtons = `
+                        <div class="d-flex align-items-center gap-2 mt-auto pt-3 border-top">
+                            <span class="badge bg-light text-dark border me-auto"><i class="fas fa-tag me-1 text-primary"></i> ${scheme.category || 'General'}</span>
+                            <button onclick="showSchemeDetails(${scheme.id}, 'info')" class="btn btn-sm btn-outline-primary rounded-pill px-4 shadow-sm fw-bold">
+                                <i class="fas fa-info-circle me-1"></i> View Details & Readiness
+                            </button>
+                        </div>
+                    `;
+
+                    return `
+                    <div class="col-md-6 col-lg-4 mb-4" id="scheme-card-${scheme.id}">
+                        <div class="card h-100 border-0 shadow-sm scheme-card-hover" style="border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;">
+                            <div class="card-body p-4 d-flex flex-column">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 rounded-pill px-3 py-1" style="font-size: 0.75rem; font-weight: 600;">
+                                        ${scheme.category || 'General'}
+                                    </span>
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-2 py-1" style="font-size: 0.7rem;">
+                                        ${scheme.matchPercentage}% Match
+                                    </span>
+                                </div>
+                                ${scheme.matchPercentage < 100 && scheme.missingDocs && scheme.missingDocs.length > 0 ? `<div class="mb-2"><span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25" style="font-size: 0.75rem;"><i class="fas fa-exclamation-triangle me-1"></i>Missing: ${scheme.missingDocs.join(', ')}</span></div>` : ''}
+                                <h5 class="fw-bold mb-2 text-dark" style="font-size: 1.1rem; line-height: 1.4;">${scheme.name}</h5>
+                                <p class="text-muted small mb-3 flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    ${scheme.description || 'No description available for this scheme.'}
+                                </p>
+                                ${actionButtons}
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+            }
+
+        // ---- Readiness AI Logic ----
+
+        function buildReadinessReportHtml(schemeId, data, generatedAt) {
+            const statusColor = data.overallStatus === 'READY' ? 'success' : data.overallStatus === 'PARTIALLY_READY' ? 'warning' : 'danger';
+            const statusIcon = data.overallStatus === 'READY' ? 'fa-check-circle' : data.overallStatus === 'PARTIALLY_READY' ? 'fa-exclamation-circle' : 'fa-times-circle';
+            const statusLabel = data.overallStatus === 'READY' ? 'Ready to Apply' : data.overallStatus === 'PARTIALLY_READY' ? 'Partially Ready' : 'Not Yet Ready';
+            const cachedAt = new Date(generatedAt).toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+
+            const itemsHtml = (data.items || []).map(item => {
+                const color = item.type === 'error' ? 'danger' : (item.type === 'warning' ? 'warning' : 'success');
+                return `<div class="d-flex align-items-start gap-2 py-2 border-bottom" style="border-color:#f1f5f9!important;">
+                    <i class="fas ${item.icon || 'fa-info-circle'} text-${color} mt-1 flex-shrink-0" style="font-size:0.82rem;"></i>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold" style="font-size:0.8rem;">${item.title}</span>
+                            <span class="badge bg-${color} bg-opacity-10 text-${color}" style="font-size:0.65rem;">${item.type.toUpperCase()}</span>
+                        </div>
+                        <div class="text-muted" style="font-size:0.75rem;">${item.text}</div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            return `<div class="readiness-report mt-3 border rounded-3 overflow-hidden" style="border-color:#e2e8f0!important;">
+                <div class="d-flex align-items-center justify-content-between px-3 py-2" style="background:${data.overallStatus === 'READY' ? '#f0fdf4' : data.overallStatus === 'PARTIALLY_READY' ? '#fffbeb' : '#fef2f2'};">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas ${statusIcon} text-${statusColor}"></i>
+                        <span class="fw-bold text-${statusColor}" style="font-size:0.82rem;">${statusLabel} (${data.score}%)</span>
+                    </div>
+                    <button onclick="recheckReadiness(${schemeId})" class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-0" style="font-size:0.65rem;" title="Recheck with latest documents">
+                        <i class="fas fa-sync-alt me-1"></i>Recheck
+                    </button>
+                </div>
+                <div class="px-3 pt-2 pb-1" style="font-size:0.75rem; color:#64748b;">${data.overallSummaryEn || ''}</div>
+                <div class="px-3 pb-2">${itemsHtml}</div>
+                <div class="px-3 py-1 text-end" style="font-size:0.65rem; color:#94a3b8;">Checked: ${cachedAt}</div>
+            </div>`;
+        }
+
+        async function checkReadiness(schemeId, forceRecheck = false) {
+            if (!currentUser) { alert('Please log in first.'); return; }
+
+            const userId = currentUser.id;
+            const cacheKey = `readiness_${userId}_${schemeId}`;
+            
+            // UI within modal
+            const container = document.getElementById('modal-readiness-content');
+            if (container) {
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary mb-3"></div>
+                        <h6 class="fw-bold">Analyzing....</h6>
+                        <p class="text-muted small">Comparing your profile with scheme requirements</p>
+                    </div>
+                `;
+            }
+
+            try {
+                const res = await fetch(`/api/schemes/${schemeId}/readiness-ai`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentUser.profile || {})
+                });
+                 const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Server error. Please retry.');
+                if (!data.items || data.items.length === 0) throw new Error('Incomplete AI response. Please retry.');
+
+                // Save to cache (now flat)
+                localStorage.setItem(cacheKey, JSON.stringify(data));
+
+                // Update modal view
+                if (container) {
+                    container.innerHTML = buildReadinessReportHtml(schemeId, data, data.generatedAt);
+                }
+            } catch(e) {
+                if (container) {
+                    container.innerHTML = `
+                        <div class="alert alert-danger m-4">
+                            <i class="fas fa-exclamation-circle me-2"></i>${e.message}
+                            <button onclick="checkReadiness(${schemeId}, true)" class="btn btn-sm btn-link text-danger p-0 ms-2 fw-bold text-decoration-none">Try Again</button>
+                        </div>`;
+                }
+            }
+        }
+
+        function recheckReadiness(schemeId) {
+            if (!currentUser) return;
+            localStorage.removeItem(`readiness_${currentUser.id}_${schemeId}`);
+            checkReadiness(schemeId, true);
+        }
+
+
+
+        function markAppliedAndRedirect(id, name, link) {
+            const applied = JSON.parse(localStorage.getItem('yojanamitra_applied') || '[]');
+            if (!applied.includes(id)) {
+                applied.push(id);
+                localStorage.setItem('yojanamitra_applied', JSON.stringify(applied));
+                try { renderDashboardSummary(); } catch(e) {}
+            }
+            if (link && link !== '#' && link.trim() !== '') {
+                window.open(link, '_blank');
+            } else {
+                // Default fallback to myschemes
+                window.open('https://www.myscheme.gov.in/schemes', '_blank');
+            }
+        }
+
+        async function applyForScheme(id, name) {
+            const scheme = currentEligibleSchemes.find(s => s.id == id);
+            const category = scheme ? scheme.category : 'General';
+            const link = scheme ? scheme.applicationLink : '#';
+            
+            const hasConflict = scheme && scheme.conflicts && scheme.conflicts.length > 0;
+            const alternatives = currentEligibleSchemes.filter(s =>
+                s.category === category && s.id != id
+            );
+
+            // UI Elements for Benefit Advisor / Conflict Modal
+            const hBox = document.getElementById('comp-icon-box');
+            const hIcon = document.getElementById('comp-icon');
+            const mTitle = document.getElementById('comp-modal-title');
+            const mIcon = document.getElementById('comp-main-icon');
+            const mainTitle = document.getElementById('comp-main-title');
+            const subTitle = document.getElementById('comp-main-subtitle');
+            const alertBox = document.getElementById('comp-alert-box');
+            const alertIcon = document.getElementById('comp-alert-icon');
+            const alertText = document.getElementById('comp-alt-reason');
+            const switchBtn = document.getElementById('comp-btn-switch');
+            const proceedBtn = document.getElementById('comp-btn-proceed');
+
+            if (hasConflict) {
+                // --- MODE: CONFLICT WARNING ---
+                hBox.className = 'bg-danger bg-opacity-10 p-2 rounded-3';
+                hIcon.className = 'fas fa-exclamation-triangle text-danger';
+                mTitle.innerText = 'Conflict Warning';
+                mTitle.className = 'modal-title fw-bold text-danger mb-0';
+
+                mIcon.className = 'fas fa-shield-alt text-danger fa-3x mb-3 animate__animated animate__shakeX';
+                mainTitle.innerText = 'Mutual Exclusivity Conflict';
+                subTitle.innerText = `Applying for '${name}' may disqualify you from other active schemes in your profile.`;
+
+                alertBox.className = 'alert alert-danger small text-start border-0 shadow-sm mb-4';
+                alertIcon.className = 'fas fa-ban me-2';
+                alertText.innerHTML = `<strong>Warning:</strong> This scheme conflicts with: <span class="fw-bold">${scheme.conflicts.join(', ')}</span>. Most government portals allow only one benefit per category.`;
+
+                switchBtn.innerText = 'Review Conflicting Schemes';
+                switchBtn.className = 'btn btn-danger fw-bold py-2 shadow-sm';
+                switchBtn.onclick = () => {
+                    bootstrap.Modal.getInstance(document.getElementById('benefitAnalysisModal')).hide();
+                };
+            } else if (alternatives.length > 0) {
+                // --- MODE: BENEFIT ADVISOR ---
+                const bestAlt = alternatives.reduce((prev, current) =>
+                    (prev.matchPercentage > current.matchPercentage) ? prev : current
+                );
+
+                if (bestAlt.matchPercentage > (scheme ? scheme.matchPercentage : 0) || (bestAlt.matchPercentage >= 80)) {
+                    hBox.className = 'bg-primary bg-opacity-10 p-2 rounded-3';
+                    hIcon.className = 'fas fa-balance-scale text-primary';
+                    mTitle.innerText = 'Benefit Advisor';
+                    mTitle.className = 'modal-title fw-bold text-dark mb-0';
+
+                    mIcon.className = 'fas fa-lightbulb text-warning fa-3x mb-3 animate__animated animate__pulse animate__infinite';
+                    mainTitle.innerText = 'Wait! Better Value Detected';
+                    subTitle.innerText = 'We found a potentially more beneficial alternative for your profile.';
+
+                    alertBox.className = 'alert alert-info small text-start border-0 shadow-sm mb-4';
+                    alertIcon.className = 'fas fa-info-circle me-2';
+                    alertText.innerText = `We found '${bestAlt.name}' in the same category (${category}) which might offer better coverage tailored to your profile.`;
+
+                    switchBtn.innerText = 'Check Recommended Scheme';
+                    switchBtn.className = 'btn btn-primary fw-bold py-2 shadow-sm';
+
+                    // Populate Names
+                    document.getElementById('comp-target-name').innerText = name;
+                    document.getElementById('comp-alt-name').innerText = bestAlt.name;
+
+                    // Setup Switch Button
+                    switchBtn.onclick = () => {
+                        bootstrap.Modal.getInstance(document.getElementById('benefitAnalysisModal')).hide();
+                        showSchemeDetails(bestAlt.id);
+                    };
+                } else {
+                    return markAppliedAndRedirect(id, name, link);
+                }
+            } else {
+                return markAppliedAndRedirect(id, name, link);
+            }
+
+            // Shared logic for shown modal
+            document.getElementById('comp-target-name').innerText = name;
+            const targetAlt = hasConflict ? { name: scheme.conflicts[0] } : (alternatives[0] || { name: 'Alternative' });
+            document.getElementById('comp-alt-name').innerText = targetAlt.name;
+
+            proceedBtn.onclick = () => {
+                bootstrap.Modal.getInstance(document.getElementById('benefitAnalysisModal')).hide();
+                markAppliedAndRedirect(id, name, link);
+            };
+
+            const modal = new bootstrap.Modal(document.getElementById('benefitAnalysisModal'));
+            modal.show();
+        }
+        document.getElementById('profile-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Safe numeric conversion
+            const toInt = (val) => {
+                const parsed = parseInt(val);
+                return isNaN(parsed) ? 0 : parsed;
+            };
+            const toFloat = (val) => {
+                const parsed = parseFloat(val);
+                return isNaN(parsed) ? 0 : parsed;
+            };
+
+            data.age = toInt(data.age);
+            data.income = toInt(data.income);
+            if ('disabilityPercentage' in data) data.disabilityPercentage = toInt(data.disabilityPercentage);
+            if ('landSizeAcres' in data) data.landSizeAcres = toFloat(data.landSizeAcres);
+            if ('totalFamilyMembers' in data) data.totalFamilyMembers = toInt(data.totalFamilyMembers);
+            if ('annualFamilyIncome' in data) data.annualFamilyIncome = toInt(data.annualFamilyIncome);
+
+            const btn = e.submitter;
+            const originalText = btn ? btn.innerHTML : 'Save Final Profile';
+            if (btn) btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Saving...';
+
+            try {
+                const res = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    currentUser = result.user;
+                    alert('Profile Updated Successfully!');
+
+                    // Refresh dashboard and switch back to summary
+                    toggleDashboardView('summary');
+                    
+                    // Smooth scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    alert('Failed to update profile: ' + (result.error || 'Unknown error'));
+                }
+            } catch (e) {
+                console.error('Update error:', e);
+                alert('Error updating profile. Check server connection.');
+            } finally {
+                if (btn) btn.innerHTML = originalText;
+            }
+        };
+
+        // Live Scheme Matching on Form Edit
+        let liveMatchTimeout;
+        document.getElementById('profile-form').addEventListener('input', () => {
+            clearTimeout(liveMatchTimeout);
+            liveMatchTimeout = setTimeout(fetchLiveMatches, 800);
+        });
+        document.getElementById('profile-form').addEventListener('change', () => {
+            clearTimeout(liveMatchTimeout);
+            liveMatchTimeout = setTimeout(fetchLiveMatches, 500);
+        });
+
+        async function fetchLiveMatches() {
+            const form = document.getElementById('profile-form');
+            const data = Object.fromEntries(new FormData(form).entries());
+            
+            // Safe numeric conversion
+            const toInt = (val) => isNaN(parseInt(val)) ? 0 : parseInt(val);
+            const toFloat = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
+
+            data.age = toInt(data.age);
+            data.income = toInt(data.income);
+            if ('disabilityPercentage' in data) data.disabilityPercentage = toInt(data.disabilityPercentage);
+            if ('landSizeAcres' in data) data.landSizeAcres = toFloat(data.landSizeAcres);
+            if ('totalFamilyMembers' in data) data.totalFamilyMembers = toInt(data.totalFamilyMembers);
+            if ('annualFamilyIncome' in data) data.annualFamilyIncome = toInt(data.annualFamilyIncome);
+
+            const container = document.getElementById('edit-view-matches');
+            const badge = document.getElementById('edit-match-count-badge');
+            
+            try {
+                if (container) container.innerHTML = '<div class="col-12 text-center py-4"><span class="spinner-border spinner-border-sm text-primary me-2"></span><small class="text-muted">Analyzing profile changes...</small></div>';
+                if (badge) badge.textContent = 'Analyzing...';
+
+                const res = await fetch('/api/check-eligibility', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!res.ok) throw new Error('API Error');
+                
+                const result = await res.json();
+                const eligibleSchemes = result.schemes || [];
+                currentEligibleSchemes = eligibleSchemes; // Store globally for benefit/conflict checks
+                
+                if (badge) {
+                    badge.className = 'badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2';
+                    badge.innerHTML = `<i class="fas fa-check-circle me-1"></i>${eligibleSchemes.length} Matches Found`;
+                }
+
+                renderDetailedSchemesList(eligibleSchemes, 'edit-view-matches', true);
+            } catch (err) {
+                console.error("Live Matching Error:", err);
+                if (container) container.innerHTML = '<div class="col-12 text-center text-muted small py-4">Live matching temporarily unavailable. Save profile to see matches.</div>';
+                if (badge) badge.textContent = 'Matches update as you type';
+            }
+        }
+
+        // Helper to format text as list items - Smarter Context-Aware Parser
+        function formatDetailList(text, targetId, isOrdered = false) {
+            const container = document.getElementById(targetId);
+            if (!text || text.toLowerCase() === 'none' || text === 'null') {
+                container.innerHTML = '<li>Details checked on official portal.</li>';
+                return false;
+            }
+
+            // Clean text: Trim leading/trailing whitespace
+            let cleaned = text.trim();
+
+            // Regex to split only when a line starts with a bullet marker or number
+            const lines = [];
+            const rawLines = cleaned.split(/\n/);
+
+            let currentLine = "";
+            const isMarker = (str) => /^(?:•|\*|-|\d+\.)/.test(str.trim());
+
+            rawLines.forEach((line) => {
+                const trimmed = line.trim();
+                if (!trimmed) return;
+
+                if (isMarker(trimmed) || currentLine === "") {
+                    if (currentLine) lines.push(currentLine);
+                    // Remove the marker for a cleaner data array, we add markers via CSS/LI
+                    currentLine = trimmed.replace(/^(?:•|\*|-|\d+\.)\s*/, "");
+                } else {
+                    // This is likely a continuation of the previous line (no marker and not first)
+                    currentLine += " " + trimmed;
+                }
+            });
+            if (currentLine) lines.push(currentLine);
+
+            if (lines.length === 0) {
+                container.innerHTML = `<li>${cleaned}</li>`;
+                return true;
+            }
+
+            container.innerHTML = lines.map(line => `<li>${line}</li>`).join('');
+            return true;
+        }
+
+        // --- Scheme Details Modal Logic ---
+        async function showSchemeDetails(schemeId, initialTab = 'info') {
+            const modalEl = document.getElementById('schemeDetailsModal');
+            let bsModal = bootstrap.Modal.getInstance(modalEl);
+            if (!bsModal) bsModal = new bootstrap.Modal(modalEl);
+
+            const loader = document.getElementById('modal-loader');
+            const content = document.getElementById('modal-content-area');
+            const tabs = document.getElementById('modal-tabs-nav');
+
+            loader.style.display = 'block';
+            content.style.display = 'none';
+            tabs.style.display = 'none';
+            bsModal.show();
+
+            try {
+                const res = await fetch(`/api/schemes/${schemeId}`);
+                if (!res.ok) throw new Error('API Error');
+                const data = await res.json();
+                const scheme = data.scheme;
+                const criteria = scheme.criteria || {};
+
+                // Basic Info
+                document.getElementById('modal-category').textContent = scheme.category || 'General';
+                document.getElementById('modal-name').textContent = scheme.name;
+                document.getElementById('modal-description').textContent = scheme.description;
+                document.querySelector('#modal-match span').textContent = (scheme.matchPercentage || 100) + '% Match';
+
+                // Rich Data Rendering
+                formatDetailList(scheme.benefits, 'modal-benefits');
+                formatDetailList(scheme.eligibility, 'modal-eligibility');
+
+                // Toggle Sections
+                const showEx = formatDetailList(criteria.exclusions, 'modal-exclusions');
+                document.getElementById('modal-exclusions-section').style.display = showEx ? 'block' : 'none';
+
+                const showProc = formatDetailList(criteria.applicationProcess, 'modal-process', true);
+                document.getElementById('modal-process-section').style.display = showProc ? 'block' : 'none';
+
+                const showDocs = formatDetailList(criteria.documentsRequired, 'modal-docs');
+                document.getElementById('modal-docs-section').style.display = showDocs ? 'block' : 'none';
+
+                document.getElementById('modal-apply-btn').onclick = () => {
+                    applyForScheme(scheme.id, scheme.name);
+                };
+
+                // Reset and Prepare Tabs
+                document.getElementById('modal-readiness-content').innerHTML = `
+                    <div class="text-center py-5">
+                        <h6 class="fw-bold">Readiness Audit</h6>
+                        <p class="text-muted small px-5">Analyze your profile documents against this scheme's specific criteria.</p>
+                        <button onclick="checkReadiness(${schemeId})" class="btn btn-light border shadow-sm rounded-pill px-4 mt-2 fw-bold">
+                            <i class="fas fa-play me-2 text-primary"></i>Start Readiness Analysis
+                        </button>
+                    </div>
+                `;
+
+                loader.style.display = 'none';
+                content.style.display = 'block';
+                tabs.style.display = 'flex';
+
+                // Handle Initial View
+                const cacheKey = `readiness_${currentUser.id}_${schemeId}`;
+                const cached = JSON.parse(localStorage.getItem(cacheKey));
+                
+                if (initialTab === 'readiness') {
+                    switchModalTab('readiness');
+                    if (cached && cached.items) {
+                        document.getElementById('modal-readiness-content').innerHTML = buildReadinessReportHtml(schemeId, cached, cached.generatedAt);
+                    }
+                    // If no cache, it stays on the "Start Analysis" UI injected above
+                } else {
+                    switchModalTab('info');
+                    // Even if on info tab, we check cache so if they toggle later, they see the result immediately
+                    if (cached && cached.items) {
+                        document.getElementById('modal-readiness-content').innerHTML = buildReadinessReportHtml(schemeId, cached, cached.generatedAt);
+                    }
+                }
+
+                // Global for recheck/check to access
+                window.currentModalSchemeId = schemeId;
+
+            } catch (e) {
+                console.error(e);
+                alert('Scheme details temporarily unavailable.');
+                bsModal.hide();
+            }
+        }
+
+        function switchModalTab(tab) {
+            const infoBtn = document.getElementById('tab-btn-info');
+            const readyBtn = document.getElementById('tab-btn-readiness');
+            const infoContent = document.getElementById('modal-info-pane');
+            const readyContent = document.getElementById('modal-readiness-pane');
+
+            if (tab === 'readiness') {
+                infoBtn.classList.remove('active');
+                readyBtn.classList.add('active');
+                infoContent.style.display = 'none';
+                readyContent.style.display = 'block';
+            } else {
+                infoBtn.classList.add('active');
+                readyBtn.classList.remove('active');
+                infoContent.style.display = 'block';
+                readyContent.style.display = 'none';
+            }
+        }
+
+        // --- Location Utilities ---
+        function populateDistricts(state, districtSelectId = 'district-select', talukSelectId = 'taluk-select') {
+            const districtSelect = document.getElementById(districtSelectId);
+            const talukSelect = document.getElementById(talukSelectId);
+            if (!districtSelect || !talukSelect) return;
+
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+            talukSelect.innerHTML = '<option value="">Select Taluk</option>';
+
+            const trimmedState = state ? state.trim() : '';
+            if (locationData[trimmedState]) {
+                Object.keys(locationData[trimmedState]).forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            } else if (trimmedState === 'Other') {
+                districtSelect.innerHTML = '<option value="Other">Other</option>';
+                talukSelect.innerHTML = '<option value="Other">Other</option>';
+            }
+        }
+
+        function populateTaluks(district, talukSelectId = 'taluk-select', stateSelectId = 'state-select') {
+            const stateSelect = document.getElementById(stateSelectId);
+            const talukSelect = document.getElementById(talukSelectId);
+            if (!stateSelect || !talukSelect) return;
+
+            const state = stateSelect.value ? stateSelect.value.trim() : '';
+            const trimmedDistrict = district ? district.trim() : '';
+
+            talukSelect.innerHTML = '<option value="">Select Taluk</option>';
+
+            if (locationData[state] && locationData[state][trimmedDistrict]) {
+                locationData[state][trimmedDistrict].forEach(taluk => {
+                    const option = document.createElement('option');
+                    option.value = taluk;
+                    option.textContent = taluk;
+                    talukSelect.appendChild(option);
+                });
+            } else if (trimmedDistrict === 'Other') {
+                talukSelect.innerHTML = '<option value="Other">Other</option>';
+            }
+        }
+
+        function calcIncomeSlab(income) {
+            // Future logic for income categorization
+            console.log('User income:', income);
+        }
+
+        // --- District / Taluk Data (Sample) ---
+        const locationData = {
+            "Andhra Pradesh": {
+                "Anantapur": ["Anantapur", "Dharmavaram", "Guntakal", "Hindupur", "Kadiri", "Tadipatri"],
+                "Chittoor": ["Chittoor", "Madanapalle", "Punganur", "Srikalahasti", "Tirupati"],
+                "East Godavari": ["Kakinada", "Rajahmundry", "Amalapuram", "Mandapeta"],
+                "Guntur": ["Guntur", "Narasaraopet", "Tenali", "Bapatla"],
+                "Krishna": ["Machilipatnam", "Vijayawada", "Gudivada", "Nuzvid"],
+                "Kurnool": ["Kurnool", "Adoni", "Nandyal", "Yemmiganur"],
+                "Prakasam": ["Ongole", "Chirala", "Kandukur", "Markapur"],
+                "Srikakulam": ["Srikakulam", "Amadalavalasa", "Ichchapuram", "Palasa"],
+                "Visakhapatnam": ["Visakhapatnam", "Anakapalle", "Bheemunipatnam"],
+                "Vizianagaram": ["Vizianagaram", "Bobbili", "Parvathipuram"],
+                "West Godavari": ["Eluru", "Bhimavaram", "Narasapuram", "Palakollu", "Tadepalligudem"],
+                "YSR Kadapa": ["Kadapa", "Proddatur", "Rayachoti", "Pulivendula"]
+            },
+            "Karnataka": {
+                "Bagalkot": ["Bagalkot", "Badami", "Mudhol", "Jamkhandi", "Bilagi", "Hunagunda", "Ilkal", "Rabkavi Banhatti", "Guledgudda"],
+                "Ballari": ["Ballari", "Kurugodu", "Kampli", "Sanduru", "Siraguppa", "Hagaribommanahalli", "Hosapete"],
+                "Belagavi": ["Belagavi", "Athani", "Bailhongal", "Chikkodi", "Gokak", "Khanapura", "Mudalgi", "Nippani", "Rayabaga", "Savadatti", "Ramadurga", "Kagawada", "Hukkeri", "Kitturu"],
+                "Bangalore Urban": ["Bangalore North", "Bangalore South", "Anekal", "Yelahanka", "Bangalore East (Krishnarajapuram)"],
+                "Bangalore Rural": ["Devanahalli", "Doddaballapura", "Hoskote", "Nelamangala"],
+                "Bidar": ["Bidar", "Aurad", "Basavakalyana", "Bhalki", "Humnabad", "Kamalnagar", "Chitgoppa", "Hulsoor"],
+                "Chamarajanagar": ["Chamarajanagar", "Gundlupete", "Kollegala", "Yelanduru", "Hanur"],
+                "Chikballapur": ["Chikballapur", "Gauribidanur", "Bagepalli", "Chintamani", "Gudibanda", "Sidlaghatta", "Chelur"],
+                "Chikmagalur": ["Chikmagalur", "Kadur", "Koppa", "Mudigere", "Narasimharajapura", "Sringeri", "Tarikere", "Ajjampura", "Kalasa"],
+                "Chitradurga": ["Chitradurga", "Hiriyur", "Hosadurga", "Challakere", "Holalkere", "Molakalmuru"],
+                "Dakshina Kannada": ["Mangalore", "Bantwal", "Puttur", "Belthangady", "Sullia", "Moodbidri", "Kadaba", "Ullal", "Mulki"],
+                "Davanagere": ["Davanagere", "Harihara", "Honnali", "Channagiri", "Jagalur", "Nyamathi"],
+                "Dharwad": ["Dharwad", "Hubballi", "Kalghatgi", "Navalgund", "Alnavar", "Annigeri", "Kundgol"],
+                "Gadag": ["Gadag", "Ron", "Shirhatti", "Nargund", "Mundaragi", "Gajendragad", "Lakshmeshwar"],
+                "Gulbarga": ["Kalaburagi", "Afzalpur", "Aland", "Chincholi", "Chittapur", "Sedam", "Jevargi", "Kamalapura", "Shahabad", "Kalgi", "Yedrami"],
+                "Hassan": ["Hassan", "Arsikere", "Channarayapatna", "Sakleshpur", "Alur", "Arkalgud", "Belur", "Holenarasipura"],
+                "Haveri": ["Haveri", "Ranebennur", "Byadgi", "Hirekerur", "Hangal", "Savanur", "Shiggaon", "Rattihalli"],
+                "Kodagu": ["Madikeri", "Somwarpet", "Virajpet", "Kushalanagar", "Ponnampet"],
+                "Kolar": ["Kolar", "Bangarapet", "Malur", "Mulbagal", "Srinivaspura", "KGF"],
+                "Koppal": ["Koppal", "Gangavathi", "Kushtagi", "Yelburga", "Kanakagiri", "Karatagi", "Kuknur"],
+                "Mandya": ["Mandya", "Maddur", "Malavalli", "Srirangapatna", "Pandavapura", "Nagamangala", "Krishnarajpet"],
+                "Mysore": ["Mysore", "Nanjangud", "Hunsur", "Piriyapatna", "T. Narasipura", "Periyapatna", "H.D. Kote", "Saligrama", "Saragur"],
+                "Raichur": ["Raichur", "Manvi", "Sindhanur", "Lingsugur", "Devadurga", "Maski", "Sirwar"],
+                "Ramanagara": ["Ramanagara", "Channapatna", "Kanakapura", "Magadi"],
+                "Shimoga": ["Shimoga", "Bhadravathi", "Sagar", "Shikaripura", "Sorab", "Thirthahalli", "Hosanagara"],
+                "Tumkur": ["Tumkur", "Gubbi", "Kunigal", "Madhugiri", "Sira", "Tiptur", "Turuvekere", "Chiknayakanhalli", "Koratagere", "Pavagada"],
+                "Udupi": ["Udupi", "Kundapura", "Karkala", "Byndoor", "Brahmavara", "Kapu", "Hebri"],
+                "Uttara Kannada": ["Karwar", "Sirsi", "Bhatkal", "Kumta", "Ankola", "Haliyal", "Honnavar", "Joida", "Mundgod", "Siddapur", "Yellapur"],
+                "Vijayapura": ["Vijayapura", "Indi", "Sindhagi", "Basavana Bagewadi", "Muddebihal", "Talikota", "Babaleshwar", "Chadchan", "Devara Hippargi", "Kolhar", "Nidagundi", "Tikota"],
+                "Yadgir": ["Yadgir", "Shahapur", "Shorapur", "Gurmitkal", "Hunsagi", "Wadagera"]
+            },
+            "Maharashtra": {
+                "Mumbai City": ["Mumbai City"],
+                "Pune": ["Haveli", "Pune City", "Khed", "Maval"],
+                "Nagpur": ["Nagpur", "Kamptee", "Hingna", "Katol"],
+                "Thane": ["Thane", "Kalyan", "Ulhasnagar", "Ambernath"]
+            },
+            "Delhi": {
+                "New Delhi": ["Chanakyapuri", "Delhi Cantonment", "Vasant Vihar"],
+                "North Delhi": ["Model Town", "Narela", "Alipur"],
+                "South Delhi": ["Saket", "Hauz Khas", "Mehrauli"]
+            },
+            "Uttar Pradesh": {
+                "Lucknow": ["Lucknow", "Malihabad", "Bakshi Ka Talab"],
+                "Kanpur Nagar": ["Kanpur", "Bilhaur", "Ghatampur"],
+                "Agra": ["Agra", "Etmadpur", "Kirawoli"]
+            },
+            "Tamil Nadu": {
+                "Chennai": ["Chennai City"],
+                "Coimbatore": ["Coimbatore North", "Coimbatore South", "Mettupalayam"],
+                "Madurai": ["Madurai North", "Madurai South", "Melur"]
+            }
+        };
+
+
+
+        // Add Date Cursor Style
+        const dateStyle = document.createElement('style');
+        dateStyle.textContent = 'input[type="date"] { cursor: pointer; }';
+        document.head.appendChild(dateStyle);
+
+        checkAuth();
+        showPage('home');
+
+        // --- Core Eligibility & Smart Features ---
+
+        // Profile form handled above in the consolidated onsubmit
+        // --- INITIALIZATION ---
+        (async function init() {
+            await checkAuth();
+            const hash = window.location.hash;
+
+            if (currentUser) {
+                // If user is logged in, show profile by default unless specific page requested
+                if (!['#schemes', '#eligibility', '#vault', '#profile'].includes(hash) && hash.length > 1) {
+                    // Stay on hash if valid page
+                } else if (!hash || hash === '#login' || hash === '#register') {
+                    showPage('profile');
+                }
+            } else {
+                // NOT LOGGED IN -> Redirect to unified auth page
+                if (hash === '#register') {
+                    window.location.href = 'auth.html#register';
+                } else {
+                    window.location.href = 'auth.html#login';
+                }
+            }
+        })();
+
+    </script>
+    <script src="js/translations.js"></script>
+
+
+    <!-- Scheme Details Modal -->
+    <div class="modal fade" id="schemeDetailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg overflow-hidden">
+                <div class="modal-header border-0 pb-0"
+                    style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 1.5rem 2rem;">
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close" style="opacity: 0.8; z-index: 10;"></button>
+                    
+                    <div class="w-100">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="bg-white bg-opacity-10 p-2 rounded-3 border border-white border-opacity-10">
+                                <i class="fas fa-file-alt text-primary-light fa-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="modal-title fw-bold text-white mb-0" style="letter-spacing: -0.02em;">Scheme Details & Analysis</h5>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <span class="badge rounded-pill"
+                                        style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); font-size: 0.65rem; font-weight: 600; padding: 0.25rem 0.6rem;">
+                                        <i class="fas fa-check-circle me-1" style="font-size: 0.6rem;"></i>VERIFIED SOURCE
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Tabs Nav -->
+                        <div class="d-flex gap-2 mt-2" id="modal-tabs-nav" style="display: none !important;">
+                            <button id="tab-btn-info" onclick="switchModalTab('info')" class="btn btn-sm btn-outline-light border-0 active fw-bold py-2 px-3 rounded-top-4" style="font-size: 0.85rem; border-bottom: 3px solid transparent !important;">
+                                <i class="fas fa-info-circle me-2"></i>Scheme Information
+                            </button>
+                             <button id="tab-btn-readiness" onclick="switchModalTab('readiness')" class="btn btn-sm btn-outline-light border-0 fw-bold py-2 px-3 rounded-top-4" style="font-size: 0.85rem; border-bottom: 3px solid transparent !important;">
+                                Readiness Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    #modal-tabs-nav button {
+                        color: rgba(255, 255, 255, 0.6) !important;
+                        transition: all 0.2s ease;
+                    }
+                    #modal-tabs-nav .active {
+                        background: rgba(255,255,255,0.15) !important;
+                        border-bottom: 3px solid #3b82f6 !important;
+                        color: #ffffff !important;
+                        opacity: 1 !important;
+                    }
+                    #modal-tabs-nav button:hover:not(.active) {
+                        background: rgba(255,255,255,0.1) !important;
+                        color: #ffffff !important;
+                    }
+                    .btn-indigo {
+                        background: #4f46e5;
+                        color: white;
+                        border: none;
+                        transition: all 0.2s ease;
+                    }
+                    .btn-indigo:hover {
+                        background: #4338ca;
+                        color: white;
+                        transform: translateY(-1px);
+                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                    }
+                    .category-badge-lg {
+                        background: #eff6ff;
+                        color: #2563eb;
+                        padding: 0.4rem 0.8rem;
+                        border-radius: 8px;
+                        font-weight: 600;
+                        font-size: 0.8rem;
+                    }
+                    .match-percentage-badge {
+                        background: #f0fdf4;
+                        color: #16a34a;
+                        padding: 0.4rem 0.8rem;
+                        border-radius: 8px;
+                        font-weight: 600;
+                        font-size: 0.8rem;
+                        display: flex;
+                        align-items: center;
+                        gap: 0.4rem;
+                    }
+                </style>
+                <div class="modal-body p-0">
+                    <div id="modal-loader" class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <p class="mt-3 text-secondary fw-semibold">Gleaning details...</p>
+                    </div>
+
+                    <div id="modal-content-area" style="display: none;">
+                        <!-- Tab Content: Information -->
+                        <div id="modal-info-pane">
+                            <!-- Header Banner -->
+                            <div class="bg-light p-4 border-bottom mb-4">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                                    <div class="d-flex gap-2">
+                                        <span id="modal-category" class="category-badge-lg">Category</span>
+                                        <span id="modal-match" class="match-percentage-badge">
+                                            <i class="fas fa-bolt"></i> <span>--% Match</span>
+                                        </span>
+                                    </div>
+                                    <div class="text-secondary small">
+                                        <i class="far fa-calendar-alt me-1" style="color: #64748b;"></i> Updated Today
+                                    </div>
+                                </div>
+                                <h4 id="modal-name" class="fw-bold text-dark mb-2" style="letter-spacing: -0.01em;"></h4>
+                                <p id="modal-description" class="lead text-secondary opacity-75 mb-0"
+                                    style="font-size: 0.95rem; line-height: 1.6;"></p>
+                            </div>
+
+                            <div class="px-4 pb-4">
+                                <div class="row g-4">
+                                    <div class="col-lg-12">
+                                        <!-- Benefits Section -->
+                                        <div class="scheme-detail-section shadow-sm border-0 bg-white">
+                                            <h6 class="fw-bold text-dark"><i
+                                                    class="fas fa-gift text-primary me-2"></i>Benefits</h6>
+                                            <ul id="modal-benefits" class="detail-list mb-0"></ul>
+                                        </div>
+
+                                        <!-- Eligibility Section -->
+                                        <div class="scheme-detail-section shadow-sm border-0 bg-white">
+                                            <h6 class="fw-bold text-dark"><i
+                                                    class="fas fa-user-check text-success me-2"></i>Eligibility Criteria
+                                            </h6>
+                                            <ul id="modal-eligibility" class="detail-list mb-0"></ul>
+                                        </div>
+
+                                        <!-- Exclusions Section -->
+                                        <div id="modal-exclusions-section"
+                                            class="scheme-detail-section shadow-sm border-0 bg-white border-start border-4 border-danger"
+                                            style="display:none;">
+                                            <h6 class="text-danger fw-bold"><i class="fas fa-ban me-2"></i>Important
+                                                Exclusions</h6>
+                                            <ul id="modal-exclusions" class="detail-list text-danger-emphasis mb-0"></ul>
+                                        </div>
+
+                                        <!-- Application Process -->
+                                        <div id="modal-process-section"
+                                            class="scheme-detail-section shadow-sm border-0 bg-white border-start border-4 border-info"
+                                            style="display:none;">
+                                            <h6 class="text-info fw-bold"><i class="fas fa-route me-2"></i>Application
+                                                Process</h6>
+                                            <ul id="modal-process" class="detail-list mb-0"></ul>
+                                        </div>
+
+                                        <!-- Documents Required -->
+                                        <div id="modal-docs-section"
+                                            class="scheme-detail-section shadow-sm border-0 bg-white border-start border-4 border-warning"
+                                            style="display:none;">
+                                            <h6 class="text-warning fw-bold"><i
+                                                    class="fas fa-folder-open me-2"></i>Documents Required</h6>
+                                            <ul id="modal-docs" class="detail-list mb-0"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content: Readiness Report -->
+                        <div id="modal-readiness-pane" style="display: none;">
+                            <div class="p-4" id="modal-readiness-content">
+                                <!-- AI Content Loaded Here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 bg-light p-3">
+                    <button type="button" class="btn btn-outline-secondary px-4 fw-semibold" data-bs-dismiss="modal"
+                        style="border-radius: 10px;">Close</button>
+                    <button id="modal-apply-btn" 
+                        class="btn btn-primary d-flex align-items-center px-4 fw-bold shadow-sm"
+                        style="border-radius: 10px; background: #2563eb; border: none;">
+                        <span>Apply for this Scheme</span>
+                        <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

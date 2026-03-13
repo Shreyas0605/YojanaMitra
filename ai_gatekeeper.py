@@ -14,9 +14,9 @@ class AIGatekeeper:
     
     # New Multi-Project Keys
     KEYS = {
-        "Vault": "AIzaSyDKIs5LJqP5GW8BAJZbkXEDPtAOseI5IUo",
-        "Chat": "AIzaSyDKIs5LJqP5GW8BAJZbkXEDPtAOseI5IUo",
-        "Tracker": "AIzaSyDKIs5LJqP5GW8BAJZbkXEDPtAOseI5IUo"
+        "Vault": os.getenv("GEMINI_API_KEY"),
+        "Chat": os.getenv("GEMINI_API_KEY"),
+        "Tracker": os.getenv("GEMINI_API_KEY")
     }
 
     @classmethod
