@@ -205,6 +205,10 @@
             }
             // Remove markdown artifacts like **, *, __, _, #, ~, ` often added by AI
             let cleanedText = decoded.replace(/[\*\_#~`>]+/g, '');
+            
+            // Remove stray HTML tags like <br>, <br, <b>, <i> etc.
+            cleanedText = cleanedText.replace(/<\/?(?:br|b|i|u|strong|em|p|div|span|li|ul|ol)\s*\/?>?/gi, ' ');
+
             // Some extra spaces might occur after characters are removed
             cleanedText = cleanedText.replace(/\s{2,}/g, ' ');
 
